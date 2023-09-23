@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 
-// Screens
+// Mavigation 🏴‍☠️
 
-import Login from './screens/Login';
+import RootStack from './navigators/RootStack';
 
 export default function App() {
   return (
-    <Login/>
+    <RootStack/>
   );
 }

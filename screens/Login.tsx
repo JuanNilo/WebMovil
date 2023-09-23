@@ -22,7 +22,11 @@ import {
     StyledButton,
     ButtonText,
     MsgBox,
-    Line
+    Line,
+    ExtraView,
+    ExtraText,
+    TextLink,
+    TextLinkContent
 
 } from './../components/style';
 
@@ -32,67 +36,84 @@ import { View } from "react-native";
 
 const {brand, primary, darkLight} = Colors; 
 
-const Login = () => {
+// Keyboards
+
+import KeyboardWrapper from "../components/keyboardWrapper";
+
+const Login = ({navigation}) => {
     const [hidePassword, setHidePasswword] = useState(true);
 
     return(
-        <StyledContainer>
-            <StatusBar style="dark"/> 
-            <InnerContainer>
-                <PageLogo resizeMode="cover" source={require('../assets/logo.png')} />
-                <PageTitle> Gira</PageTitle>
-                <SubTitle> Acoount Login</SubTitle>
-                <Formik
-                    initialValues={{email: '', password: ''}}
-                    onSubmit={(values) => {
-                        console.log(values);
-                    }}
-                >
-                    {
-                        ({handleChange, handleBlur, handleSubmit, values}) => (
-                            <StyledFormArea>
-                                <MyTextInput
-                                    label="Email Address"
-                                    icon="mail"
-                                    placeholder="mail@site.com"
-                                    placeholderTextColor={primary}
-                                    onChangeText={handleChange('email')}
-                                    onBlur={handleBlur('email')}
-                                    value={values.email}
-                                    keyboardType="email-address"
-                                />
-                                <MyTextInput
-                                    label="Password"
-                                    icon="lock"
-                                    placeholder="********"
-                                    placeholderTextColor={primary}
-                                    onChangeText={handleChange('password')}
-                                    onBlur={handleBlur('password')}
-                                    value={values.password}
-                                    secureTextEntry={hidePassword}
-                                    isPassword={true}
-                                    hidePassword={hidePassword}
-                                    setHidePassword={setHidePasswword}
-                                />
-                                <MsgBox>...</MsgBox>
-                                <StyledButton onPress={handleSubmit}>
-                                    <ButtonText>
-                                        Login
-                                    </ButtonText>
-                                </StyledButton>
-                                <Line />
-                                <StyledButton github={true} onPress={handleSubmit}>
-                                    <AntDesign name="github" color={primary} size={30}/> 
-                                    <ButtonText github={true}>
-                                        Sign in with GitHub
-                                    </ButtonText>
-                                </StyledButton>
-                            </StyledFormArea>
-                        )
-                    }
-                </Formik>
-            </InnerContainer>
-        </StyledContainer>
+        <KeyboardWrapper>
+            <StyledContainer>
+                <StatusBar style="dark"/> 
+                <InnerContainer>
+                    <PageLogo resizeMode="cover" source={require('../assets/logo.png')} />
+                    <PageTitle> Gira</PageTitle>
+                    <SubTitle> Acoount Login</SubTitle>
+                    <Formik
+                        initialValues={{email: '', password: ''}}
+                        onSubmit={(values) => {
+                            console.log(values);
+                            navigation.navigate('Welcome');
+                        }}
+                    >
+                        {
+                            ({handleChange, handleBlur, handleSubmit, values}) => (
+                                <StyledFormArea>
+                                    <MyTextInput
+                                        label="Email Address"
+                                        icon="mail"
+                                        placeholder="mail@site.com"
+                                        placeholderTextColor={primary}
+                                        onChangeText={handleChange('email')}
+                                        onBlur={handleBlur('email')}
+                                        value={values.email}
+                                        keyboardType="email-address"
+                                    />
+                                    <MyTextInput
+                                        label="Password"
+                                        icon="lock"
+                                        placeholder="********"
+                                        placeholderTextColor={primary}
+                                        onChangeText={handleChange('password')}
+                                        onBlur={handleBlur('password')}
+                                        value={values.password}
+                                        secureTextEntry={hidePassword}
+                                        isPassword={true}
+                                        hidePassword={hidePassword}
+                                        setHidePassword={setHidePasswword}
+                                    />
+                                    <MsgBox>...</MsgBox>
+                                    <StyledButton onPress={handleSubmit}>
+                                        <ButtonText>
+                                            Login
+                                        </ButtonText>
+                                    </StyledButton>
+                                    <Line />
+                                    <StyledButton github={true} onPress={handleSubmit}>
+                                        <AntDesign name="github" color={primary} size={30}/> 
+                                        <ButtonText github={true}>
+                                            Sign in with GitHub
+                                        </ButtonText>
+                                    </StyledButton>
+                                    <ExtraView>
+                                        <ExtraText>
+                                            Don't Have an account already?. 
+                                        </ExtraText>
+                                        <TextLink onPress={() =>  navigation.navigate('SignUp')}>
+                                            <TextLinkContent>
+                                                SignUp
+                                            </TextLinkContent>
+                                        </TextLink>
+                                    </ExtraView>
+                                </StyledFormArea>
+                            )
+                        }
+                    </Formik>
+                </InnerContainer>
+            </StyledContainer>
+        </KeyboardWrapper>
     );
 }
 
