@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+
+import { TextInput} from 'react-native';
 import { StatusBar } from "expo-status-bar";
 
 //formik
@@ -93,6 +95,12 @@ const SignUp = ({navigation}) => {
                                         isPassword={true}
                                         hidePassword={hidePassword}
                                         setHidePassword={setHidePasswword}
+                                    />
+                                    <TextInput
+                                        
+                                        value={values.password}
+                                        placeholder="useless placeholder"
+                                        keyboardType="text"
                                     />
                                     <MyTextInput
                                         label="Confirm Password"
