@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import {View, Text, Image, TextInput, TouchableOpacity} from "react-native";
+import { StyleSheet,View, Text, Image, TextInput, TouchableOpacity} from "react-native";
 import  Constants  from "expo-constants";
 
 const StatusBarHeight = Constants.statusBarHeight;
@@ -15,6 +15,29 @@ export const Colors = {
 };
 
 const {primary, secondary, terceary, darkLight, brand, purple, red} = Colors;
+
+const giraStyles = StyleSheet.create({
+    styleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+      },
+      styleIcon: {
+        marginRight: 10, 
+      },
+      styleInput: {
+        flex: 1, 
+        backgroundColor: secondary, 
+        color: primary, 
+        height: 50,
+        marginVertical: 10,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        fontSize: 16,
+      },
+})
+
+
+export default giraStyles;
 
 export const StyledContainer = styled.View`
     flex: 1;

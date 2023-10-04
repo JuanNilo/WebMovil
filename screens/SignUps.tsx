@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 
-import { TextInput} from 'react-native';
+import giraStyles from "./../components/style";
+import { TextInput, View } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 
 //formik
@@ -31,11 +32,11 @@ import {
 
 } from './../components/style';
 
-import { View } from "react-native";
+const {styleInput, styleIcon, styleContainer} = giraStyles
 
 // Colors
 
-const {primary } = Colors; 
+const {primary , secondary} = Colors; 
 
 // Keyboards
 
@@ -72,18 +73,22 @@ const SignUp = ({navigation}) => {
                                         value={values.name}
                                     />
 
-                                    <MyTextInput
-                                        label="Email Address"
-                                        icon="mail"
-                                        placeholder="mail@site.com"
+                                    {/* Mail */}
+                                    <View style={styleContainer}>
+                                    <Octicons style={styleIcon} name={'mail'} size={30} color={secondary}/>
+
+                                    <TextInput
+                                        style={styleInput}
                                         placeholderTextColor={primary}
+                                        value={values.email}
+                                        placeholder="mail@site.com"
                                         onChangeText={handleChange('email')}
                                         onBlur={handleBlur('email')}
-                                        value={values.email}
                                         keyboardType="email-address"
-                                    />
+                                        />
+                                    </View>
 
-                                    <MyTextInput
+                                    {/* <MyTextInput
                                         label="Password"
                                         icon="lock"
                                         placeholder="********"
@@ -95,28 +100,39 @@ const SignUp = ({navigation}) => {
                                         isPassword={true}
                                         hidePassword={hidePassword}
                                         setHidePassword={setHidePasswword}
-                                    />
+                                    /> */}
+
+                                    {/* Contrasena */}
+                                    <View style={styleContainer}>
+                                    <Octicons style={styleIcon} name={'lock'} size={30} color={secondary}/>
+
                                     <TextInput
-                                        
-                                        value={values.password}
-                                        placeholder="useless placeholder"
-                                        keyboardType="text"
-                                    />
-                                    <MyTextInput
-                                        label="Confirm Password"
-                                        icon="lock"
-                                        placeholder="********"
+                                        style={styleInput}
                                         placeholderTextColor={primary}
+                                        value={values.password}
+                                        placeholder="Passoword"
+                                        onChangeText={handleChange('password')}
+                                        onBlur={handleBlur('password')}
+                                        />
+                                    </View>
+
+                                    {/* Confirmar contrasena */}
+                                    <View style={styleContainer}>
+                                    <Octicons style={styleIcon} name={'lock'} size={30} color={secondary}/>
+
+                                    <TextInput
+                                        style={styleInput}
+                                        placeholderTextColor={primary}
+                                        value={values.confirmPassword}
+                                        placeholder="Confirm password"
                                         onChangeText={handleChange('confirmPassword')}
                                         onBlur={handleBlur('confirmPassword')}
-                                        value={values.confirmPassword}
-                                        secureTextEntry={hidePassword}
-                                        isPassword={true}
-                                        hidePassword={hidePassword}
-                                        setHidePassword={setHidePasswword}
-                                    />
+                                        />
+                                    </View>
+                                
                                     <MsgBox>...</MsgBox>
-                                    <StyledButton onPress={handleSubmit}>
+                                    <StyledButton 
+                                        onPress={handleSubmit}>
                                         <ButtonText>
                                             SignIn
                                         </ButtonText>
@@ -158,5 +174,6 @@ const MyTextInput = ({label, icon, isPassword, hidePassword, setHidePassword,...
         </View>
     )
 }
+
 
 export default SignUp;
