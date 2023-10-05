@@ -20,11 +20,20 @@ const giraStyles = StyleSheet.create({
     styleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-      },
-      styleIcon: {
-        marginRight: 10, 
-      },
-      styleInput: {
+    },
+    styleLabel: {
+        color: terceary,
+        fontSize: 18,
+        textAlign: "left",
+    },
+    styleIconContainer:{
+        textAlign: 'center',
+        display: 'flex',
+    },
+    styleIcon: {
+        width: 40, 
+    },
+    styleInput: {
         flex: 1, 
         backgroundColor: secondary, 
         color: primary, 
@@ -33,7 +42,7 @@ const giraStyles = StyleSheet.create({
         borderRadius: 5,
         paddingHorizontal: 10,
         fontSize: 16,
-      },
+    },
 })
 
 
@@ -80,7 +89,7 @@ export const WelcomeImage = styled.Image`
 `;
 
 export const PageTitle = styled.Text`
-    font-size: 30px;
+    font-size: 35px;
     text-align: center;
     font-weight: bold;
     color: ${secondary};
@@ -92,7 +101,7 @@ export const PageTitle = styled.Text`
 `;
 
 export const SubTitle = styled.Text` 
-    font-size: 18px;
+    font-size: 28px;
     margin-bottom: 10px;
     letter-spacing: 1px;
     font-weight: bold;
