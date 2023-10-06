@@ -42,10 +42,34 @@ const {primary , secondary} = Colors;
 // Keyboards
 
 import KeyboardWrapper from "../components/keyboardWrapper";
+import axios from "axios";
 
 
 const SignUp = ({navigation}) => {
     const [hidePassword, setHidePasswword] = useState(true);
+   
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+     
+    const registerRequest = async (email: string, firstName: string, lastName: string,password: string) => {
+        setError(false);
+
+        try{
+            const response = await axios.post('http://10.0.2.2:3000/api/auth/register',{
+                email,
+                firstName,
+                lastName,
+                password,
+            });
+
+            navigation.navigate('Login');
+
+        }catch (e: any){
+            setError(true);
+            setErrorMessage(e?.response?.data?.message);
+            console.log({error: e?.response?.data?.message});
+        }
+    };
 
     return(
         <KeyboardWrapper>
@@ -57,10 +81,7 @@ const SignUp = ({navigation}) => {
                     <SubTitle>Registrar cuenta</SubTitle>
                     <Formik
                         initialValues={{firstName: '', lastName: '',email: '', password: '', confirmPassword: ''}}
-                        onSubmit={(values) => {
-                            console.log(values);
-                            navigation.navigate('Welcome');
-                        }}
+                        onSubmit={(values) => registerRequest(values.email, values.firstName,  values.lastName,values.password)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
@@ -103,7 +124,7 @@ const SignUp = ({navigation}) => {
                                             placeholderTextColor={primary}
                                             value={values.lastName}
                                             onChangeText={handleChange('lastName')}
-                                            onBlur={handleBlur('lastName')}a
+                                            onBlur={handleBlur('lastName')}
                                         />
                                     </View>
 
@@ -149,7 +170,7 @@ const SignUp = ({navigation}) => {
                                         style={styleInput}
                                         placeholderTextColor={primary}
                                         value={values.password}
-                                        placeholder="Passoword"
+                                        placeholder="Password"
                                         secureTextEntry
                                         onChangeText={handleChange('password')}
                                         onBlur={handleBlur('password')}
@@ -174,7 +195,7 @@ const SignUp = ({navigation}) => {
                                 
                                     <MsgBox>...</MsgBox>
                                     <StyledButton 
-                                        onPress={handleSubmit}>
+                                        onPress={() => registerRequest(values.email, values.firstName, values.lastName, values.password)}>
                                         <ButtonText>
                                             SignIn
                                         </ButtonText>

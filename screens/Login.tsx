@@ -1,6 +1,10 @@
 import React, {useState} from "react";
 import { StatusBar } from "expo-status-bar";
 
+import axios from "axios";
+
+import { ENDPOINT_MS_USER } from 'react-native-dotenv';
+
 import { TextInput, View, Text } from 'react-native';
 
 //formik
@@ -45,8 +49,32 @@ const {brand, primary, secondary, terceary,  darkLight} = Colors;
 
 import KeyboardWrapper from "../components/keyboardWrapper";
 
+
+
 const Login = ({navigation}) => {
     const [hidePassword, setHidePasswword] = useState(true);
+    //const [email, setEmail] = useState('');
+    //const [password, setPassword] = useState('');
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+     
+    const loginRequest = async (email: string, password: string) => {
+        setError(false);
+
+        try{
+            const response = await axios.post('http://10.0.2.2:3000/api/auth/login',{
+                email,
+                password,
+            });
+
+            navigation.navigate('Welcome');
+
+        }catch (e: any){
+            setError(true);
+            setErrorMessage(e?.response?.data?.message);
+            console.log({error: e?.response?.data?.message});
+        }
+    };
 
     return(
         <KeyboardWrapper>
@@ -58,10 +86,7 @@ const Login = ({navigation}) => {
                     <SubTitle>Acoount Login</SubTitle>
                     <Formik
                         initialValues={{email: '', password: ''}}
-                        onSubmit={(values) => {
-                            console.log(values);
-                            navigation.navigate('Welcome');
-                        }}
+                        onSubmit={(values) => loginRequest(values.email, values.password)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
@@ -119,7 +144,7 @@ const Login = ({navigation}) => {
                                         style={styleInput}
                                         placeholderTextColor={primary}
                                         value={values.password}
-                                        placeholder="Passoword"
+                                        placeholder="Password"
                                         secureTextEntry
                                         onChangeText={handleChange('password')}
                                         onBlur={handleBlur('password')}
@@ -128,12 +153,13 @@ const Login = ({navigation}) => {
 
 
                                     <MsgBox>...</MsgBox>
-                                    <StyledButton onPress={handleSubmit}>
+                                    <StyledButton onPress={() => loginRequest(values.email,values.password)}>
                                         <ButtonText>
                                             Login
                                         </ButtonText>
                                     </StyledButton>
                                     <Line />
+                
                                     <ExtraView>
                                         <ExtraText>
                                             Don't Have an account already?. 

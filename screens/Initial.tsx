@@ -27,7 +27,7 @@ const Initial = ({navigation}) => {
                     </StyledButton>
                     <Line/>
                     {/* Registrarse */}
-                    <StyledButton style={{backgroundColor: purple}} onPress={() => navigation.navigate('Login')} >
+                    <StyledButton style={{backgroundColor: purple}} onPress={() => navigation.navigate('SignUp')} >
                         <ButtonText>
                             Registrarse
                         </ButtonText>
