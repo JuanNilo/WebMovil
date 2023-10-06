@@ -11,6 +11,7 @@ const {primary, purple, terceary} = Colors;
 import Login from './../screens/Login';
 import SignUp from './../screens/SignUps';
 import Welcome from './../screens/welcome';
+import Initial from './../screens/Initial'
 
 const Stack = createNativeStackNavigator();
 
@@ -27,8 +28,9 @@ const RootStack = () => {
                     headerTitle: '',
                     
                 }}
-                initialRouteName='Login'
+                initialRouteName='Initial'
             >
+                <Stack.Screen name='Initial' component={Initial}/> 
                 <Stack.Screen name='Login' component={Login}/>
                 <Stack.Screen name='SignUp' component={SignUp}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='Welcome' component={Welcome}/>

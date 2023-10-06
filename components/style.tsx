@@ -51,7 +51,7 @@ export default giraStyles;
 export const StyledContainer = styled.View`
     flex: 1;
     padding: 25px;
-    padding-top: ${StatusBarHeight + 30}px;
+    padding-top: ${StatusBarHeight + 45}px;
     background-color: ${primary};
 `;
 
@@ -160,22 +160,13 @@ export const StyledButton = styled.TouchableOpacity`
     margin-vertical: 2px;
     height: 50px;
 
-    ${(props) => props.github == true && `
-        background-color: ${purple};
-        flex-direction: row;
-        justify-content: center;
-    `}
+    
 `;
 
 export const ButtonText = styled.Text`
     color: ${primary};
     font-size: 22px;
     font-weight: bold;
-
-    ${(props) => props.github == true && `
-        font-size: 20px;
-        padding-left: 10px;
-    `}
 `;
 
 export const MsgBox = styled.Text`

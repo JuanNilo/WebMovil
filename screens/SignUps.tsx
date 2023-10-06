@@ -73,6 +73,10 @@ const SignUp = ({navigation}) => {
                                         onChangeText={handleChange('name')}
                                         onBlur={handleBlur('name')}
                                         value={values.name}
+
+                                        cealicciucncoquimbo@gmail.com  
+                                        fpmcucncoquimbo
+
                                     /> */}
                                     
                                     {/* Nombre */}
@@ -99,7 +103,7 @@ const SignUp = ({navigation}) => {
                                             placeholderTextColor={primary}
                                             value={values.lastName}
                                             onChangeText={handleChange('lastName')}
-                                            onBlur={handleBlur('lastName')}
+                                            onBlur={handleBlur('lastName')}a
                                         />
                                     </View>
 

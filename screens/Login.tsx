@@ -134,12 +134,6 @@ const Login = ({navigation}) => {
                                         </ButtonText>
                                     </StyledButton>
                                     <Line />
-                                    <StyledButton github={true} onPress={handleSubmit}>
-                                        <AntDesign name="github" color={primary} size={30}/> 
-                                        <ButtonText github={true}>
-                                            Sign in with GitHub
-                                        </ButtonText>
-                                    </StyledButton>
                                     <ExtraView>
                                         <ExtraText>
                                             Don't Have an account already?. 
