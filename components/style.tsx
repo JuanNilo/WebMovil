@@ -54,6 +54,19 @@ const giraStyles = StyleSheet.create({
         color: purple,
         fontSize: 16,
         fontWeight: 'bold'
+    },
+    styleInnerContainer : {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        overflow: 'scroll'
+    },
+    container: {
+        padding: 25,
+        flex: 1,
+        height: '100%',
+        paddingTop: StatusBarHeight + 50,
+        backgroundColor: primary,
     }
 })
 

@@ -1,7 +1,7 @@
 import React, {useState, useRef} from "react";
 
 import giraStyles from "./../components/style";
-import { TextInput, View, Text } from 'react-native';
+import { TextInput, View, Text, ScrollView } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 
 //formik
@@ -33,7 +33,7 @@ import {
 
 } from './../components/style';
 
-const {styleInput, styleIcon, styleContainer, styleIconContainer, styleLabel} = giraStyles
+const {styleInput, styleIcon, styleInnerContainer,styleContainer, styleIconContainer, container,styleLabel, styleErrorMessage, styleErrorView} = giraStyles
 
 // Colors
 
@@ -81,9 +81,9 @@ const SignUp = ({navigation}) => {
 
     return(
         <KeyboardWrapper>
-            <StyledContainer>
+            <ScrollView style={container}>
                 <StatusBar style="dark"/> 
-                <InnerContainer>
+                <View style={styleInnerContainer}>
                     <PageLogo resizeMode="cover" source={require('../assets/logo.png')} />
                     <PageTitle> Gira</PageTitle>
                     <SubTitle>Registrar cuenta</SubTitle>
@@ -185,7 +185,13 @@ const SignUp = ({navigation}) => {
                                         />
                                     </View>
                                 
-                                    <MsgBox>...</MsgBox>
+                                    <View
+                                        style={styleErrorView}
+                                    >
+                                        <Text style={styleErrorMessage}>
+                                            {errorMessage}
+                                        </Text>
+                                    </View>
                                     <StyledButton 
                                         onPress={() => registerRequest(values.email, values.firstName, values.lastName, values.password)}>
                                         <ButtonText>
@@ -207,8 +213,8 @@ const SignUp = ({navigation}) => {
                             )
                         }
                     </Formik>
-                </InnerContainer>
-            </StyledContainer>
+                </View>
+            </ScrollView>
         </KeyboardWrapper>
     );
 }
