@@ -13,11 +13,18 @@ import {
     WelcomeImage
 
 } from './../components/style';
+import BottomRootStack from "./BottomRootStack";
 
 const Welcome = ({navigation}) => {
     return(
-        <>
-            <StatusBar style="dark"/> 
+        <BottomRootStack/>
+    );
+}
+
+
+export default Welcome;
+
+{/* <StatusBar style="dark"/> 
             <InnerContainer>
                 <WelcomeImage resizeMode="cover" source={require('./../assets/Cover.png')} />
                 <WelcomeContainer>
@@ -34,10 +41,4 @@ const Welcome = ({navigation}) => {
                                 </StyledButton>
                             </StyledFormArea>
                 </WelcomeContainer>
-            </InnerContainer>
-        </>
-    );
-}
-
-
-export default Welcome;
+            </InnerContainer> */}

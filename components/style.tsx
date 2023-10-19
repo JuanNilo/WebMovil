@@ -67,6 +67,11 @@ const giraStyles = StyleSheet.create({
         height: '100%',
         paddingTop: StatusBarHeight + 50,
         backgroundColor: primary,
+    },
+    styleLogo : {
+        width: 90,
+        height: 90,
+        borderRadius: 50,
     }
 })
 
