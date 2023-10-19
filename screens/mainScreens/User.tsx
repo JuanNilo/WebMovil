@@ -1,52 +1,104 @@
-import * as React from 'react';
-import {View, Text, Image} from 'react-native'
- 
+import React, { useState, useEffect } from "react";
+import giraStyles from "./../../components/style";
+import { View, ScrollView, Image, Text } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { Octicons } from "@expo/vector-icons";
+import { StyledContainer, InnerContainer, PageLogo, PageTitle, SubTitle, StyledFormArea, LeftIcon, StyledInputLabel, StyledTextInput, RigthIcon, StyledButton, ButtonText, Line, ExtraView, ExtraText, TextLink, TextLinkContent } from './../../components/style';
+import { Colors } from "./../../components/style";
 
-import { 
-    StyledContainer,
-    InnerContainer,
-    PageLogo,
-    PageTitle,
-    SubTitle,
-    StyledFormArea,
-    LeftIcon,
-    StyledInputLabel,
-    StyledTextInput,
-    RigthIcon,
-    Colors,
-    StyledButton,
-    ButtonText,
-    MsgBox,
-    Line,
-    ExtraView,
-    ExtraText,
-    TextLink,
-    TextLinkContent
+const { secondary, primary, brand, purple } = Colors
 
-} from './../../components/style';
-import KeyboardWrapper from '../../components/keyboardWrapper';
-import { StatusBar } from 'expo-status-bar';
+const { styleIcon, styleInnerContainer, styleContainer, styleDataUser,styleIconContainer, container, styleLabel, styleErrorMessage, styleErrorView, styleLogo } = giraStyles
 
-import giraStyles from './../../components/style';
+import KeyboardWrapper from "../../components/keyboardWrapper";
+import axios from "axios";
 
-const {styleLogo} = giraStyles
+const User = ({ navigation }) => {
+  const [hidePassword, setHidePassword] = useState(true);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [userData, setUserData] = useState({});
 
-export default function User({navigation}){
-    return(
+  useEffect(() => {
+    // Fetch user data from the backend
+    const fetchUserData = async () => {
+      try {
+        const email = 'juan@mail.com';
+        axios.get(`http://10.0.2.2:3000/api/users/email/${email}`)
+          .then(response => {
+            const userData = response.data;
+            setUserData(userData);
+          })
+          .catch(error => {
+            console.error('Error al recuperar los datos del usuario:', error);
+          });
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
 
-        <KeyboardWrapper>
-            <StyledContainer>
-            <InnerContainer>
+    fetchUserData();
+  }, []);
 
-                <StatusBar style="dark"/> 
-                    <Image  source={{
-                    uri: 'https://reactnative.dev/img/tiny_logo.png',
-                    }}
-                    style={styleLogo}
-                    />
-                <PageTitle>Name user</PageTitle>
-                </InnerContainer>
-            </StyledContainer>
-        </KeyboardWrapper>
-    )
+  return (
+    <KeyboardWrapper>
+      <ScrollView style={container}>
+        <StatusBar style="dark" />
+        <View style={styleInnerContainer}>
+          <Image
+            source={{
+              uri: 'https://reactnative.dev/img/tiny_logo.png',
+            }}
+            style={styleLogo}
+          />
+          <PageTitle
+            style={{color: purple}}
+          >{userData.firstName} {userData.lastName}</PageTitle>
+          <SubTitle>Bienvenido</SubTitle>
+          <SubTitle>Datos</SubTitle>
+          <View style={styleDataUser}>
+            {/* Nombre */}
+            <View style={styleContainer}>
+              <Octicons style={styleIcon} name={"person"} size={30} color={purple} />
+              <Text style={styleLabel}>
+                Nombre: {userData.firstName}
+              </Text>
+            </View>
+
+            {/* Apellido */}
+            <View style={styleContainer}>
+              <Octicons style={styleIcon} name={"person-fill"} size={30} color={purple} />
+              <Text style={styleLabel}>
+                Apellido: {userData.lastName}
+              </Text>
+            </View>
+
+            {/* Mail */}
+            <View style={styleContainer}>
+              <Octicons style={styleIcon} name={'mail'} size={30} color={purple} />
+              <Text style={styleLabel}>
+                Mail: {userData.email}
+              </Text>
+            </View>
+
+            <View style={styleErrorView}>
+              <Text style={styleErrorMessage}>
+                {errorMessage}
+              </Text>
+            </View>
+            <StyledButton
+            style={{backgroundColor: purple}}
+              onPress={() => console.log('holamundo') /* handle your button action here */}>
+              <ButtonText > 
+                Editar datos
+              </ButtonText>
+            </StyledButton>
+            <Line />
+            </View>
+        </View>
+      </ScrollView>
+    </KeyboardWrapper>
+  );
 }
+
+export default User;

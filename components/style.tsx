@@ -34,6 +34,10 @@ const giraStyles = StyleSheet.create({
     styleIcon: {
         width: 40, 
     },
+    styleDataUser:{
+        width: '90%',
+        height: '100%',
+    },
     styleInput: {
         flex: 1, 
         backgroundColor: brand, 
