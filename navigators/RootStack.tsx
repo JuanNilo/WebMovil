@@ -12,6 +12,8 @@ import Login from './../screens/Login';
 import SignUp from './../screens/SignUps';
 import Welcome from './../screens/welcome';
 import Initial from './../screens/Initial'
+import PasswordRecovery from '../screens/PasswordRecovery';
+import PasswordChange from '../screens/PasswordChange';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +35,8 @@ const RootStack = () => {
                 <Stack.Screen name='Initial' component={Initial}/> 
                 <Stack.Screen name='Login' component={Login}/>
                 <Stack.Screen name='SignUp' component={SignUp}/>
+                <Stack.Screen name='PasswordRecovery' component={PasswordRecovery}/>
+                <Stack.Screen name='PasswordChange' component={PasswordChange}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='Welcome' component={Welcome}/>
             </Stack.Navigator>
         </NavigationContainer>

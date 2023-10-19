@@ -27,7 +27,7 @@ const Welcome = ({navigation}) => {
                 <SubTitle welcome={true}>Dave Smith</SubTitle>
                             <StyledFormArea>
                                 <Line />
-                                <StyledButton onPress={() => {navigation.navigate('Initial')}}>
+                                <StyledButton onPress={() => {navigation.navigate('Login')}}>
                                     <ButtonText>
                                         Logout
                                     </ButtonText>

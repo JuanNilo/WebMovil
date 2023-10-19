@@ -49,32 +49,37 @@ import KeyboardWrapper from "../components/keyboardWrapper";
 
 
 
-const Login = ({navigation}) => {
+const PasswordChange = ({navigation}) => {
     const [hidePassword, setHidePasswword] = useState(true);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [values, setValues] = useState({ email: '', password: '' });
-    const loginRequest = async (email: string, password: string) => {
+    const [values, setValues] = useState({ code: '', password: '', confirmPassword: '' });
+    const passwordChangeRequest = async (code: string, password: string, confirmPassword: string) => {
         setError(false);
+        if(password !== confirmPassword){
+            setError(true)
+            setErrorMessage('Contraseñas no coinciden!');
+        }else{
+            try{
+                // const response = await axios.post('http://10.0.2.2:3000/api/auth/login',{
+                //     email,
+                //     password,
+                // });
+                setErrorMessage('');
+                setValues({ code: '', password: '', confirmPassword: '' });
+                navigation.navigate('Login');
 
-        try{
-            const response = await axios.post('http://10.0.2.2:3000/api/auth/login',{
-                email,
-                password,
-            });
-            setErrorMessage('');
-            setValues({ email: '', password: '' });
-            navigation.navigate('Welcome');
-
-        }catch (e: any){
-            setError(true);
-            setErrorMessage(e?.response?.data?.message);
-            console.log({error: e?.response?.data?.message});
+            }catch (e: any){
+                setError(true);
+                setErrorMessage(e?.response?.data?.message);
+                console.log({error: e?.response?.data?.message});
+            }
         }
     };
 
-    const emailInputRef = useRef();
+    const codeInputRef = useRef();
     const passwordInputRef = useRef();
+    const confirmPasswordInputRef = useRef();
 
     return(
         <KeyboardWrapper>
@@ -83,35 +88,34 @@ const Login = ({navigation}) => {
                 <InnerContainer>
                     <PageLogo resizeMode="cover" source={require('../assets/logo.png')} />
                     <PageTitle> Gira</PageTitle>
-                    <SubTitle>Iniciar sesión</SubTitle>
+                    <SubTitle>Cambiar contraseña</SubTitle>
                     <Formik
                         initialValues={values}
-                        onSubmit={(formValues) => loginRequest(formValues.email, formValues.password)}
+                        onSubmit={(formValues) => passwordChangeRequest(formValues.code, formValues.password, formValues.confirmPassword)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
                                 <StyledFormArea>
-                                     {/* Mail */}
-                                    <Text style={styleLabel}>Ingrese correo</Text>
+                                     {/* Code */}
+                                    <Text style={styleLabel}>Ingrese codigo</Text>
                                     <View style={styleContainer}>
-                                    <Octicons style={styleIcon} name={'mail'} size={30} color={brand}/>
+                                    <Octicons style={styleIcon} name={'code'} size={30} color={brand}/>
 
                                     <TextInput
-                                        ref={emailInputRef}
+                                        ref={codeInputRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
-                                        value={values.email}
-                                        placeholder="correo@gira.com"
-                                        onChangeText={handleChange('email')}
-                                        onBlur={handleBlur('email')}
-                                        keyboardType="email-address"
+                                        value={values.code}
+                                        placeholder="Codigo"
+                                        onChangeText={handleChange('code')}
+                                        onBlur={handleBlur('code')}
                                         onSubmitEditing={() => passwordInputRef.current.focus()}
                                         />
                                     </View>
 
                                     {/* Contrasena */}
                                     
-                                    <Text style={styleLabel}>Ingrese contraseña</Text>
+                                    <Text style={styleLabel}>Ingrese nueva contraseña</Text>
                                     <View style={styleContainer}>
                                         <View style={styleIconContainer}>
                                             <Octicons style={styleIcon} name={'lock'} size={30} color={brand}/>
@@ -122,14 +126,34 @@ const Login = ({navigation}) => {
                                         style={styleInput}
                                         placeholderTextColor={primary}
                                         value={values.password}
-                                        placeholder="Constraseña"
+                                        placeholder="Nueva constraseña"
                                         secureTextEntry
                                         onChangeText={handleChange('password')}
                                         onBlur={handleBlur('password')}
-                                        onSubmitEditing={() => loginRequest(values.email, values.password)}
+                                        onSubmitEditing={() => confirmPasswordInputRef.current.focus()}
                                         />
                                     </View>
 
+                                    {/* Confirmar contrasena */}
+                                                                        
+                                    <Text style={styleLabel}>Confirmar nueva contraseña</Text>
+                                    <View style={styleContainer}>
+                                        <View style={styleIconContainer}>
+                                            <Octicons style={styleIcon} name={'lock'} size={30} color={brand}/>
+                                        </View>
+
+                                    <TextInput
+                                        ref={confirmPasswordInputRef}
+                                        style={styleInput}
+                                        placeholderTextColor={primary}
+                                        value={values.confirmPassword}
+                                        placeholder="Confirmar nueva contraseña"
+                                        secureTextEntry
+                                        onChangeText={handleChange('confirmPassword')}
+                                        onBlur={handleBlur('confirmPassword')}
+                                        onSubmitEditing={() => passwordChangeRequest(values.code, values.password, values.confirmPassword)}
+                                        />
+                                    </View>
 
                                     <View
                                         style={styleErrorView}
@@ -138,32 +162,24 @@ const Login = ({navigation}) => {
                                             {errorMessage}
                                         </Text>
                                     </View>
-                                    <StyledButton onPress={() => loginRequest(values.email,values.password)}>
+                                    <StyledButton onPress={() => passwordChangeRequest(values.code,values.password, values.confirmPassword)}>
                                         <ButtonText>
-                                        Iniciar sesión
+                                        Cambiar contraseña
                                         </ButtonText>
                                     </StyledButton>
                                     <Line />
                 
                                     <ExtraView>
                                         <ExtraText>
-                                        ¿No tienes una cuenta?
+                                        ¿Tienes una cuenta?
                                         </ExtraText>
-                                        <TextLink onPress={() =>  navigation.navigate('SignUp')}>
+                                        <TextLink onPress={() =>  navigation.navigate('Login')}>
                                             <TextLinkContent>
-                                            Regístrate
+                                            Inicia sesión
                                             </TextLinkContent>
                                         </TextLink>
                                     </ExtraView>
                                     <Line />
-                                    {/* Recuperar contraseña */}
-                                    <ExtraView>
-                                        <TextLink onPress={() =>  navigation.navigate('PasswordRecovery')}>
-                                            <TextLinkContent>
-                                            ¿Olvidaste tu contraseña?
-                                            </TextLinkContent>
-                                        </TextLink>
-                                    </ExtraView>
                                     
                                 </StyledFormArea>
                             )
@@ -175,4 +191,4 @@ const Login = ({navigation}) => {
     );
 }
 
-export default Login;
+export default PasswordChange;

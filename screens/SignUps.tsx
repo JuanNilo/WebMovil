@@ -51,23 +51,27 @@ const SignUp = ({navigation}) => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
      
-    const registerRequest = async (email: string, firstName: string, lastName: string,password: string) => {
+    const registerRequest = async (email: string, firstName: string, lastName: string,password: string, confirmPassword: string) => {
         setError(false);
-
-        try{
-            const response = await axios.post('http://10.0.2.2:3000/api/auth/register',{
-                email,
-                firstName,
-                lastName,
-                password,
-            });
-
-            navigation.navigate('Login');
-
-        }catch (e: any){
-            setError(true);
-            setErrorMessage(e?.response?.data?.message);
-            console.log({error: e?.response?.data?.message});
+        if(password !== confirmPassword){
+            setError(true)
+            setErrorMessage('Contraseñas no coinciden!');
+        }else{
+            try{
+                const response = await axios.post('http://10.0.2.2:3000/api/auth/register',{
+                    email,
+                    firstName,
+                    lastName,
+                    password,
+                });
+                
+                navigation.navigate('Login');
+                
+            }catch (e: any){
+                setError(true);
+                setErrorMessage(e?.response?.data?.message);
+                console.log({error: e?.response?.data?.message});
+            }
         }
     };
 
@@ -89,7 +93,7 @@ const SignUp = ({navigation}) => {
                     <SubTitle>Registrar cuenta</SubTitle>
                     <Formik
                         initialValues={{firstName: '', lastName: '',email: '', password: '', confirmPassword: ''}}
-                        onSubmit={(values) => registerRequest(values.email, values.firstName,  values.lastName,values.password)}
+                        onSubmit={(values) => registerRequest(values.email, values.firstName,  values.lastName,values.password, values.confirmPassword)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
@@ -181,7 +185,7 @@ const SignUp = ({navigation}) => {
                                             secureTextEntry 
                                             onChangeText={handleChange('confirmPassword')}
                                             onBlur={handleBlur('confirmPassword')}
-                                            onSubmitEditing={() => registerRequest(values.email,values.firstName, values.lastName,  values.password)}
+                                            onSubmitEditing={() => registerRequest(values.email,values.firstName, values.lastName,  values.password, values.confirmPassword)}
                                         />
                                     </View>
                                 
@@ -193,7 +197,7 @@ const SignUp = ({navigation}) => {
                                         </Text>
                                     </View>
                                     <StyledButton 
-                                        onPress={() => registerRequest(values.email, values.firstName, values.lastName, values.password)}>
+                                        onPress={() => registerRequest(values.email, values.firstName, values.lastName, values.password, values.confirmPassword)}>
                                         <ButtonText>
                                             SignIn
                                         </ButtonText>
