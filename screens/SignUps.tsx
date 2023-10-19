@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 
 import giraStyles from "./../components/style";
 import { TextInput, View, Text } from 'react-native';
@@ -71,6 +71,14 @@ const SignUp = ({navigation}) => {
         }
     };
 
+    // Ref
+
+    const nameInputRef = useRef();
+    const lastNameInputRef = useRef();
+    const emailInputRef = useRef();
+    const passwordInputRef = useRef();
+    const confirmPasswordInputRef = useRef();
+
     return(
         <KeyboardWrapper>
             <StyledContainer>
@@ -86,31 +94,21 @@ const SignUp = ({navigation}) => {
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
                                 <StyledFormArea>
-                                    {/* <MyTextInput
-                                        label="Name"
-                                        icon="person"
-                                        placeholder="Dave Smith"
-                                        placeholderTextColor={primary}
-                                        onChangeText={handleChange('name')}
-                                        onBlur={handleBlur('name')}
-                                        value={values.name}
-
-                                        cealicciucncoquimbo@gmail.com  
-                                        fpmcucncoquimbo
-
-                                    /> */}
                                     
+                                
                                     {/* Nombre */}
                                     <Text style={styleLabel}>Ingrese nombre</Text>
                                     <View style={styleContainer}>
                                         <Octicons style={styleIcon} name={"person"} size={30} color={secondary} />
                                         <TextInput
+                                            ref={nameInputRef}
                                             placeholder="Dave"
                                             style={styleInput}
                                             placeholderTextColor={primary}
                                             value={values.firstName}
                                             onChangeText={handleChange('firstName')}
                                             onBlur={handleBlur('firstName')}
+                                            onSubmitEditing={() => lastNameInputRef.current.focus()}
                                         />
                                     </View>
 
@@ -119,12 +117,14 @@ const SignUp = ({navigation}) => {
                                     <View style={styleContainer}>
                                         <Octicons style={styleIcon} name={"person-fill"} size={30} color={secondary} />
                                         <TextInput
+                                            ref={lastNameInputRef}
                                             placeholder="Smith"
                                             style={styleInput}
                                             placeholderTextColor={primary}
                                             value={values.lastName}
                                             onChangeText={handleChange('lastName')}
                                             onBlur={handleBlur('lastName')}
+                                            onSubmitEditing={() => emailInputRef.current.focus()}
                                         />
                                     </View>
 
@@ -134,6 +134,7 @@ const SignUp = ({navigation}) => {
                                     <Octicons style={styleIcon} name={'mail'} size={30} color={secondary}/>
 
                                     <TextInput
+                                        ref={emailInputRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
                                         value={values.email}
@@ -141,22 +142,9 @@ const SignUp = ({navigation}) => {
                                         onChangeText={handleChange('email')}
                                         onBlur={handleBlur('email')}
                                         keyboardType="email-address"
+                                        onSubmitEditing={() => passwordInputRef.current.focus()}
                                         />
                                     </View>
-
-                                    {/* <MyTextInput
-                                        label="Password"
-                                        icon="lock"
-                                        placeholder="********"
-                                        placeholderTextColor={primary}
-                                        onChangeText={handleChange('password')}
-                                        onBlur={handleBlur('password')}
-                                        value={values.password}
-                                        secureTextEntry={hidePassword}
-                                        isPassword={true}
-                                        hidePassword={hidePassword}
-                                        setHidePassword={setHidePasswword}
-                                    /> */}
 
                                     {/* Contrasena */}
                                     
@@ -167,6 +155,7 @@ const SignUp = ({navigation}) => {
                                         </View>
 
                                     <TextInput
+                                        ref={passwordInputRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
                                         value={values.password}
@@ -174,6 +163,7 @@ const SignUp = ({navigation}) => {
                                         secureTextEntry
                                         onChangeText={handleChange('password')}
                                         onBlur={handleBlur('password')}
+                                        onSubmitEditing={() => confirmPasswordInputRef.current.focus()}
                                         />
                                     </View>
 
@@ -183,6 +173,7 @@ const SignUp = ({navigation}) => {
                                         <Octicons style={styleIcon} name={'lock'} size={30} color={secondary}/>
 
                                         <TextInput
+                                            ref={confirmPasswordInputRef}
                                             style={styleInput}
                                             placeholderTextColor={primary}
                                             value={values.confirmPassword}
@@ -190,6 +181,7 @@ const SignUp = ({navigation}) => {
                                             secureTextEntry 
                                             onChangeText={handleChange('confirmPassword')}
                                             onBlur={handleBlur('confirmPassword')}
+                                            onSubmitEditing={() => registerRequest(values.email,values.firstName, values.lastName,  values.password)}
                                         />
                                     </View>
                                 
@@ -219,23 +211,6 @@ const SignUp = ({navigation}) => {
             </StyledContainer>
         </KeyboardWrapper>
     );
-}
-
-const MyTextInput = ({label, icon, isPassword, hidePassword, setHidePassword,...props}) => {
-    return(
-        <View>
-            <LeftIcon>
-                <Octicons name={icon} size={30} color={primary}/>
-            </LeftIcon> 
-            <StyledInputLabel>{label}</StyledInputLabel>
-            <StyledTextInput {...props}/>
-            {isPassword && (
-                <RigthIcon onPress={() => setHidePassword(!hidePassword)}>
-                    <Ionicons name={hidePassword ? 'md-eye-off' :  'md-eye'} size={30} color={primary}/> 
-                </RigthIcon>
-            )}
-        </View>
-    )
 }
 
 

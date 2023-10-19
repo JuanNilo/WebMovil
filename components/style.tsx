@@ -5,16 +5,17 @@ import  Constants  from "expo-constants";
 const StatusBarHeight = Constants.statusBarHeight;
 
 export const Colors = {
-    primary: "#ffffff",
+    primary: "#dcdcdc",
     secondary: "#09f",
     terceary: "#3B3B3B",
+    yellow: "#FAB440",
     darkLight: "#C0C0C0",
-    brand: "#0052CC",
+    brand: "#0052CC", // Azul 
     purple: "#572364",
     red: "#EF4444"
 };
 
-const {primary, secondary, terceary, darkLight, brand, purple, red} = Colors;
+const {primary, secondary, terceary, yellow, darkLight, brand, purple, red} = Colors;
 
 const giraStyles = StyleSheet.create({
     styleContainer: {
@@ -35,7 +36,7 @@ const giraStyles = StyleSheet.create({
     },
     styleInput: {
         flex: 1, 
-        backgroundColor: secondary, 
+        backgroundColor: brand, 
         color: primary, 
         height: 50,
         marginVertical: 10,
@@ -43,6 +44,17 @@ const giraStyles = StyleSheet.create({
         paddingHorizontal: 10,
         fontSize: 16,
     },
+    styleErrorView: {
+        borderRadius: 5,
+        paddingVertical: 4,
+        alignItems: 'center',
+        textAlign: 'center'
+    },
+    styleErrorMessage: {
+        color: purple,
+        fontSize: 16,
+        fontWeight: 'bold'
+    }
 })
 
 
@@ -51,6 +63,7 @@ export default giraStyles;
 export const StyledContainer = styled.View`
     flex: 1;
     padding: 25px;
+    height: 100%;
     padding-top: ${StatusBarHeight + 45}px;
     background-color: ${primary};
 `;
@@ -201,7 +214,8 @@ export const TextLink = styled.TouchableOpacity`
 `;
 
 export const TextLinkContent = styled.Text`
-    color: ${brand};
+    color: ${purple};
+    font-weight: bold;
     font-size: 15px;
     padding-left: 5px;
 `;

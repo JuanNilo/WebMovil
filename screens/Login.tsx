@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import { StatusBar } from "expo-status-bar";
 
 import axios from "axios";
 
-import { ENDPOINT_MS_USER } from 'react-native-dotenv';
+import { KeyboardAvoidingView, Platform } from "react-native";
 
 import { TextInput, View, Text } from 'react-native';
 
@@ -15,7 +15,7 @@ import {Octicons, Ionicons, AntDesign} from "@expo/vector-icons";
 
 import giraStyles from "./../components/style";
 
-const {styleInput, styleIcon, styleContainer, styleIconContainer, styleLabel} = giraStyles
+const {styleInput, styleIcon, styleContainer, styleIconContainer, styleLabel, styleErrorView, styleErrorMessage} = giraStyles
 
 
 import { 
@@ -43,7 +43,7 @@ import {
 
 // Colors
 
-const {brand, primary, secondary, terceary,  darkLight} = Colors; 
+const {primary, secondary, terceary, yellow, darkLight, brand, purple, red} = Colors; 
 
 // Keyboards
 
@@ -53,11 +53,9 @@ import KeyboardWrapper from "../components/keyboardWrapper";
 
 const Login = ({navigation}) => {
     const [hidePassword, setHidePasswword] = useState(true);
-    //const [email, setEmail] = useState('');
-    //const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-     
+    const [values, setValues] = useState({ email: '', password: '' });
     const loginRequest = async (email: string, password: string) => {
         setError(false);
 
@@ -66,7 +64,8 @@ const Login = ({navigation}) => {
                 email,
                 password,
             });
-
+            setErrorMessage('');
+            setValues({ email: '', password: '' });
             navigation.navigate('Welcome');
 
         }catch (e: any){
@@ -75,6 +74,9 @@ const Login = ({navigation}) => {
             console.log({error: e?.response?.data?.message});
         }
     };
+
+    const emailInputRef = useRef();
+    const passwordInputRef = useRef();
 
     return(
         <KeyboardWrapper>
@@ -85,29 +87,19 @@ const Login = ({navigation}) => {
                     <PageTitle> Gira</PageTitle>
                     <SubTitle>Acoount Login</SubTitle>
                     <Formik
-                        initialValues={{email: '', password: ''}}
-                        onSubmit={(values) => loginRequest(values.email, values.password)}
+                        initialValues={values}
+                        onSubmit={(formValues) => loginRequest(formValues.email, formValues.password)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
                                 <StyledFormArea>
-                                    {/* <MyTextInput
-                                        label="Email Address"
-                                        icon="mail"
-                                        placeholder="mail@site.com"
-                                        placeholderTextColor={primary}
-                                        onChangeText={handleChange('email')}
-                                        onBlur={handleBlur('email')}
-                                        value={values.email}
-                                        keyboardType="email-address"
-                                    /> */}
-                                     
                                      {/* Mail */}
                                     <Text style={styleLabel}>Ingrese mail</Text>
                                     <View style={styleContainer}>
-                                    <Octicons style={styleIcon} name={'mail'} size={30} color={secondary}/>
+                                    <Octicons style={styleIcon} name={'mail'} size={30} color={brand}/>
 
                                     <TextInput
+                                        ref={emailInputRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
                                         value={values.email}
@@ -115,32 +107,20 @@ const Login = ({navigation}) => {
                                         onChangeText={handleChange('email')}
                                         onBlur={handleBlur('email')}
                                         keyboardType="email-address"
+                                        onSubmitEditing={() => passwordInputRef.current.focus()}
                                         />
                                     </View>
-                                    
-                                    {/* <MyTextInput
-                                        label="Password"
-                                        icon="lock"
-                                        placeholder="********"
-                                        placeholderTextColor={primary}
-                                        onChangeText={handleChange('password')}
-                                        onBlur={handleBlur('password')}
-                                        value={values.password}
-                                        secureTextEntry={hidePassword}
-                                        isPassword={true}
-                                        hidePassword={hidePassword}
-                                        setHidePassword={setHidePasswword}
-                                    /> */}
 
                                     {/* Contrasena */}
                                     
                                     <Text style={styleLabel}>Ingrese contraseña</Text>
                                     <View style={styleContainer}>
                                         <View style={styleIconContainer}>
-                                            <Octicons style={styleIcon} name={'lock'} size={30} color={secondary}/>
+                                            <Octicons style={styleIcon} name={'lock'} size={30} color={brand}/>
                                         </View>
 
                                     <TextInput
+                                        ref={passwordInputRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
                                         value={values.password}
@@ -148,11 +128,18 @@ const Login = ({navigation}) => {
                                         secureTextEntry
                                         onChangeText={handleChange('password')}
                                         onBlur={handleBlur('password')}
+                                        onSubmitEditing={() => loginRequest(values.email, values.password)}
                                         />
                                     </View>
 
 
-                                    <MsgBox>...</MsgBox>
+                                    <View
+                                        style={styleErrorView}
+                                    >
+                                        <Text style={styleErrorMessage}>
+                                            {errorMessage}
+                                        </Text>
+                                    </View>
                                     <StyledButton onPress={() => loginRequest(values.email,values.password)}>
                                         <ButtonText>
                                             Login
