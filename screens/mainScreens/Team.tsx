@@ -18,9 +18,9 @@ export default function Team({navigation}){
             <PageTitle style={{color:purple}}>TEAMS</PageTitle>
             {/* Crear equipo */}
             <StyledButton
-                style={{backgroundColor: purple}}
+                style={{backgroundColor: yellow}}
                 onPress={() => navigation.navigate('CreateTeam') /* handle your button action here */}>
-              <ButtonText > 
+              <ButtonText style={{color:'black'}}> 
                 Crear equipo
               </ButtonText>
             </StyledButton>
@@ -32,14 +32,7 @@ export default function Team({navigation}){
                 Ver equipos
               </ButtonText>
             </StyledButton>
-            {/* Editar equipo */}
-            <StyledButton
-                style={{backgroundColor: yellow}}
-                onPress={() => navigation.navigate('EditTeam') /* handle your button action here */}>
-              <ButtonText style={{color: 'black'}}> 
-                Editar equipos
-              </ButtonText>
-            </StyledButton>
+            
             {/* Eliminar equipo */}
             <StyledButton
                 style={{backgroundColor: red}}
