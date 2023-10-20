@@ -98,7 +98,7 @@ const Login = ({navigation}) => {
                                     <View style={styleContainer}>
                                     <Octicons style={styleIcon} name={'mail'} size={30} color={brand}/>
 
-                                    <TextInput disabled={isLoading}
+                                    <TextInput 
                                         ref={emailInputRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
@@ -119,7 +119,7 @@ const Login = ({navigation}) => {
                                             <Octicons style={styleIcon} name={'lock'} size={30} color={brand}/>
                                         </View>
 
-                                    <TextInput disabled={isLoading}
+                                    <TextInput 
                                         ref={passwordInputRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
@@ -128,7 +128,7 @@ const Login = ({navigation}) => {
                                         secureTextEntry
                                         onChangeText={handleChange('password')}
                                         onBlur={handleBlur('password')}
-                                        onSubmitEditing={() => loginRequest(values.email, values.password)}
+                                        onSubmitEditing={() => handleSubmit()}
                                         />
                                     </View>
 
