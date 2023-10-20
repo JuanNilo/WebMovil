@@ -19,6 +19,13 @@ import EditPassword from '../screens/mainScreens/editorScreens/EditPassword';
 import EditMail from '../screens/mainScreens/editorScreens/EditMail';
 const Stack = createNativeStackNavigator();
 
+
+// Team
+import CreateTeam from '../screens/mainScreens/teamScreens/CreateTeam';
+import DeleteTeam from '../screens/mainScreens/teamScreens/DeleteTeam';
+import EditTeam from '../screens/mainScreens/teamScreens/EditTeam';
+import ViewTeams from '../screens/mainScreens/teamScreens/ViewTeams';
+
 const RootStack = () => {
     return(
         <NavigationContainer>
@@ -43,6 +50,10 @@ const RootStack = () => {
                 <Stack.Screen options={{headerTintColor: purple}} name='EditData' component={EditData}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='EditPassword' component={EditPassword}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='EditMail' component={EditMail}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='CreateTeam' component={CreateTeam}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='DeleteTeam' component={DeleteTeam}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='EditTeam' component={EditTeam}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='ViewTeams' component={ViewTeams}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -33,7 +33,7 @@ export default function BottomRootStack(){
         
             <Tab.Navigator
                 
-                initialRouteName={homeName}
+                initialRouteName={teamName}
                 screenOptions={({route}) => ({
                     tabBarIcon: ({focused, color, size}) => {
                         let iconName;
