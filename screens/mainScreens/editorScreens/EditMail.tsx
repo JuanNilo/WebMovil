@@ -45,6 +45,8 @@ const {primary , secondary, purple} = Colors;
 
 import KeyboardWrapper from "../../../components/keyboardWrapper";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 const EditMail = ({navigation}) => {
@@ -52,42 +54,40 @@ const EditMail = ({navigation}) => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [userData, setUserData] = useState({});
+    const [emailInput, setEmailInput] = useState('');   
+    const [newEmail, setNewEmail] = useState('');
     
     // Recuperar datos desde el back
 
-    useEffect(() => {
-        // Fetch user data from the backend
-        const fetchUserData = async () => {
-          try {
-            const email = 'juan@mail.com';
-            axios.get(`http://10.0.2.2:3000/api/users/email/${email}`)
-              .then(response => {
-                const userData = response.data;
-                setUserData(userData);
-              })
-              .catch(error => {
-                console.error('Error al recuperar los datos del usuario:', error);
-              });
-          } catch (error) {
-            console.error('Failed to fetch user data:', error);
-          }
-        };
-    
+    const fetchUserData = async () => {
+        try {
+          const email = await AsyncStorage.getItem('email');
+          const response = await axios.get(`http://10.0.2.2:3000/api/users/profile/${email}`);
+          const userData = response.data;
+          setUserData(userData);
+        } catch (error) {
+          setError(true);
+          setErrorMessage(error?.response?.data?.message);
+          console.error('Error al recuperar los datos del usuario:', error);
+        }
+      };
+      useFocusEffect(() => {
         fetchUserData();
-      }, []);
+      });
 
-    const changeEmail = async (oldEmail: string, newEmail: string) => {
+    
+      const changeEmail = async (emailInput: string, newEmail: string) => {
         setError(false);
         try{
-            // const response = await axios.post('http://10.0.2.2:3000/api/auth/register',{
-            //     email,
-            //     firstName,
-            //     lastName,
-            //     password,
-            // });
-            
+            const oldEmail = await AsyncStorage.getItem('email');
+            console.log (oldEmail);
+            const response = await axios.post('http://10.0.2.2:3000/api/users/update-email',{
+                oldEmail,
+                emailInput,
+                newEmail,
+            });
+            await AsyncStorage.setItem('email', newEmail);
             navigation.navigate('Login');
-            
         }catch (e: any){
             setError(true);
             setErrorMessage(e?.response?.data?.message);
@@ -114,8 +114,8 @@ const EditMail = ({navigation}) => {
                     <PageTitle> Gira</PageTitle>
                     <SubTitle>Cambiar correo</SubTitle>
                     <Formik
-                        initialValues={{oldEmail: userData.email, newEmail: ''}}
-                        onSubmit={(values) => registerRequest(values.oldEmail,values.newEmail)}
+                        initialValues={{emailInput: '', newEmail: ''}}
+                        onSubmit={(values) => changeEmail(values.emailInput,values.newEmail)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
@@ -131,10 +131,10 @@ const EditMail = ({navigation}) => {
                                         ref={oldEmailRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
-                                        value={values.oldEmail}
+                                        value={values.emailInput}
                                         placeholder={"antiguo@mail.com"}
-                                        onChangeText={handleChange('oldEmail')}
-                                        onBlur={handleBlur('oldEmail')}
+                                        onChangeText={handleChange('emailInput')}
+                                        onBlur={handleBlur('emailInput')}
                                         keyboardType="email-address"
                                         onSubmitEditing={() => newEmailRef.current.focus()}
                                         />
@@ -155,7 +155,7 @@ const EditMail = ({navigation}) => {
                                         onChangeText={handleChange('newEmail')}
                                         onBlur={handleBlur('newEmail')}
                                         keyboardType="email-address"
-                                        onSubmitEditing={() => changeEmail(values.oldEmail,values.newEmail)}
+                                        onSubmitEditing={() => handleSubmit()}
                                         />
                                     </View>
                                     
@@ -169,7 +169,7 @@ const EditMail = ({navigation}) => {
                                     </View>
                                     <StyledButton 
                                         style={{backgroundColor: purple}}
-                                        onPress={() => changeEmail(values.oldEmail,values.newEmail)}>
+                                        onPress={() => changeEmail(values.emailInput,values.newEmail)}>
                                         <ButtonText>
                                             Cambiar correo
                                         </ButtonText>

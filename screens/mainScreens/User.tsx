@@ -13,6 +13,8 @@ const { styleIcon, styleInnerContainer, styleContainer, styleDataUser,styleIconC
 import KeyboardWrapper from "../../components/keyboardWrapper";
 import axios from "axios";
 import { useAsyncStorage } from "../../localStorage/localStorage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 
@@ -23,22 +25,25 @@ const User = ({ navigation }) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [userData, setUserData] = useState({})
-  const email = String(useAsyncStorage('email'));
+  const [email, setEmail] = useState('');
   
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(`http://10.0.2.2:3000/api/users/email/${email}`);
-        const userData = response.data;
-        setUserData(userData);
-        console.log(userData);
-      } catch (error) {
-        console.error('Error al recuperar los datos del usuario:', error);
-      }
-    };
-  
+
+  const fetchUserData = async () => {
+    try {
+      const email = await AsyncStorage.getItem('email');
+      setEmail(email);
+      const response = await axios.get(`http://10.0.2.2:3000/api/users/profile/${email}`);
+      const userData = response.data;
+      setUserData(userData);
+    } catch (error) {
+      setError(true);
+      setErrorMessage(error?.response?.data?.message);
+      console.error('Error al recuperar los datos del usuario:', error);
+    }
+  };
+  useFocusEffect(() => {
     fetchUserData();
-  }, []);
+  });
 
   return (
     <KeyboardWrapper>

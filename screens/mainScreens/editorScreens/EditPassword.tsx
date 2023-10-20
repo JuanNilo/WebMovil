@@ -47,6 +47,7 @@ const {primary, secondary, terceary, yellow, darkLight, brand, purple, red} = Co
 
 import KeyboardWrapper from "./../../../components/keyboardWrapper";
 import { useRoute } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
@@ -54,24 +55,25 @@ const EditPassword = ({navigation}) => {
     const [hidePassword, setHidePasswword] = useState(true);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [values, setValues] = useState({ oldPassword:'', newPassword: '', confirmPassword: '' });
+    const [values, setValues] = useState({ password:'', newPassword: '', confirmPassword: '' });
     const route = useRoute();
     const params = route.params;
-    const email = 'juan@mail.com'
-    const passwordChangeRequest = async (oldPassword: string, newPassword: string, confirmPassword: string) => {
+    const passwordChangeRequest = async (password: string, newPassword: string, confirmPassword: string) => {
         setError(false);
         if(newPassword !== confirmPassword){
             setError(true)
             setErrorMessage('Contraseñas no coinciden!');
         }else{
             try{
-                // const response = await axios.post('http://10.0.2.2:3000/api/auth/reset-pass',{
-                // email,
-                // newPassword,
-                // });
+                const email = await AsyncStorage.getItem('email');
+                const response = await axios.post('http://10.0.2.2:3000/api/users/update-password',{
+                email,
+                password,
+                newPassword,
+                });
                 setErrorMessage('');
-                setValues({ oldPassword: '', newPassword: '', confirmPassword: '' });
-                console.log({oldPassword, newPassword, confirmPassword});
+                setValues({ password: '', newPassword: '', confirmPassword: '' });
+                console.log({password, newPassword, confirmPassword});
                 navigation.navigate('Login');
 
             }catch (e: any){
@@ -101,7 +103,7 @@ const EditPassword = ({navigation}) => {
                     <SubTitle>Cambiar contraseña</SubTitle>
                     <Formik
                         initialValues={values}
-                        onSubmit={(formValues) => passwordChangeRequest(formValues.oldPassword, formValues.newPassword, formValues.confirmPassword)}
+                        onSubmit={(formValues) => passwordChangeRequest(formValues.password, formValues.newPassword, formValues.confirmPassword)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
@@ -115,10 +117,11 @@ const EditPassword = ({navigation}) => {
                                         ref={oldPassword}
                                         style={styleInput}
                                         placeholderTextColor={primary}
-                                        value={values.oldPassword}
+                                        value={values.password}
                                         placeholder="Contraseña antigua"
-                                        onChangeText={handleChange('oldPasswordInput')}
-                                        onBlur={handleBlur('oldPasswordInput')}
+                                        secureTextEntry
+                                        onChangeText={handleChange('password')}
+                                        onBlur={handleBlur('password')}
                                         onSubmitEditing={() => passwordInputRef.current.focus()}
                                         />
                                     </View>
@@ -172,7 +175,7 @@ const EditPassword = ({navigation}) => {
                                             {errorMessage}
                                         </Text>
                                     </View>
-                                    <StyledButton style={{backgroundColor: purple}} onPress={() => passwordChangeRequest(values.oldPassword,values.newPassword, values.confirmPassword)}>
+                                    <StyledButton style={{backgroundColor: purple}} onPress={() => passwordChangeRequest(values.password,values.newPassword, values.confirmPassword)}>
                                         <ButtonText>
                                             Cambiar contraseña
                                         </ButtonText>

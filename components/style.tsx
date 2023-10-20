@@ -88,6 +88,15 @@ const giraStyles = StyleSheet.create({
         borderRadius: 5,
         fontSize: 26,
         textAlign: 'center'
+    },
+    styleListContainer: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+    },
+    styleListItem: {
+        marginVertical: 5,
+        fontSize: 18,
+        color: 'black', 
     }
 })
 
