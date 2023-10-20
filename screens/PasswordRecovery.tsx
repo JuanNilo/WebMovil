@@ -58,7 +58,7 @@ const PasswordRecovery = ({navigation}) => {
             email
             });
             const code  = response.data;
-            setCode({ code });
+            setCode({ code : ''});
             setErrorMessage('');
             setValues({ email: ''});
             navigation.navigate('PasswordChange', {code, email});

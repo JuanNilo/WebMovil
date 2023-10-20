@@ -54,23 +54,28 @@ const PasswordChange = ({navigation}) => {
     const [hidePassword, setHidePasswword] = useState(true);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [values, setValues] = useState({ code: '', password: '', confirmPassword: '' });
+    const [values, setValues] = useState({ code: '', codeInput: '', newPassword: '', confirmPassword: '' });
     const route = useRoute();
-    const { code, email } = route.params;
+    const params = route.params;
+    const code = params.code ? String(params.code) : '';
+    const email = params.email ? String(params.email) : '';
 
-    const passwordChangeRequest = async (code: string, password: string, confirmPassword: string) => {
+    const passwordChangeRequest = async (codeInput: string, newPassword: string, confirmPassword: string) => {
         setError(false);
-        if(password !== confirmPassword){
+        if(newPassword !== confirmPassword){
             setError(true)
             setErrorMessage('Contraseñas no coinciden!');
         }else{
             try{
-                // const response = await axios.post('http://10.0.2.2:3000/api/auth/login',{
-                //     email,
-                //     password,
-                // });
+                const response = await axios.post('http://10.0.2.2:3000/api/auth/reset-pass',{
+                email,
+                code,
+                codeInput,
+                newPassword,
+                });
                 setErrorMessage('');
-                setValues({ code: '', password: '', confirmPassword: '' });
+                setValues({ code: '', codeInput: '',newPassword: '', confirmPassword: '' });
+                console.log({code, codeInput, newPassword, confirmPassword});
                 navigation.navigate('Login');
 
             }catch (e: any){
@@ -95,7 +100,7 @@ const PasswordChange = ({navigation}) => {
                     <SubTitle>Cambiar contraseña</SubTitle>
                     <Formik
                         initialValues={values}
-                        onSubmit={(formValues) => passwordChangeRequest(formValues.code, formValues.password, formValues.confirmPassword)}
+                        onSubmit={(formValues) => passwordChangeRequest(formValues.codeInput, formValues.newPassword, formValues.confirmPassword)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
@@ -109,10 +114,10 @@ const PasswordChange = ({navigation}) => {
                                         ref={codeInputRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
-                                        value={values.code}
+                                        value={values.codeInput}
                                         placeholder="Codigo"
-                                        onChangeText={handleChange('code')}
-                                        onBlur={handleBlur('code')}
+                                        onChangeText={handleChange('codeInput')}
+                                        onBlur={handleBlur('codeInput')}
                                         onSubmitEditing={() => passwordInputRef.current.focus()}
                                         />
                                     </View>
@@ -129,11 +134,11 @@ const PasswordChange = ({navigation}) => {
                                         ref={passwordInputRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
-                                        value={values.password}
+                                        value={values.newPassword}
                                         placeholder="Nueva constraseña"
                                         secureTextEntry
-                                        onChangeText={handleChange('password')}
-                                        onBlur={handleBlur('password')}
+                                        onChangeText={handleChange('newPassword')}
+                                        onBlur={handleBlur('newPassword')}
                                         onSubmitEditing={() => confirmPasswordInputRef.current.focus()}
                                         />
                                     </View>
@@ -155,7 +160,7 @@ const PasswordChange = ({navigation}) => {
                                         secureTextEntry
                                         onChangeText={handleChange('confirmPassword')}
                                         onBlur={handleBlur('confirmPassword')}
-                                        onSubmitEditing={() => passwordChangeRequest(values.code, values.password, values.confirmPassword)}
+                                        onSubmitEditing={() => handleSubmit()}
                                         />
                                     </View>
 
@@ -166,9 +171,9 @@ const PasswordChange = ({navigation}) => {
                                             {errorMessage}
                                         </Text>
                                     </View>
-                                    <StyledButton onPress={() => passwordChangeRequest(values.code,values.password, values.confirmPassword)}>
+                                    <StyledButton onPress={() => passwordChangeRequest(values.codeInput,values.newPassword, values.confirmPassword)}>
                                         <ButtonText>
-                                        Cambiar contraseña
+                                            Cambiar contraseña
                                         </ButtonText>
                                     </StyledButton>
                                     <Line />
