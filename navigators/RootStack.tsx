@@ -14,7 +14,8 @@ import Welcome from './../screens/welcome';
 import Initial from './../screens/Initial'
 import PasswordRecovery from '../screens/PasswordRecovery';
 import PasswordChange from '../screens/PasswordChange';
-
+import EditData from '../screens/mainScreens/editorScreens/EditData';
+import EditPassword from '../screens/mainScreens/editorScreens/EditPassword';
 const Stack = createNativeStackNavigator();
 
 const RootStack = () => {
@@ -38,6 +39,8 @@ const RootStack = () => {
                 <Stack.Screen name='PasswordRecovery' component={PasswordRecovery}/>
                 <Stack.Screen name='PasswordChange' component={PasswordChange}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='Welcome' component={Welcome}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='EditData' component={EditData}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='EditPassword' component={EditPassword}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

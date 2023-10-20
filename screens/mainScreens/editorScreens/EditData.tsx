@@ -1,8 +1,8 @@
 
 
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
 
-import giraStyles from "./../../components/style";
+import giraStyles from "../../../components/style";
 import { TextInput, View, Text, ScrollView,Image } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 
@@ -33,17 +33,17 @@ import {
     TextLink,
     TextLinkContent
 
-} from './../../components/style';
+} from '../../../components/style';
 
 const {styleInput, styleIcon, styleInnerContainer,styleContainer, styleIconContainer, container,styleLabel, styleErrorMessage, styleErrorView, styleLogo} = giraStyles
 
 // Colors
 
-const {primary , secondary} = Colors; 
+const {primary , secondary, purple} = Colors; 
 
 // Keyboards
 
-import KeyboardWrapper from "./../../components/keyboardWrapper";
+import KeyboardWrapper from "../../../components/keyboardWrapper";
 import axios from "axios";
 
 
@@ -52,7 +52,31 @@ const EditData = ({navigation}) => {
    
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-     
+    const [userData, setUserData] = useState({});
+    
+    // Recuperar datos desde el back
+
+    useEffect(() => {
+        // Fetch user data from the backend
+        const fetchUserData = async () => {
+          try {
+            const email = 'juan@mail.com';
+            axios.get(`http://10.0.2.2:3000/api/users/email/${email}`)
+              .then(response => {
+                const userData = response.data;
+                setUserData(userData);
+              })
+              .catch(error => {
+                console.error('Error al recuperar los datos del usuario:', error);
+              });
+          } catch (error) {
+            console.error('Failed to fetch user data:', error);
+          }
+        };
+    
+        fetchUserData();
+      }, []);
+
     const registerRequest = async (email: string, firstName: string, lastName: string,password: string, confirmPassword: string) => {
         setError(false);
         if(password !== confirmPassword){
@@ -97,9 +121,9 @@ const EditData = ({navigation}) => {
                     style={styleLogo}
                 />
                     <PageTitle> Gira</PageTitle>
-                    <SubTitle>Registrar cuenta</SubTitle>
+                    <SubTitle>Editar datos</SubTitle>
                     <Formik
-                        initialValues={{firstName: '', lastName: '',email: '', password: '', confirmPassword: ''}}
+                        initialValues={{firstName: userData.firstName, lastName: userData.lastName,email: userData.email, password: userData.password, confirmPassword: userData.password}}
                         onSubmit={(values) => registerRequest(values.email, values.firstName,  values.lastName,values.password, values.confirmPassword)}
                     >
                         {
@@ -113,7 +137,7 @@ const EditData = ({navigation}) => {
                                         <Octicons style={styleIcon} name={"person"} size={30} color={secondary} />
                                         <TextInput
                                             ref={nameInputRef}
-                                            placeholder="Dave"
+                                            placeholder={userData.firstName}
                                             style={styleInput}
                                             placeholderTextColor={primary}
                                             value={values.firstName}
@@ -129,7 +153,7 @@ const EditData = ({navigation}) => {
                                         <Octicons style={styleIcon} name={"person-fill"} size={30} color={secondary} />
                                         <TextInput
                                             ref={lastNameInputRef}
-                                            placeholder="Smith"
+                                            placeholder={userData.lastName}
                                             style={styleInput}
                                             placeholderTextColor={primary}
                                             value={values.lastName}
@@ -149,7 +173,7 @@ const EditData = ({navigation}) => {
                                         style={styleInput}
                                         placeholderTextColor={primary}
                                         value={values.email}
-                                        placeholder="mail@site.com"
+                                        placeholder={userData.email}
                                         onChangeText={handleChange('email')}
                                         onBlur={handleBlur('email')}
                                         keyboardType="email-address"
@@ -170,7 +194,7 @@ const EditData = ({navigation}) => {
                                         style={styleInput}
                                         placeholderTextColor={primary}
                                         value={values.password}
-                                        placeholder="Password"
+                                        placeholder="********"
                                         secureTextEntry
                                         onChangeText={handleChange('password')}
                                         onBlur={handleBlur('password')}
@@ -188,7 +212,7 @@ const EditData = ({navigation}) => {
                                             style={styleInput}
                                             placeholderTextColor={primary}
                                             value={values.confirmPassword}
-                                            placeholder="Confirm password"
+                                            placeholder="********"
                                             secureTextEntry 
                                             onChangeText={handleChange('confirmPassword')}
                                             onBlur={handleBlur('confirmPassword')}
@@ -204,22 +228,12 @@ const EditData = ({navigation}) => {
                                         </Text>
                                     </View>
                                     <StyledButton 
+                                        style={{backgroundColor: purple}}
                                         onPress={() => registerRequest(values.email, values.firstName, values.lastName, values.password, values.confirmPassword)}>
                                         <ButtonText>
-                                            SignIn
+                                            Guardar cambios
                                         </ButtonText>
                                     </StyledButton>
-                                    <Line />
-                                    <ExtraView>
-                                        <ExtraText>
-                                            ¿Tienes cuenta?. 
-                                        </ExtraText>
-                                        <TextLink onPress={() => navigation.navigate('Login')}>
-                                            <TextLinkContent>
-                                                Login
-                                            </TextLinkContent>
-                                        </TextLink>
-                                    </ExtraView>
                                 </StyledFormArea>
                             )
                         }

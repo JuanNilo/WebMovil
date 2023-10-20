@@ -23,7 +23,7 @@ const User = ({ navigation }) => {
     // Fetch user data from the backend
     const fetchUserData = async () => {
       try {
-        const email = 'naxoxxd2.0@gmail.com';
+        const email = 'juan@mail.com';
         axios.get(`http://10.0.2.2:3000/api/users/email/${email}`)
           .then(response => {
             const userData = response.data;
@@ -86,11 +86,30 @@ const User = ({ navigation }) => {
                 {errorMessage}
               </Text>
             </View>
+            {/* Editar Nombre */}
             <StyledButton
             style={{backgroundColor: purple}}
-              onPress={() => console.log('holamundo') /* handle your button action here */}>
+              onPress={() => navigation.navigate('EditData') /* handle your button action here */}>
               <ButtonText > 
                 Editar datos
+              </ButtonText>
+            </StyledButton>
+            <Line />
+            {/* Editar mail */}
+            <StyledButton
+            style={{backgroundColor: purple}}
+              onPress={() => navigation.navigate('EditMail') /* handle your button action here */}>
+              <ButtonText > 
+                Editar mail
+              </ButtonText>
+            </StyledButton>
+            <Line />
+            {/* Editar Contrasena */}
+            <StyledButton
+            style={{backgroundColor: purple}}
+              onPress={() => navigation.navigate('EditPassword') /* handle your button action here */}>
+              <ButtonText > 
+                Editar contraseña
               </ButtonText>
             </StyledButton>
             <Line />
