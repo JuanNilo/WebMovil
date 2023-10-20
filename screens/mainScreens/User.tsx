@@ -23,7 +23,7 @@ const User = ({ navigation }) => {
     // Fetch user data from the backend
     const fetchUserData = async () => {
       try {
-        const email = 'juan@mail.com';
+        const email = 'naxoxxd2.0@gmail.com';
         axios.get(`http://10.0.2.2:3000/api/users/email/${email}`)
           .then(response => {
             const userData = response.data;

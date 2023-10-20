@@ -46,6 +46,7 @@ const {primary, secondary, terceary, yellow, darkLight, brand, purple, red} = Co
 // Keyboards
 
 import KeyboardWrapper from "../components/keyboardWrapper";
+import { useRoute } from "@react-navigation/native";
 
 
 
@@ -54,6 +55,9 @@ const PasswordChange = ({navigation}) => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [values, setValues] = useState({ code: '', password: '', confirmPassword: '' });
+    const route = useRoute();
+    const { code, email } = route.params;
+
     const passwordChangeRequest = async (code: string, password: string, confirmPassword: string) => {
         setError(false);
         if(password !== confirmPassword){

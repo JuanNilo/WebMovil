@@ -13,6 +13,7 @@ import {Octicons} from "@expo/vector-icons";
 
 import giraStyles from "./../components/style";
 
+
 const {styleInput, styleIcon, styleContainer, styleIconContainer, styleLabel, styleErrorView, styleErrorMessage} = giraStyles
 
 
@@ -44,20 +45,23 @@ import KeyboardWrapper from "../components/keyboardWrapper";
 
 
 
-const Login = ({navigation}) => {
+const PasswordRecovery = ({navigation}) => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [values, setValues] = useState({ email: '' });
+    const [code, setCode] = useState({ code: '' });
     const passwordCodeRequest = async (email: string) => {
         setError(false);
 
         try{
-            // const response = await axios.post('http://10.0.2.2:3000/api/auth/login',{
-            //     email
-            // });
+            const response = await axios.post('http://10.0.2.2:3000/api/auth/reset',{
+            email
+            });
+            const code  = response.data;
+            setCode({ code });
             setErrorMessage('');
             setValues({ email: ''});
-            navigation.navigate('PasswordChange');
+            navigation.navigate('PasswordChange', {code, email});
 
         }catch (e: any){
             setError(true);
@@ -135,4 +139,4 @@ const Login = ({navigation}) => {
     );
 }
 
-export default Login;
+export default PasswordRecovery;

@@ -54,9 +54,10 @@ const Login = ({navigation}) => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [values, setValues] = useState({ email: '', password: '' });
+    const [isLoading, setIsLoading] = useState(false);
     const loginRequest = async (email: string, password: string) => {
         setError(false);
-
+        setIsLoading(true);
         try{
             const response = await axios.post('http://10.0.2.2:3000/api/auth/login',{
                 email,
@@ -70,6 +71,7 @@ const Login = ({navigation}) => {
             setError(true);
             setErrorMessage(e?.response?.data?.message);
             console.log({error: e?.response?.data?.message});
+            setIsLoading(false);
         }
     };
 
@@ -96,7 +98,7 @@ const Login = ({navigation}) => {
                                     <View style={styleContainer}>
                                     <Octicons style={styleIcon} name={'mail'} size={30} color={brand}/>
 
-                                    <TextInput
+                                    <TextInput disabled={isLoading}
                                         ref={emailInputRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
@@ -117,7 +119,7 @@ const Login = ({navigation}) => {
                                             <Octicons style={styleIcon} name={'lock'} size={30} color={brand}/>
                                         </View>
 
-                                    <TextInput
+                                    <TextInput disabled={isLoading}
                                         ref={passwordInputRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
@@ -138,29 +140,35 @@ const Login = ({navigation}) => {
                                             {errorMessage}
                                         </Text>
                                     </View>
-                                    <StyledButton onPress={() => loginRequest(values.email,values.password)}>
+                                    <StyledButton
+                                        onPress={async () => { setIsLoading(true); // Activar el estado de carga al presionar el botón
+                                        try {
+                                            await loginRequest(values.email, values.password);
+                                        } finally {
+                                        setIsLoading(false);}
+                                        }} disabled={isLoading}>
                                         <ButtonText>
-                                        Iniciar sesión
+                                            {isLoading ? 'Cargando...' : 'Iniciar sesión'}
                                         </ButtonText>
-                                    </StyledButton>
+                                    </StyledButton >
                                     <Line />
                 
                                     <ExtraView>
                                         <ExtraText>
-                                        ¿No tienes una cuenta?
+                                            ¿No tienes una cuenta?
                                         </ExtraText>
-                                        <TextLink onPress={() =>  navigation.navigate('SignUp')}>
+                                        <TextLink disabled={isLoading} onPress={() =>  navigation.navigate('SignUp')}>
                                             <TextLinkContent>
-                                            Regístrate
+                                                Regístrate
                                             </TextLinkContent>
                                         </TextLink>
                                     </ExtraView>
                                     <Line />
                                     {/* Recuperar contraseña */}
                                     <ExtraView>
-                                        <TextLink onPress={() =>  navigation.navigate('PasswordRecovery')}>
+                                        <TextLink disabled={isLoading} onPress={() =>  navigation.navigate('PasswordRecovery')}>
                                             <TextLinkContent>
-                                            ¿Olvidaste tu contraseña?
+                                                ¿Olvidaste tu contraseña?
                                             </TextLinkContent>
                                         </TextLink>
                                     </ExtraView>
