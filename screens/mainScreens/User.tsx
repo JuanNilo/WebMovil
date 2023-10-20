@@ -24,14 +24,12 @@ const User = ({ navigation }) => {
   const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [userData, setUserData] = useState({})
-  const [email, setEmail] = useState('');
+  const [userData, setUserData] = useState({});
   
 
   const fetchUserData = async () => {
     try {
       const email = await AsyncStorage.getItem('email');
-      setEmail(email);
       const response = await axios.get(`http://10.0.2.2:3000/api/users/profile/${email}`);
       const userData = response.data;
       setUserData(userData);

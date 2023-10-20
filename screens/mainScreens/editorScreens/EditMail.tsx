@@ -56,6 +56,7 @@ const EditMail = ({navigation}) => {
     const [userData, setUserData] = useState({});
     const [emailInput, setEmailInput] = useState('');   
     const [newEmail, setNewEmail] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     
     // Recuperar datos desde el back
 
@@ -87,6 +88,7 @@ const EditMail = ({navigation}) => {
                 newEmail,
             });
             await AsyncStorage.setItem('email', newEmail);
+            setIsLoading(false);
             navigation.navigate('Login');
         }catch (e: any){
             setError(true);
@@ -167,13 +169,17 @@ const EditMail = ({navigation}) => {
                                             {errorMessage}
                                         </Text>
                                     </View>
-                                    <StyledButton 
-                                        style={{backgroundColor: purple}}
-                                        onPress={() => changeEmail(values.emailInput,values.newEmail)}>
+                                    <StyledButton
+                                        onPress={async () => { setIsLoading(true); // Activar el estado de carga al presionar el botón
+                                        try {
+                                            await changeEmail(values.emailInput, values.newEmail);
+                                        } finally {
+                                        setIsLoading(false);}
+                                        }} disabled={isLoading}>
                                         <ButtonText>
-                                            Cambiar correo
+                                            {isLoading ? 'Cargando...' : 'Cambiar Email'}
                                         </ButtonText>
-                                    </StyledButton>
+                                    </StyledButton >
                                 </StyledFormArea>
                             )
                         }

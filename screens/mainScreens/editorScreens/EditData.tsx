@@ -57,14 +57,11 @@ const EditData = ({navigation}) => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [userData, setUserData] = useState({});
-    const [email, setEmail] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const fetchUserData = async (email: string) => {
+    const fetchUserData = async () => {
       try {
         const email = await AsyncStorage.getItem('email');
-        setEmail(email);
         const response = await axios.get(`http://10.0.2.2:3000/api/users/profile/${email}`);
         const userData = response.data;
         setUserData(userData);
@@ -78,19 +75,19 @@ const EditData = ({navigation}) => {
     
     useEffect(() => {
       
-      fetchUserData(email);
+      fetchUserData();
     }, []);
 
     const updateRequest = async (firstName: string, lastName: string) => {
         setError(false);
         try{
             const email = await AsyncStorage.getItem('email');
-            setEmail(email);
             const response = await axios.post('http://10.0.2.2:3000/api/users/update-profile',{
                 email,
                 firstName,
                 lastName,
             });
+            setIsLoading(false);
             navigation.navigate('User');
         }catch (e: any){
             setError(true);
@@ -166,13 +163,17 @@ const EditData = ({navigation}) => {
                                             {errorMessage}
                                         </Text>
                                     </View>
-                                    <StyledButton 
-                                        style={{backgroundColor: purple}}
-                                        onPress={() => updateRequest(values.firstName, values.lastName)}>
+                                    <StyledButton
+                                        onPress={async () => { setIsLoading(true); // Activar el estado de carga al presionar el botón
+                                        try {
+                                            await updateRequest(values.firstName, values.lastName);
+                                        } finally {
+                                        setIsLoading(false);}
+                                        }} disabled={isLoading}>
                                         <ButtonText>
-                                            Guardar cambios
+                                            {isLoading ? 'Cargando...' : 'Cambiar Datos'}
                                         </ButtonText>
-                                    </StyledButton>
+                                    </StyledButton >
                                 </StyledFormArea>
                             )
                         }

@@ -50,6 +50,7 @@ const PasswordRecovery = ({navigation}) => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [values, setValues] = useState({ email: '' });
+    const [isLoading, setIsLoading] = useState(false);
     const passwordCodeRequest = async (email: string) => {
         setError(false);
 
@@ -62,6 +63,7 @@ const PasswordRecovery = ({navigation}) => {
             setValues({ email: ''});
             await AsyncStorage.setItem('email', email);
             await AsyncStorage.setItem('code', code);
+            setIsLoading(false);
             navigation.navigate('PasswordChange');
 
         }catch (e: any){
@@ -110,11 +112,17 @@ const PasswordRecovery = ({navigation}) => {
                                             {errorMessage}
                                         </Text>
                                     </View>
-                                    <StyledButton onPress={() => passwordCodeRequest(values.email)}>
+                                    <StyledButton
+                                        onPress={async () => { setIsLoading(true); 
+                                        try {
+                                            await passwordCodeRequest(values.email);
+                                        } finally {
+                                        setIsLoading(false);}
+                                        }} disabled={isLoading}>
                                         <ButtonText>
-                                        Recuperar
+                                            {isLoading ? 'Cargando...' : 'Recuperar'}
                                         </ButtonText>
-                                    </StyledButton>
+                                    </StyledButton >
                                     <Line />
                 
                                     <ExtraView>

@@ -67,6 +67,7 @@ const Login = ({navigation}) => {
             setErrorMessage('');
             setValues({ email: '', password: '' });
             await AsyncStorage.setItem('email', email);
+            setIsLoading(false);
             navigation.navigate('Welcome', {email});
 
         }catch (e: any){

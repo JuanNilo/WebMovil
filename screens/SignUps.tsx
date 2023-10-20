@@ -50,6 +50,7 @@ const SignUp = ({navigation}) => {
    
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
      
     const registerRequest = async (email: string, firstName: string, lastName: string,password: string, confirmPassword: string) => {
         setError(false);
@@ -64,7 +65,7 @@ const SignUp = ({navigation}) => {
                     lastName,
                     password,
                 });
-                
+                setIsLoading(false);
                 navigation.navigate('Login');
                 
             }catch (e: any){
@@ -196,18 +197,23 @@ const SignUp = ({navigation}) => {
                                             {errorMessage}
                                         </Text>
                                     </View>
-                                    <StyledButton 
-                                        onPress={() => registerRequest(values.email, values.firstName, values.lastName, values.password, values.confirmPassword)}>
+                                    <StyledButton
+                                        onPress={async () => { setIsLoading(true); // Activar el estado de carga al presionar el botón
+                                        try {
+                                            await registerRequest(values.email,values.firstName, values.lastName,  values.password, values.confirmPassword);
+                                        } finally {
+                                        setIsLoading(false);}
+                                        }} disabled={isLoading}>
                                         <ButtonText>
-                                            SignIn
+                                            {isLoading ? 'Cargando...' : 'Registrarse'}
                                         </ButtonText>
-                                    </StyledButton>
+                                    </StyledButton >
                                     <Line />
                                     <ExtraView>
                                         <ExtraText>
                                             ¿Tienes cuenta?. 
                                         </ExtraText>
-                                        <TextLink onPress={() => navigation.navigate('Login')}>
+                                        <TextLink disabled={isLoading} onPress={() => navigation.navigate('Login')}>
                                             <TextLinkContent>
                                                 Login
                                             </TextLinkContent>

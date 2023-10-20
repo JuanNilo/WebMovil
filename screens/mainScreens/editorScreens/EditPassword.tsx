@@ -58,6 +58,7 @@ const EditPassword = ({navigation}) => {
     const [values, setValues] = useState({ password:'', newPassword: '', confirmPassword: '' });
     const route = useRoute();
     const params = route.params;
+    const [isLoading, setIsLoading] = useState(false);
     const passwordChangeRequest = async (password: string, newPassword: string, confirmPassword: string) => {
         setError(false);
         if(newPassword !== confirmPassword){
@@ -74,6 +75,7 @@ const EditPassword = ({navigation}) => {
                 setErrorMessage('');
                 setValues({ password: '', newPassword: '', confirmPassword: '' });
                 console.log({password, newPassword, confirmPassword});
+                setIsLoading(false);
                 navigation.navigate('Login');
 
             }catch (e: any){
@@ -175,11 +177,17 @@ const EditPassword = ({navigation}) => {
                                             {errorMessage}
                                         </Text>
                                     </View>
-                                    <StyledButton style={{backgroundColor: purple}} onPress={() => passwordChangeRequest(values.password,values.newPassword, values.confirmPassword)}>
+                                    <StyledButton
+                                        onPress={async () => { setIsLoading(true); // Activar el estado de carga al presionar el botón
+                                        try {
+                                            await passwordChangeRequest(values.password, values.newPassword, values.confirmPassword);
+                                        } finally {
+                                        setIsLoading(false);}
+                                        }} disabled={isLoading}>
                                         <ButtonText>
-                                            Cambiar contraseña
+                                            {isLoading ? 'Cargando...' : 'Cambiar Contraseña'}
                                         </ButtonText>
-                                    </StyledButton>
+                                    </StyledButton >
                                     <Line />
                 
                                     

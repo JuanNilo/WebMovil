@@ -45,6 +45,7 @@ const {primary , secondary, purple, yellow} = Colors;
 
 import KeyboardWrapper from "../../../components/keyboardWrapper";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const EditTeam = ({navigation}) => {
@@ -55,28 +56,28 @@ const EditTeam = ({navigation}) => {
     
     // Recuperar datos desde el back
 
-    useEffect(() => {
-        // Fetch user data from the backend
-        const fetchTeamData = async () => {
-          try {
-            const email = 'juan@mail.com';
-            axios.get(`http://10.0.2.2:3000/api/users/email/${email}`)
-              .then(response => {
-                const teamData = response.data;
-                setTeamData(teamData);
-              })
-              .catch(error => {
-                console.error('Error al recuperar los datos del usuario:', error);
-              });
-          } catch (error) {
-            console.error('Failed to fetch user data:', error);
+    const fetchTeamsData = async () => {
+        try {
+          const email = await AsyncStorage.getItem('email');
+          const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/get-team-names`,
+          {
+            email: email,
           }
-        };
-    
-        fetchTeamData();
+          );
+          const teamData = response.data;
+          setTeamData(teamData || []);
+          
+        } catch (error) {
+          console.error('Error al recuperar los datos de equipos:', error);
+        }
+      };
+      
+      
+      useEffect(() => {
+        fetchTeamsData();
       }, []);
 
-    const changeEmail = async (teamName: string) => {
+    const changeTeamName = async (teamName: string) => {
         setError(false);
         try{
             // const response = await axios.post('http://10.0.2.2:3000/api/auth/register',{

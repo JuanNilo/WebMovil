@@ -12,6 +12,7 @@ const { secondary, primary, brand, purple } = Colors
 const { styleIcon, styleInnerContainer, styleContainer, styleDataUser,styleIconContainer, container, styleLabel, styleErrorMessage, styleErrorView, styleInput,styleLogo, styleList } = giraStyles
 
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export default function ViewTeams({navigation}){
@@ -19,9 +20,14 @@ export default function ViewTeams({navigation}){
 
     const fetchTeamsData = async () => {
       try {
-        const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/get-team-names`);
-        const userData = response.data;
-        setTeams(userData || []);
+        const email = await AsyncStorage.getItem('email');
+        const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/get-team-names`,
+        {
+          email: email,
+        }
+        );
+        const teamData = response.data;
+        setTeams(teamData || []);
         
       } catch (error) {
         console.error('Error al recuperar los datos de equipos:', error);
@@ -47,22 +53,23 @@ export default function ViewTeams({navigation}){
                     />
                     <PageTitle style={{color: purple}}>Equipos</PageTitle>
                     <View style={styleDataUser}>
-                        {teams.map((name) => (
-                            <View style={styleContainer}>
+                        {teams.map((name, index) => (
+                            <View key={index} style={styleContainer}>
                                 <Text style={styleLabel}>
                                     {name}
                                 </Text>
-                                <Octicons style={styleIcon} name={"pencil"} size={30} color={purple} />
+                                <View style={styleContainer}>
+                                    <StyledButton
+                                        style={{backgroundColor: purple, alignItems: 'center', justifyContent: 'center', marginHorizontal: 'auto'}}
+                                            onPress={() => navigation.navigate('EditTeam') /* handle your button action here */}>
+                                        <Octicons style={styleIcon} name={"pencil"} size={30} color={primary} />
+                                    
+                                    </StyledButton>
+                                </View>
+                                
                             </View>
                         ))}     
-                        <View style={styleContainer}>
-                                <StyledButton
-                                style={{backgroundColor: purple, alignItems: 'center', justifyContent: 'center', marginHorizontal: 'auto'}}
-                                    onPress={() => navigation.navigate('EditTeam') /* handle your button action here */}>
-                                <Octicons style={styleIcon} name={"pencil"} size={30} color={primary} />
-                                    
-                                </StyledButton>
-                        </View>
+                       
                     </View>    
                 </View>
             </ScrollView>

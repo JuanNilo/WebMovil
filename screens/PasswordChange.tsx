@@ -58,6 +58,7 @@ const PasswordChange = ({navigation}) => {
     const email = useAsyncStorage('email');
     console.log(email);
     const code = useAsyncStorage('code');
+    const [isLoading, setIsLoading] = useState(false);
 
     const passwordChangeRequest = async (codeInput: string, newPassword: string, confirmPassword: string) => {
         setError(false);
@@ -75,6 +76,7 @@ const PasswordChange = ({navigation}) => {
                 setErrorMessage('');
                 setValues({ code: '', codeInput: '',newPassword: '', confirmPassword: '' });
                 console.log({code, codeInput, newPassword, confirmPassword});
+                setIsLoading(false);
                 navigation.navigate('Login');
 
             }catch (e: any){
@@ -170,11 +172,17 @@ const PasswordChange = ({navigation}) => {
                                             {errorMessage}
                                         </Text>
                                     </View>
-                                    <StyledButton onPress={() => passwordChangeRequest(values.codeInput,values.newPassword, values.confirmPassword)}>
+                                    <StyledButton
+                                        onPress={async () => { setIsLoading(true); 
+                                        try {
+                                            await passwordChangeRequest(values.codeInput, values.newPassword, values.confirmPassword);
+                                        } finally {
+                                        setIsLoading(false);}
+                                        }} disabled={isLoading}>
                                         <ButtonText>
-                                            Cambiar contraseña
+                                            {isLoading ? 'Cargando...' : 'Recuperar'}
                                         </ButtonText>
-                                    </StyledButton>
+                                    </StyledButton >
                                     <Line />
                 
                                     <ExtraView>
