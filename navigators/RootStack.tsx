@@ -16,6 +16,7 @@ import PasswordRecovery from '../screens/PasswordRecovery';
 import PasswordChange from '../screens/PasswordChange';
 import EditData from '../screens/mainScreens/editorScreens/EditData';
 import EditPassword from '../screens/mainScreens/editorScreens/EditPassword';
+import EditMail from '../screens/mainScreens/editorScreens/EditMail';
 const Stack = createNativeStackNavigator();
 
 const RootStack = () => {
@@ -41,6 +42,7 @@ const RootStack = () => {
                 <Stack.Screen options={{headerTintColor: purple}} name='Welcome' component={Welcome}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='EditData' component={EditData}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='EditPassword' component={EditPassword}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='EditMail' component={EditMail}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
