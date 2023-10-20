@@ -77,37 +77,29 @@ const EditData = ({navigation}) => {
         fetchUserData();
       }, []);
 
-    const registerRequest = async (email: string, firstName: string, lastName: string,password: string, confirmPassword: string) => {
+    const registerRequest = async (firstName: string, lastName: string) => {
         setError(false);
-        if(password !== confirmPassword){
-            setError(true)
-            setErrorMessage('Contraseñas no coinciden!');
-        }else{
+        
             try{
-                const response = await axios.post('http://10.0.2.2:3000/api/auth/register',{
-                    email,
-                    firstName,
-                    lastName,
-                    password,
-                });
+                // const response = await axios.post('http://10.0.2.2:3000/api/auth/register',{
+                //     firstName,
+                //     lastName,
+                // });
                 
-                navigation.navigate('Login');
+                navigation.navigate('User');
                 
             }catch (e: any){
                 setError(true);
                 setErrorMessage(e?.response?.data?.message);
                 console.log({error: e?.response?.data?.message});
             }
-        }
+        
     };
 
     // Ref
 
     const nameInputRef = useRef();
     const lastNameInputRef = useRef();
-    const emailInputRef = useRef();
-    const passwordInputRef = useRef();
-    const confirmPasswordInputRef = useRef();
 
     return(
         <KeyboardWrapper>
@@ -123,8 +115,8 @@ const EditData = ({navigation}) => {
                     <PageTitle> Gira</PageTitle>
                     <SubTitle>Editar datos</SubTitle>
                     <Formik
-                        initialValues={{firstName: userData.firstName, lastName: userData.lastName,email: userData.email, password: userData.password, confirmPassword: userData.password}}
-                        onSubmit={(values) => registerRequest(values.email, values.firstName,  values.lastName,values.password, values.confirmPassword)}
+                        initialValues={{firstName: userData.firstName, lastName: userData.lastName}}
+                        onSubmit={(values) => registerRequest(values.firstName,  values.lastName)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
@@ -159,66 +151,10 @@ const EditData = ({navigation}) => {
                                             value={values.lastName}
                                             onChangeText={handleChange('lastName')}
                                             onBlur={handleBlur('lastName')}
-                                            onSubmitEditing={() => emailInputRef.current.focus()}
-                                        />
-                                    </View>
-
-                                    {/* Mail */}
-                                    <Text style={styleLabel}>Ingrese mail</Text>
-                                    <View style={styleContainer}>
-                                    <Octicons style={styleIcon} name={'mail'} size={30} color={secondary}/>
-
-                                    <TextInput
-                                        ref={emailInputRef}
-                                        style={styleInput}
-                                        placeholderTextColor={primary}
-                                        value={values.email}
-                                        placeholder={userData.email}
-                                        onChangeText={handleChange('email')}
-                                        onBlur={handleBlur('email')}
-                                        keyboardType="email-address"
-                                        onSubmitEditing={() => passwordInputRef.current.focus()}
-                                        />
-                                    </View>
-
-                                    {/* Contrasena */}
-                                    
-                                    <Text style={styleLabel}>Ingrese contraseña</Text>
-                                    <View style={styleContainer}>
-                                        <View style={styleIconContainer}>
-                                            <Octicons style={styleIcon} name={'lock'} size={30} color={secondary}/>
-                                        </View>
-
-                                    <TextInput
-                                        ref={passwordInputRef}
-                                        style={styleInput}
-                                        placeholderTextColor={primary}
-                                        value={values.password}
-                                        placeholder="********"
-                                        secureTextEntry
-                                        onChangeText={handleChange('password')}
-                                        onBlur={handleBlur('password')}
-                                        onSubmitEditing={() => confirmPasswordInputRef.current.focus()}
-                                        />
-                                    </View>
-
-                                    {/* Confirmar contrasena */}
-                                    <Text style={styleLabel}>Reingrese contraseña</Text>
-                                    <View style={styleContainer}>
-                                        <Octicons style={styleIcon} name={'lock'} size={30} color={secondary}/>
-
-                                        <TextInput
-                                            ref={confirmPasswordInputRef}
-                                            style={styleInput}
-                                            placeholderTextColor={primary}
-                                            value={values.confirmPassword}
-                                            placeholder="********"
-                                            secureTextEntry 
-                                            onChangeText={handleChange('confirmPassword')}
-                                            onBlur={handleBlur('confirmPassword')}
                                             onSubmitEditing={() => registerRequest(values.email,values.firstName, values.lastName,  values.password, values.confirmPassword)}
                                         />
                                     </View>
+
                                 
                                     <View
                                         style={styleErrorView}
@@ -229,7 +165,7 @@ const EditData = ({navigation}) => {
                                     </View>
                                     <StyledButton 
                                         style={{backgroundColor: purple}}
-                                        onPress={() => registerRequest(values.email, values.firstName, values.lastName, values.password, values.confirmPassword)}>
+                                        onPress={() => registerRequest(values.firstName, values.lastName)}>
                                         <ButtonText>
                                             Guardar cambios
                                         </ButtonText>
