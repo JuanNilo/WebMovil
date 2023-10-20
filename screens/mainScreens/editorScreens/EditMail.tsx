@@ -72,9 +72,9 @@ const EditMail = ({navigation}) => {
           console.error('Error al recuperar los datos del usuario:', error);
         }
       };
-      useFocusEffect(() => {
+      useEffect(() => {
         fetchUserData();
-      });
+      },[]);
 
     
       const changeEmail = async (emailInput: string, newEmail: string) => {
