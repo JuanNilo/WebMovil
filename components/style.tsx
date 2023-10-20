@@ -9,7 +9,7 @@ export const Colors = {
     secondary: "#09f",
     terceary: "#3B3B3B",
     yellow: "#FAB440",
-    darkLight: "#C0C0C0",
+    darkLight: "#A6A6A6",
     brand: "#0052CC", // Azul 
     purple: "#572364",
     red: "#EF4444"
@@ -76,6 +76,18 @@ const giraStyles = StyleSheet.create({
         width: 90,
         height: 90,
         borderRadius: 50,
+    },
+    styleList : {
+        flex: 1, 
+        backgroundColor: darkLight, 
+        color: 'black',
+        fontWeight: "bold", 
+        height: 50,
+        paddingVertical: 2,
+        marginHorizontal: 5,
+        borderRadius: 5,
+        fontSize: 26,
+        textAlign: 'center'
     }
 })
 
