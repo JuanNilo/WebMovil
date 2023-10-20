@@ -12,31 +12,31 @@ const { styleIcon, styleInnerContainer, styleContainer, styleDataUser,styleIconC
 
 import KeyboardWrapper from "../../components/keyboardWrapper";
 import axios from "axios";
+import { useAsyncStorage } from "../../localStorage/localStorage";
+
+
+
+
 
 const User = ({ navigation }) => {
   const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [userData, setUserData] = useState({});
-
+  const [userData, setUserData] = useState({})
+  const email = String(useAsyncStorage('email'));
+  
   useEffect(() => {
-    // Fetch user data from the backend
     const fetchUserData = async () => {
       try {
-        const email = 'juan@mail.com';
-        axios.get(`http://10.0.2.2:3000/api/users/email/${email}`)
-          .then(response => {
-            const userData = response.data;
-            setUserData(userData);
-          })
-          .catch(error => {
-            console.error('Error al recuperar los datos del usuario:', error);
-          });
+        const response = await axios.get(`http://10.0.2.2:3000/api/users/email/${email}`);
+        const userData = response.data;
+        setUserData(userData);
+        console.log(userData);
       } catch (error) {
-        console.error('Failed to fetch user data:', error);
+        console.error('Error al recuperar los datos del usuario:', error);
       }
     };
-
+  
     fetchUserData();
   }, []);
 

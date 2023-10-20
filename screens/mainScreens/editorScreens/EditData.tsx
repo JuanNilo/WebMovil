@@ -45,14 +45,18 @@ const {primary , secondary, purple} = Colors;
 
 import KeyboardWrapper from "../../../components/keyboardWrapper";
 import axios from "axios";
+import { useRoute } from "@react-navigation/native";
+import { useAsyncStorage } from "../../../localStorage/localStorage";
 
 
 const EditData = ({navigation}) => {
     const [hidePassword, setHidePasswword] = useState(true);
-   
+    const route = useRoute();
+    
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [userData, setUserData] = useState({});
+    const email = useAsyncStorage('email');
     
     // Recuperar datos desde el back
 
@@ -60,7 +64,6 @@ const EditData = ({navigation}) => {
         // Fetch user data from the backend
         const fetchUserData = async () => {
           try {
-            const email = 'juan@mail.com';
             axios.get(`http://10.0.2.2:3000/api/users/email/${email}`)
               .then(response => {
                 const userData = response.data;

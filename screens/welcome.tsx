@@ -14,6 +14,7 @@ import {
 
 } from './../components/style';
 import BottomRootStack from "./BottomRootStack";
+import { useRoute } from "@react-navigation/native";
 
 const Welcome = ({navigation}) => {
     return(

@@ -42,6 +42,7 @@ const {primary, secondary, terceary, yellow, darkLight, brand, purple, red} = Co
 // Keyboards
 
 import KeyboardWrapper from "../components/keyboardWrapper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
@@ -49,7 +50,6 @@ const PasswordRecovery = ({navigation}) => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [values, setValues] = useState({ email: '' });
-    const [code, setCode] = useState({ code: '' });
     const passwordCodeRequest = async (email: string) => {
         setError(false);
 
@@ -57,11 +57,12 @@ const PasswordRecovery = ({navigation}) => {
             const response = await axios.post('http://10.0.2.2:3000/api/auth/reset',{
             email
             });
-            const code  = response.data;
-            setCode({ code : ''});
+            const code  = String(response.data);
             setErrorMessage('');
             setValues({ email: ''});
-            navigation.navigate('PasswordChange', {code, email});
+            await AsyncStorage.setItem('email', email);
+            await AsyncStorage.setItem('code', code);
+            navigation.navigate('PasswordChange');
 
         }catch (e: any){
             setError(true);
