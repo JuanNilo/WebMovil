@@ -46,6 +46,7 @@ const {primary, secondary, terceary, yellow, darkLight, brand, purple, red} = Co
 // Keyboards
 
 import KeyboardWrapper from "../components/keyboardWrapper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
@@ -65,7 +66,8 @@ const Login = ({navigation}) => {
             });
             setErrorMessage('');
             setValues({ email: '', password: '' });
-            navigation.navigate('Welcome');
+            await AsyncStorage.setItem('email', email);
+            navigation.navigate('Welcome', {email});
 
         }catch (e: any){
             setError(true);

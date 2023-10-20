@@ -1,6 +1,6 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import { StatusBar } from "expo-status-bar";
-
+import { useAsyncStorage } from "./../localStorage/localStorage";
 import axios from "axios";
 
 import { TextInput, View, Text } from 'react-native';
@@ -46,7 +46,7 @@ const {primary, secondary, terceary, yellow, darkLight, brand, purple, red} = Co
 // Keyboards
 
 import KeyboardWrapper from "../components/keyboardWrapper";
-import { useRoute } from "@react-navigation/native";
+
 
 
 
@@ -55,10 +55,9 @@ const PasswordChange = ({navigation}) => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [values, setValues] = useState({ code: '', codeInput: '', newPassword: '', confirmPassword: '' });
-    const route = useRoute();
-    const params = route.params;
-    const code = params.code ? String(params.code) : '';
-    const email = params.email ? String(params.email) : '';
+    const email = useAsyncStorage('email');
+    console.log(email);
+    const code = useAsyncStorage('code');
 
     const passwordChangeRequest = async (codeInput: string, newPassword: string, confirmPassword: string) => {
         setError(false);

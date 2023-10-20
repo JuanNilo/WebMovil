@@ -1,3 +1,4 @@
+import { useRoute } from '@react-navigation/native';
 import * as React from 'react';
 import {View, Text, ScrollView} from 'react-native'
 import { ButtonText, PageTitle, StyledButton } from '../../components/style';
@@ -10,6 +11,7 @@ const {purple, yellow,brand,red} = Colors;
 
 
 export default function Team({navigation}){
+    const route = useRoute();
     return(
         <ScrollView style={container}>
                 <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
