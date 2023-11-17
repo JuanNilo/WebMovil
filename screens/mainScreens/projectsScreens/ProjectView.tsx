@@ -23,8 +23,8 @@ const ProjectView = ({navigation}) => {
   
   const fetchTeamsData = async () => {
     try {
-      const id = await AsyncStorage.getItem('id_project');
-      const response = await axios.post(`http://10.0.2.2:4000/api/in/teams/project/${id}`);
+      const id_project = await AsyncStorage.getItem('id_project');
+      const response = await axios.post(`http://10.0.2.2:4000/api/in/teams/project/${id_project}`);
       const teamData = response.data;
       console.log(teamData);
       setIdTeams(teamData.ids);
@@ -36,8 +36,8 @@ const ProjectView = ({navigation}) => {
 
   const fetchMembersData = async () => {
     try {
-      const id = await AsyncStorage.getItem('id_project');
-      const response = await axios.post(`http://10.0.2.2:3002/api/on/members/${id}`);
+      const id_project = await AsyncStorage.getItem('id_project');
+      const response = await axios.post(`http://10.0.2.2:3002/api/on/members/${id_project}`);
       const memberData = response.data;
       console.log(memberData);
       setEmailMembers(memberData.email);
@@ -103,7 +103,7 @@ const ProjectView = ({navigation}) => {
                 )
             })}
             
-            <ButtonText style={styles.botonContainer}>
+            <ButtonText style={styles.botonContainer} onPress= {() => navigation.navigate('CreateTeam')}>
               <Text style={{color:'black', textAlign:'center'}}>
                 Crear equipo
               </Text>

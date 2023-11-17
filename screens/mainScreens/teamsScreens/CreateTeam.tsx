@@ -49,18 +49,16 @@ export default function CreateTeam({navigation}){
     
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const rol = 'administrador';	
     const [name, setName] = useState('');
       useEffect(() => {
       }, []);
 
     const registerTeamRequest = async (name: string) => {
         try {
-          const email = await AsyncStorage.getItem('email');
-          const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/new-team`,{
+          const id_project = await AsyncStorage.getItem('id_project');
+          const response = await axios.post(`http://10.0.2.2:4000/api/in/teams`,{
             name,
-            email,
-            rol,
+            id_project,
           });
           navigation.navigate('Projects');
         } catch (error) {
