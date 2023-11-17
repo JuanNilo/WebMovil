@@ -10,39 +10,29 @@ const StatusBarHeight = Constants.statusBarHeight;
 import { lorelei } from '@dicebear/collection';
 import { createAvatar } from "@dicebear/core";
 import { SvgXml } from 'react-native-svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 
 const ProjectView = ({navigation}) => {
-  const [projectInfo, setProjectInfo] = useState([
-    {
-        id: 1, name: 'Juan', lastName: 'Nilo', mail:'nilo@mail.com', role:'Administrador'
-    },{
-        id: 2, name: 'Ignacio', lastName: 'Herrera', mail:'nacho@mail.com',
-        role:'Desarrollador'
-    },
-    {
-        id: 3, name: 'María', lastName: 'González', mail:'maria@mail.com',
-        role:'Diseñadora'
-    },
-    {
-        id: 4, name: 'Pedro', lastName: 'López', mail:'pedro@mail.com',
-        role:'Tester'
-    },
-    {
-        id: 5, name: 'Laura', lastName: 'Martínez', mail:'laura@mail.com',
-        role:'Analista'
+  const [nameMembers, setNameMembers] = useState([]);
+  const [emailMembers, setEmailMambers] = useState([]);
+  const [nameTeams, setNameTeams] = useState([]);
+  const [idTeams, setIdTeams] = useState([]);
+  
+  const fetchTeamsData = async () => {
+    try {
+      const id = await AsyncStorage.getItem('id_project');
+      const response = await axios.post(`http://10.0.2.2:3002/api/in/teams/project/${id}`);
+      const teamData = response.data;
+      console.log(teamData);
+      setIdTeams(teamData.ids);
+      setNameTeams(teamData.names);
+    } catch (error) {
+      console.error('Error al recuperar los datos de equipos:', error);
     }
-    ]);
-
-    const [teams, setTeams] = useState([
-        {
-            id: 1, name: 'Equipo 1', description:'Equipo de prueba 1'
-        },
-        {
-            id: 2, name: 'Equipo 2', description:'Equipo de prueba 2'
-        }
-
-    ]);
+  };
+  
 
   return (
     <KeyboardWrapper>
@@ -54,7 +44,7 @@ const ProjectView = ({navigation}) => {
             <SubTitle>Miembros del proyecto:</SubTitle>
             <View>
 
-            {projectInfo.map((info) => {
+            {nameMembers.map((info , index) => {
                 return (
                    
                     <View key={info.id} style={styles.memberContainer}>
@@ -70,7 +60,7 @@ const ProjectView = ({navigation}) => {
                 )
             })}
             {/* Boton agregar miembro */}
-            <ButtonText style={styles.botonContainer}>
+            <ButtonText onPress={ () => navigation.navigate('AddMemberProject')} style={styles.botonContainer}>
               <Text style={{color:'black', textAlign:'center'}}>
                 Añadir miembro
               </Text>
@@ -80,12 +70,11 @@ const ProjectView = ({navigation}) => {
             <Line/>
             <View style={{paddingVertical: 20, width: '100%'}}>
             <SubTitle>Equipos del projecto</SubTitle>
-            {teams.map((team) => {
+            {nameTeams.map((name, index) => {
                 return (
-                    <ButtonText onPress={() => navigation.navigate('Team')} key={team.id} style={styles.projectContainer}>
+                    <ButtonText onPress={() => navigation.navigate('Team')} key={index} style={styles.projectContainer}>
                       <View style={{flexDirection:'column', alignItems:'flex-start', width:'70%'}}>
-                        <Text style={styles.projectName}>{team.name}</Text>
-                        <Text style={styles.projectDescription}>{team.description}</Text>
+                        <Text style={styles.projectName}>{name}</Text>
                       </View>
                         <View style={{height:50, alignItems:'flex-end', justifyContent:'center'}}>
 

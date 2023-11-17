@@ -60,6 +60,11 @@ export default function ViewProjects({navigation}){
             console.log({error: e?.response?.data?.message});
         }
     }
+
+    const idLocalStorage = async (id: number) => {
+        await AsyncStorage.setItem('id_project', id.toString());
+        navigation.navigate('ProjectView');
+    }
     
     useEffect(() => {
       fetchProjectData();
@@ -79,7 +84,7 @@ export default function ViewProjects({navigation}){
                                 {/* Nombre del proyecto */}
                                 <View style={styleTeamContainer}>
                                     <ButtonText style={{fontSize:20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}
-                                    onPress={() => navigation.navigate('ProjectView') /* handle your button action here */}
+                                    onPress={() => idLocalStorage(projectsIds[index]) /* handle your button action here */}
                                     >
                                         {name}
                                     </ButtonText>
