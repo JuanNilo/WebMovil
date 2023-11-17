@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import giraStyles, { StyledButton } from "./../../../components/style";
+import giraStyles, { ButtonText, StyledButton } from "./../../../components/style";
 import { View, ScrollView, Image, Text } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import { Octicons } from "@expo/vector-icons";
@@ -7,9 +7,9 @@ import { PageTitle } from "./../../../components/style";
 import { Colors } from "./../../../components/style";
 import KeyboardWrapper from "../../../components/keyboardWrapper";
 
-const { secondary, primary, brand, purple } = Colors
+const { secondary, primary, brand, purple,red } = Colors
 
-const { styleIcon, styleInnerContainer, styleContainer, styleDataUser,styleIconContainer, container, styleLabel, styleErrorMessage, styleErrorView, styleInput,styleLogo, styleList } = giraStyles
+const { styleIcon, styleInnerContainer, styleContainer, styleDataUser,styleIconContainer, container, styleLabel, styleErrorMessage, styleErrorView, styleInput,styleLogo, styleList, styleTeamContainer } = giraStyles
 
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -34,39 +34,65 @@ export default function ViewTeams({navigation}){
       }
     };
     
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    
+    const deleteTeam = async (teamName: string) => {
+        setError(false)
+        try{
+        //    Nacho juegue
+            
+            navigation.navigate('Team');
+            
+        }catch (e: any){
+            setError(true);
+            setErrorMessage(e?.response?.data?.message);
+            console.log({error: e?.response?.data?.message});
+        }
+    }
     
     useEffect(() => {
       fetchTeamsData();
-      console.log(teams);
     }, []);
   
     return(
         <KeyboardWrapper>
-            <ScrollView style={container}>
+            <ScrollView style={{
+        flex: 1,
+        height: '100%'}}>
                 <StatusBar style="dark"/>
                 <View style={styleInnerContainer}>
-                    <Image
-                        source={{
-                        uri: 'https://reactnative.dev/img/tiny_logo.png',
-                        }}
-                        style={styleLogo}
-                    />
-                    <PageTitle style={{color: purple}}>Equipos</PageTitle>
-                    <View style={styleDataUser}>
+                    <View style={{width: '100%', height: '100%' }}>
                         {teams.map((name, index) => (
                             <View key={index} style={styleContainer}>
-                                <Text style={styleLabel}>
-                                    {name}
-                                </Text>
+
+                                {/* Nombre del equipo */}
+                                <View style={styleTeamContainer}>
+                                    <ButtonText style={{fontSize:20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}
+                                    onPress={() => navigation.navigate('TeamView') /* handle your button action here */}
+                                    >
+                                        {name}
+                                    </ButtonText>
+                                </View>
+
+                                {/* Boton de editar */}
                                 <View style={styleContainer}>
                                     <StyledButton
-                                        style={{backgroundColor: purple, alignItems: 'center', justifyContent: 'center', marginHorizontal: 'auto'}}
+                                        style={{backgroundColor: purple ,alignItems: 'center', justifyContent: 'center', marginHorizontal: 'auto'}}
                                             onPress={() => navigation.navigate('EditTeam') /* handle your button action here */}>
-                                        <Octicons style={styleIcon} name={"pencil"} size={30} color={primary} />
+                                        <Octicons style={{width:40, padding: 2, paddingLeft: 6}} name={"pencil"} size={30} color={primary} />
                                     
                                     </StyledButton>
                                 </View>
-                                
+                                {/* Boton de eliminar */}
+                                <View style={styleContainer}>
+                                <StyledButton
+                                style={{backgroundColor: red, padding: 5, justifyContent:'center',alignItems:'center',marginHorizontal: 4}}
+                                    onPress={() => deleteTeam("equipo") /* handle your button action here */}>
+                                <Octicons style={{width:40, padding: 2, paddingLeft: 9}} name={"x"} size={35} color={primary} />
+                                    
+                                </StyledButton>
+                            </View>
                             </View>
                         ))}     
                        

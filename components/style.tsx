@@ -77,6 +77,12 @@ const giraStyles = StyleSheet.create({
         height: 90,
         borderRadius: 50,
     },
+    styleUserLogo : {
+        width: 150,
+        height: 150,
+        backgroundColor: 'white',
+        borderRadius: 100,
+    },
     styleList : {
         flex: 1, 
         backgroundColor: darkLight, 
@@ -97,7 +103,19 @@ const giraStyles = StyleSheet.create({
         marginVertical: 5,
         fontSize: 18,
         color: 'black', 
-    }
+    },
+    styleTeamContainer : {
+        backgroundColor: darkLight, 
+        height: 50,
+        marginHorizontal: 5,
+        width: '60%',
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 10,
+        fontWeight: 'bold',
+        fontSize: 20,
+    },
 })
 
 
@@ -215,8 +233,17 @@ export const StyledButton = styled.TouchableOpacity`
     border-radius: 5px;
     margin-vertical: 2px;
     height: 50px;
+`;
 
-    
+export const ButtonOption = styled.TouchableOpacity`
+    padding: 5px;
+    background-color: ${brand};
+    juistify-content: center;
+    align-items: center;
+    margin-vertical: 2px;
+    height: 40px;
+    width: 40px;
+    border-radius: 50px;
 `;
 
 export const ButtonText = styled.Text`

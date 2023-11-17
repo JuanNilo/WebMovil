@@ -25,6 +25,8 @@ import CreateTeam from '../screens/mainScreens/teamScreens/CreateTeam';
 import DeleteTeam from '../screens/mainScreens/teamScreens/DeleteTeam';
 import EditTeam from '../screens/mainScreens/teamScreens/EditTeam';
 import ViewTeams from '../screens/mainScreens/teamScreens/ViewTeams';
+import TeamView from '../screens/mainScreens/teamScreens/TeamView';
+import Project from '../screens/mainScreens/ProjectScreens/Project';
 
 const RootStack = () => {
     return(
@@ -54,6 +56,9 @@ const RootStack = () => {
                 <Stack.Screen options={{headerTintColor: purple}} name='DeleteTeam' component={DeleteTeam}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='EditTeam' component={EditTeam}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='ViewTeams' component={ViewTeams}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='TeamView' component={TeamView}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='Project' component={Project}/>
+                
             </Stack.Navigator>
         </NavigationContainer>
     )

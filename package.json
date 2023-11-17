@@ -9,6 +9,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@dicebear/collection": "^7.0.1",
+    "@dicebear/core": "^7.0.1",
     "@expo/webpack-config": "^19.0.0",
     "@react-native-async-storage/async-storage": "1.18.2",
     "@react-navigation/bottom-tabs": "^6.5.9",
@@ -26,6 +28,7 @@
     "react-native-material-bottom-navigation": "^1.0.5",
     "react-native-safe-area-context": "^4.6.3",
     "react-native-screens": "~3.22.0",
+    "react-native-svg": "^14.0.0",
     "react-native-web": "~0.19.6",
     "styled-components": "^6.0.0",
     "stylis": "^4.0.0"

@@ -5,17 +5,18 @@ import { StatusBar } from "expo-status-bar";
 import { Octicons } from "@expo/vector-icons";
 import { StyledContainer, InnerContainer, PageLogo, PageTitle, SubTitle, StyledFormArea, LeftIcon, StyledInputLabel, StyledTextInput, RigthIcon, StyledButton, ButtonText, Line, ExtraView, ExtraText, TextLink, TextLinkContent } from './../../components/style';
 import { Colors } from "./../../components/style";
-
+import { createAvatar } from "@dicebear/core";
+import { pixelArt, funEmoji, lorelei,  } from "@dicebear/collection";
 const { secondary, primary, brand, purple } = Colors
 
-const { styleIcon, styleInnerContainer, styleContainer, styleDataUser,styleIconContainer, container, styleLabel, styleErrorMessage, styleErrorView, styleLogo } = giraStyles
+const { styleIcon, styleInnerContainer, styleContainer, styleDataUser,styleIconContainer, container, styleLabel, styleErrorMessage, styleErrorView, styleUserLogo } = giraStyles
 
 import KeyboardWrapper from "../../components/keyboardWrapper";
 import axios from "axios";
 import { useAsyncStorage } from "../../localStorage/localStorage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-
+import { SvgXml } from 'react-native-svg';
 
 
 
@@ -26,6 +27,7 @@ const User = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [userData, setUserData] = useState({});
   
+  const avatar = createAvatar(lorelei, { seed: userData.email }).toString();
 
   const fetchUserData = async () => {
     try {
@@ -48,23 +50,19 @@ const User = ({ navigation }) => {
       <ScrollView style={container}>
         <StatusBar style="dark" />
         <View style={styleInnerContainer}>
-          <Image
-            source={{
-              uri: 'https://reactnative.dev/img/tiny_logo.png',
-            }}
-            style={styleLogo}
-          />
+
+          <SvgXml xml={avatar} style={styleUserLogo} />
+
           <PageTitle
             style={{color: purple}}
           >{userData.firstName} {userData.lastName}</PageTitle>
-          <SubTitle>Bienvenido</SubTitle>
           <SubTitle>Datos</SubTitle>
           <View style={styleDataUser}>
             {/* Nombre */}
             <View style={styleContainer}>
               <Octicons style={styleIcon} name={"person"} size={30} color={purple} />
               <Text style={styleLabel}>
-                Nombre: {userData.firstName}
+                Nombre: <Text style={{fontWeight:'bold'}}>{userData.firstName}</Text> 
               </Text>
             </View>
 
@@ -72,7 +70,7 @@ const User = ({ navigation }) => {
             <View style={styleContainer}>
               <Octicons style={styleIcon} name={"person-fill"} size={30} color={purple} />
               <Text style={styleLabel}>
-                Apellido: {userData.lastName}
+                Apellido: <Text style={{fontWeight:'bold'}}> {userData.lastName}</Text>
               </Text>
             </View>
 
@@ -80,7 +78,7 @@ const User = ({ navigation }) => {
             <View style={styleContainer}>
               <Octicons style={styleIcon} name={'mail'} size={30} color={purple} />
               <Text style={styleLabel}>
-                Mail: {userData.email}
+                Mail: <Text style={{fontWeight:'bold'}}> {userData.email}</Text>
               </Text>
             </View>
 
