@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import giraStyles, { ButtonText, StyledButton } from "../../../components/style";
 import { View, ScrollView, Image, Text } from 'react-native';
 import { StatusBar } from "expo-status-bar";
+import {useFocusEffect} from "@react-navigation/native";
 import { Octicons } from "@expo/vector-icons";
 import { PageTitle } from "../../../components/style";
 import { Colors } from "../../../components/style";
@@ -36,6 +37,12 @@ export default function ViewProjects({navigation}){
         console.error('Error al recuperar los datos de equipos:', error);
       }
     };
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchProjectData();
+        }, [])
+        );
     
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');

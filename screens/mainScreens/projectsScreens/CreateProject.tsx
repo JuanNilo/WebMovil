@@ -100,7 +100,6 @@ export default function CreateProject({navigation}){
                                             value={values.name}
                                             onChangeText={handleChange('name')}
                                             onBlur={handleBlur('name')}
-                                            onSubmitEditing={() => nameInputRef.current.focus()}
                                         />
                                     </View>
                                     {/* Error */}
