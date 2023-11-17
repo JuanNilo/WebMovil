@@ -30,6 +30,7 @@ import AddMemberProject from '../screens/mainScreens/projectsScreens/AddMemberPr
 
 // Team
 import Team from '../screens/mainScreens/teamsScreens/Team';
+import CreateTeam from '../screens/mainScreens/teamsScreens/CreateTeam';
 
 const RootStack = () => {
     return(
@@ -62,6 +63,7 @@ const RootStack = () => {
                 <Stack.Screen options={{headerTintColor: purple}} name='ProjectView' component={ProjectView}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='Team' component={Team}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='AddMemberProject' component={AddMemberProject}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='CreateTeam' component={CreateTeam}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

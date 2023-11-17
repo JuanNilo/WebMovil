@@ -1,5 +1,4 @@
 import React, {useState, useRef, useEffect} from "react";
-
 import giraStyles from "../../../components/style";
 import { TextInput, View, Text, ScrollView,Image, StyleSheet } from 'react-native';
 import { StatusBar } from "expo-status-bar";
@@ -46,20 +45,20 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 
-export default function AddMemberProject({navigation}){
+export default function CreateTeam({navigation}){
     
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const rol = 'administrador';	
-    const [mail, setMail] = useState('');
+    const [name, setName] = useState('');
       useEffect(() => {
       }, []);
 
-    const registerMemberProject = async (mail: string) => {
+    const registerTeamRequest = async (name: string) => {
         try {
           const email = await AsyncStorage.getItem('email');
-          const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/new-project`,{
-            mail,
+          const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/new-team`,{
+            name,
             email,
             rol,
           });
@@ -67,7 +66,7 @@ export default function AddMemberProject({navigation}){
         } catch (error) {
           setError(true);
           setErrorMessage(error?.response?.data?.message);
-          console.error('Error al registar miembro', error);
+          console.error('Error al crear equipo', error);
         }
       };
      
@@ -82,23 +81,23 @@ export default function AddMemberProject({navigation}){
                         }}
                         style={styleLogo}
                     />
-                    <PageTitle style={{color: purple}}>Añadir miembro</PageTitle>
+                    <PageTitle style={{color: purple}}>Crear equipo</PageTitle>
                     <Formik
-                        initialValues={{mail: ''}}
-                        onSubmit={(values) => registerMemberProject(values.mail)}
+                        initialValues={{name: ''}}
+                        onSubmit={(values) => registerTeamRequest(values.name)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
                                 <StyledFormArea>
-                                    <Text style={styles.TextLabel}>Ingrese el correo del miembro</Text>
+                                    <Text style={styles.TextLabel}>Ingrese nombre del equipo</Text>
                                     <View style={styleContainer}>
                                         <Octicons style={styleIcon} name={"people"} size={30} color={'black'}/>
                                         <TextInput
-                                            placeholder="correo@mail.com"
+                                            placeholder="Nombre de equipo"
                                             style={styles.InputContainer}
-                                            value={values.mail}
-                                            onChangeText={handleChange('mail')}
-                                            onBlur={handleBlur('mail')}
+                                            value={values.name}
+                                            onChangeText={handleChange('name')}
+                                            onBlur={handleBlur('name')}
                                         />
                                     </View>
                                     {/* Error */}
@@ -109,16 +108,13 @@ export default function AddMemberProject({navigation}){
                                             {errorMessage}
                                         </Text>
                                     </View>
-                                    <View>
-
-                                    <StyledButton
-                                        style={{backgroundColor:'black'}}
-                                        onPress={() => registerMemberProject(values.mail)}>
+                                    <StyledButton 
+                                        style={{backgroundColor: 'black'}}
+                                        onPress={() => registerTeamRequest(values.name)}>
                                         <ButtonText>
-                                            Añadir miembro
+                                            Crear equipo
                                         </ButtonText>
                                     </StyledButton>
-                                            </View>
                                 </StyledFormArea>
                             )
                         }
@@ -135,28 +131,17 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         flexDirection: 'row',
         padding: 10,
-        borderColor: 'black',
+        borderColor:'black',
         borderWidth: 3,
-        color: 'black',
-        width: '80%',
-        fontWeight: 'bold',
+        color:'black',
+        width:'80%',
+        fontWeight:'bold',
         fontSize: 18,
     },
     TextLabel: {
         color: 'black',
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    ButtonContainer: {
-        backgroundColor: 'white',
-        borderRadius: 10,
-        padding: 10,
-        borderColor: 'black',
-        borderWidth: 3,
-        color: 'black',
-        fontWeight: 'bold',
-        fontSize: 18,
-        textAlign: 'center',
+        marginBottom:10,
     }
 })
