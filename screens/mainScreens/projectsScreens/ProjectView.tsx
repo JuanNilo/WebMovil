@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, Image, FlatList, StyleSheet,ScrollView } from 'react-native';
 import KeyboardWrapper from '../../../components/keyboardWrapper';
 import giraStyles, { ButtonText, Line, PageTitle, SubTitle } from '../../../components/style';
@@ -12,18 +12,19 @@ import { createAvatar } from "@dicebear/core";
 import { SvgXml } from 'react-native-svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const ProjectView = ({navigation}) => {
   const [nameMembers, setNameMembers] = useState([]);
-  const [emailMembers, setEmailMambers] = useState([]);
+  const [emailMembers, setEmailMembers] = useState([]);
   const [nameTeams, setNameTeams] = useState([]);
   const [idTeams, setIdTeams] = useState([]);
   
   const fetchTeamsData = async () => {
     try {
       const id = await AsyncStorage.getItem('id_project');
-      const response = await axios.post(`http://10.0.2.2:3002/api/in/teams/project/${id}`);
+      const response = await axios.post(`http://10.0.2.2:4000/api/in/teams/project/${id}`);
       const teamData = response.data;
       console.log(teamData);
       setIdTeams(teamData.ids);
@@ -32,6 +33,26 @@ const ProjectView = ({navigation}) => {
       console.error('Error al recuperar los datos de equipos:', error);
     }
   };
+
+  const fetchMembersData = async () => {
+    try {
+      const id = await AsyncStorage.getItem('id_project');
+      const response = await axios.post(`http://10.0.2.2:3002/api/on/members/${id}`);
+      const memberData = response.data;
+      console.log(memberData);
+      setEmailMembers(memberData.email);
+    } catch (error) {
+      console.error('Error al recuperar los datos de miembros:', error);
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+        fetchTeamsData();
+        fetchMembersData();
+    }, [])
+    );
+
   
 
   return (
@@ -44,18 +65,16 @@ const ProjectView = ({navigation}) => {
             <SubTitle>Miembros del proyecto:</SubTitle>
             <View>
 
-            {nameMembers.map((info , index) => {
+            {emailMembers.map((email , index) => {
                 return (
                    
-                    <View key={info.id} style={styles.memberContainer}>
-                        <SvgXml xml={createAvatar(lorelei, { seed: info.mail }).toString()} style={styles.logo} />
+                    <View key={index} style={styles.memberContainer}>
+                        <SvgXml xml={createAvatar(lorelei, { seed: email }).toString()} style={styles.logo} />
 
                         <View style={{flexDirection:'column', alignItems:'flex-start', width:'55%'}}>
-                            <Text style={styles.memberName}>{info.name} {info.lastName}</Text>
-                            <Text style={styles.memberRole}>{info.role}</Text>
+                          <Text style={styles.memberName}>{email}</Text>
                         </View>
-                        {info.role == 'Administrador' ? null: 
-                        <Octicons name="x" style={styles.boton} size={30} color="white"/>}
+                        <Octicons name="x" style={styles.boton} size={30} color="white"/>
                     </View>
                 )
             })}
