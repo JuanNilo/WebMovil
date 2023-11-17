@@ -24,7 +24,7 @@ const ProjectView = ({navigation}) => {
   const fetchTeamsData = async () => {
     try {
       const id_project = await AsyncStorage.getItem('id_project');
-      const response = await axios.post(`http://10.0.2.2:4000/api/in/teams/project/${id_project}`);
+      const response = await axios.get(`http://10.0.2.2:4000/api/in/teams/project/${id_project}`);
       const teamData = response.data;
       console.log(teamData);
       setIdTeams(teamData.ids);
@@ -37,10 +37,11 @@ const ProjectView = ({navigation}) => {
   const fetchMembersData = async () => {
     try {
       const id_project = await AsyncStorage.getItem('id_project');
-      const response = await axios.post(`http://10.0.2.2:3002/api/on/members/members/${id_project}`);
+      console.log(id_project);
+      const response = await axios.get(`http://10.0.2.2:3002/api/on/members/members/${id_project}`);
       const memberData = response.data;
-      console.log(memberData);
-      setEmailMembers(memberData.email);
+      setEmailMembers(memberData.emails);
+      console.log(emailMembers);
     } catch (error) {
       console.error('Error al recuperar los datos de miembros:', error);
     }
@@ -65,8 +66,8 @@ const ProjectView = ({navigation}) => {
             <SubTitle>Miembros del proyecto:</SubTitle>
             <View>
 
-            {emailMembers.map((email , index) => {
-                return (
+            {emailMembers.map((email , index) => (
+               
                    
                     <View key={index} style={styles.memberContainer}>
                         <SvgXml xml={createAvatar(lorelei, { seed: email }).toString()} style={styles.logo} />
@@ -75,9 +76,9 @@ const ProjectView = ({navigation}) => {
                           <Text style={styles.memberName}>{email}</Text>
                         </View>
                         <Octicons name="x" style={styles.boton} size={30} color="white"/>
-                    </View>
-                )
-            })}
+                    </View>)
+                
+            )}
             {/* Boton agregar miembro */}
             <ButtonText onPress={ () => navigation.navigate('AddMemberProject')} style={styles.botonContainer}>
               <Text style={{color:'black', textAlign:'center'}}>
@@ -88,7 +89,7 @@ const ProjectView = ({navigation}) => {
             </View>
             <Line/>
             <View style={{paddingVertical: 20, width: '100%'}}>
-            <SubTitle>Equipos del projecto</SubTitle>
+            <SubTitle>Equipos del proyecto</SubTitle>
             {nameTeams.map((name, index) => {
                 return (
                     <ButtonText onPress={() => navigation.navigate('Team')} key={index} style={styles.projectContainer}>
