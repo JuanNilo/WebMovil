@@ -37,7 +37,7 @@ const ProjectView = ({navigation}) => {
   const fetchMembersData = async () => {
     try {
       const id_project = await AsyncStorage.getItem('id_project');
-      const response = await axios.post(`http://10.0.2.2:3002/api/on/members/${id_project}`);
+      const response = await axios.post(`http://10.0.2.2:3002/api/on/members/members/${id_project}`);
       const memberData = response.data;
       console.log(memberData);
       setEmailMembers(memberData.email);
