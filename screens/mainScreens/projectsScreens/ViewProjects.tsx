@@ -16,18 +16,21 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export default function ViewProjects({navigation}){
-    const [projects, setProjects] = useState([]);
+    const [projectsNames, setProjectsNames] = useState([]);
+    const [projectsIds, setProjectsIds] = useState([]);
 
     const fetchProjectData = async () => {
       try {
         const email = await AsyncStorage.getItem('email');
-        const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/get-team-names`,
+        const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/get-projects`,
         {
           email: email,
         }
         );
         const projectData = response.data;
-        setProjects(projectData || []);
+        console.log(projectData);
+        setProjectsIds(projectData.ids);
+        setProjectsNames(projectData.names);
         
       } catch (error) {
         console.error('Error al recuperar los datos de equipos:', error);
@@ -63,7 +66,7 @@ export default function ViewProjects({navigation}){
                 <StatusBar style="dark"/>
                 <View style={styleInnerContainer}>
                     <View style={{width: '100%', height: '100%' }}>
-                        {projects.map((name, index) => (
+                        {projectsNames.map((name, index) => (
                             <View key={index} style={styleContainer}>
 
                                 {/* Nombre del proyecto */}

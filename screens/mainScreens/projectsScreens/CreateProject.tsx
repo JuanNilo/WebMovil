@@ -50,42 +50,24 @@ export default function CreateProject({navigation}){
     
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const rol = 'admin';	
+    const rol = 'administrador';	
     const [name, setName] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const fetchUserData = async () => {
-        try {
-          const email = await AsyncStorage.getItem('email');
-          const response = await axios.get(`http://10.0.2.2:3000/api/users/profile/${email}`);
-          const userData = response.data;
-          setFirstName(userData.firstName);
-          setLastName(userData.lastName);
-        } catch (error) {
-          setError(true);
-          setErrorMessage(error?.response?.data?.message);
-          console.error('Error al recuperar los datos del usuario:', error);
-        }
-      };
       useEffect(() => {
-        fetchUserData();
       }, []);
 
     const resgisterProjectRequest = async (name: string) => {
         try {
           const email = await AsyncStorage.getItem('email');
-          const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/new-team`,{
+          const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/new-project`,{
             name,
             email,
-            firstName,
-            lastName,
             rol,
           });
           navigation.navigate('Projects');
         } catch (error) {
           setError(true);
           setErrorMessage(error?.response?.data?.message);
-          console.error('Error al recuperar los datos del usuario:', error);
+          console.error('Error al crear equipo', error);
         }
       };
      
