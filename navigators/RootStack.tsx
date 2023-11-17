@@ -20,12 +20,15 @@ import EditMail from '../screens/mainScreens/editorScreens/EditMail';
 const Stack = createNativeStackNavigator();
 
 
-// Team
+// Project
 import CreateProject from '../screens/mainScreens/projectsScreens/CreateProject';
 import DeleteTeam from '../screens/mainScreens/projectsScreens/DeleteTeam';
 import EditProject from '../screens/mainScreens/projectsScreens/EditProject';
 import ViewTeams from '../screens/mainScreens/projectsScreens/ViewProjects';
 import ProjectView from '../screens/mainScreens/projectsScreens/ProjectView';
+import AddMemberProject from '../screens/mainScreens/projectsScreens/AddMemberProject';
+
+// Team
 import Team from '../screens/mainScreens/teamsScreens/Team';
 
 const RootStack = () => {
@@ -58,7 +61,7 @@ const RootStack = () => {
                 <Stack.Screen options={{headerTintColor: purple}} name='ViewTeams' component={ViewTeams}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='ProjectView' component={ProjectView}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='Team' component={Team}/>
-                
+                <Stack.Screen options={{headerTintColor: purple}} name='AddMemberProject' component={AddMemberProject}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

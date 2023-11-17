@@ -1,0 +1,162 @@
+import React, {useState, useRef, useEffect} from "react";
+
+import giraStyles from "../../../components/style";
+import { TextInput, View, Text, ScrollView,Image, StyleSheet } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+
+//formik
+import { Formik } from "formik";
+
+// Icons 
+import {Octicons, Ionicons} from "@expo/vector-icons";
+
+import { 
+    StyledContainer,
+    InnerContainer,
+    PageLogo,
+    PageTitle,
+    SubTitle,
+    StyledFormArea,
+    LeftIcon,
+    StyledInputLabel,
+    StyledTextInput,
+    RigthIcon,
+    Colors,
+    StyledButton,
+    ButtonText,
+    MsgBox,
+    Line,
+    ExtraView,
+    ExtraText,
+    TextLink,
+    TextLinkContent
+
+} from '../../../components/style';
+
+const {styleInput, styleIcon, styleInnerContainer,styleContainer, styleIconContainer, container,styleLabel, styleErrorMessage, styleErrorView, styleLogo} = giraStyles
+
+// Colors
+
+const {primary , secondary, purple} = Colors; 
+
+// Keyboards
+
+import KeyboardWrapper from "../../../components/keyboardWrapper";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+
+export default function AddMemberProject({navigation}){
+    
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const rol = 'administrador';	
+    const [mail, setMail] = useState('');
+      useEffect(() => {
+      }, []);
+
+    const registerMemberProject = async (mail: string) => {
+        try {
+          const email = await AsyncStorage.getItem('email');
+          const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/new-project`,{
+            mail,
+            email,
+            rol,
+          });
+          navigation.navigate('Projects');
+        } catch (error) {
+          setError(true);
+          setErrorMessage(error?.response?.data?.message);
+          console.error('Error al registar miembro', error);
+        }
+      };
+     
+    return(
+        <KeyboardWrapper>
+            <ScrollView style={container}>
+                <StatusBar style="dark" />
+                <View style={styleInnerContainer}>
+                    <Image
+                        source={{
+                        uri: 'https://reactnative.dev/img/tiny_logo.png',
+                        }}
+                        style={styleLogo}
+                    />
+                    <PageTitle style={{color: purple}}>Añadir miembro</PageTitle>
+                    <Formik
+                        initialValues={{mail: ''}}
+                        onSubmit={(values) => registerMemberProject(values.mail)}
+                    >
+                        {
+                            ({handleChange, handleBlur, handleSubmit, values}) => (
+                                <StyledFormArea>
+                                    <Text style={styles.TextLabel}>Ingrese el correo del miembro</Text>
+                                    <View style={styleContainer}>
+                                        <Octicons style={styleIcon} name={"people"} size={30} color={'black'}/>
+                                        <TextInput
+                                            placeholder="correo@mail.com"
+                                            style={styles.InputContainer}
+                                            value={values.mail}
+                                            onChangeText={handleChange('mail')}
+                                            onBlur={handleBlur('mail')}
+                                        />
+                                    </View>
+                                    {/* Error */}
+                                    <View
+                                        style={styleErrorView}
+                                    >
+                                        <Text style={styleErrorMessage}>
+                                            {errorMessage}
+                                        </Text>
+                                    </View>
+                                    <View>
+
+                                    <ButtonText
+                                        style={styles.InputContainer}
+                                        onPress={() => registerMemberProject(values.mail)}>
+                                        <Text style={{color:'black', textAlign:'center'}}>
+                                            Añadir miembro
+                                        </Text>
+                                    </ButtonText>
+                                            </View>
+                                </StyledFormArea>
+                            )
+                        }
+                    </Formik>
+                </View>
+            </ScrollView>
+        </KeyboardWrapper>
+    )
+}
+
+const styles = StyleSheet.create({
+    InputContainer : {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        flexDirection: 'row',
+        padding: 10,
+        borderColor: 'black',
+        borderWidth: 3,
+        color: 'black',
+        width: '80%',
+        fontWeight: 'bold',
+        fontSize: 18,
+    },
+    TextLabel: {
+        color: 'black',
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    ButtonContainer: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 10,
+        borderColor: 'black',
+        borderWidth: 3,
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 18,
+        textAlign: 'center',
+    }
+})
