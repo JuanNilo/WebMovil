@@ -46,7 +46,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 
-export default function CreateTeam({navigation}){
+export default function CreateProject({navigation}){
     
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -71,7 +71,7 @@ export default function CreateTeam({navigation}){
         fetchUserData();
       }, []);
 
-    const registerTeamRequest = async (name: string) => {
+    const resgisterProjectRequest = async (name: string) => {
         try {
           const email = await AsyncStorage.getItem('email');
           const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/new-team`,{
@@ -81,7 +81,7 @@ export default function CreateTeam({navigation}){
             lastName,
             rol,
           });
-          navigation.navigate('Team');
+          navigation.navigate('Projects');
         } catch (error) {
           setError(true);
           setErrorMessage(error?.response?.data?.message);
@@ -100,19 +100,19 @@ export default function CreateTeam({navigation}){
                         }}
                         style={styleLogo}
                     />
-                    <PageTitle style={{color: purple}}>Crear equipo</PageTitle>
+                    <PageTitle style={{color: purple}}>Crear proyecto</PageTitle>
                     <Formik
                         initialValues={{name: ''}}
-                        onSubmit={(values) => registerTeamRequest(values.name)}
+                        onSubmit={(values) => resgisterProjectRequest(values.name)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
                                 <StyledFormArea>
-                                    <Text style={styleLabel}>Ingrese nombre de equipo</Text>
+                                    <Text style={styleLabel}>Ingrese nombre del proyecto</Text>
                                     <View style={styleContainer}>
                                         <Octicons style={styleIcon} name={"people"} size={30} color={purple}/>
                                         <TextInput
-                                            placeholder="Nombre de equipo"
+                                            placeholder="Nombre de proyecto"
                                             style={styleInput}
                                             placeholderTextColor={primary}
                                             value={values.name}
@@ -131,9 +131,9 @@ export default function CreateTeam({navigation}){
                                     </View>
                                     <StyledButton 
                                         style={{backgroundColor: purple}}
-                                        onPress={() => registerTeamRequest(values.name)}>
+                                        onPress={() => resgisterProjectRequest(values.name)}>
                                         <ButtonText>
-                                            Crear equipo
+                                            Crear proyecto
                                         </ButtonText>
                                     </StyledButton>
                                 </StyledFormArea>

@@ -12,8 +12,8 @@ import { createAvatar } from "@dicebear/core";
 import { SvgXml } from 'react-native-svg';
 
 
-const TeamView = ({navigation}) => {
-  const [teamInfo, setTeamInfo] = useState([
+const ProjectView = ({navigation}) => {
+  const [projectInfo, setProjectInfo] = useState([
     {
         id: 1, name: 'Juan', lastName: 'Nilo', mail:'nilo@mail.com', role:'Administrador'
     },{
@@ -34,12 +34,12 @@ const TeamView = ({navigation}) => {
     }
     ]);
 
-    const [projects, setProjects] = useState([
+    const [teams, setTeams] = useState([
         {
-            id: 1, name: 'Proyecto 1', description:'Proyecto de prueba 1'
+            id: 1, name: 'Equipo 1', description:'Equipo de prueba 1'
         },
         {
-            id: 2, name: 'Proyecto 2', description:'Proyecto de prueba 2'
+            id: 2, name: 'Equipo 2', description:'Equipo de prueba 2'
         }
 
     ]);
@@ -49,18 +49,18 @@ const TeamView = ({navigation}) => {
         <ScrollView style={{padding:10, paddingEnd: 20, flex:1, height:"100%", paddingTop: StatusBarHeight + 40 }}>
             <View style={styles.container}>
     
-            <PageTitle style={{color:purple, fontSize:42}}>Team 1</PageTitle>
+            <PageTitle style={{color:purple, fontSize:42}}>Proyecto 1</PageTitle>
             <Line/>
-            <SubTitle>Miembros del equipo:</SubTitle>
+            <SubTitle>Miembros del proyecto:</SubTitle>
             <View>
 
-            {teamInfo.map((info) => {
+            {projectInfo.map((info) => {
                 return (
                    
                     <View key={info.id} style={styles.memberContainer}>
                         <SvgXml xml={createAvatar(lorelei, { seed: info.mail }).toString()} style={styles.logo} />
 
-                        <View style={{flexDirection:'column', alignItems:'start', width:'55%'}}>
+                        <View style={{flexDirection:'column', alignItems:'flex-start', width:'55%'}}>
                             <Text style={styles.memberName}>{info.name} {info.lastName}</Text>
                             <Text style={styles.memberRole}>{info.role}</Text>
                         </View>
@@ -78,14 +78,14 @@ const TeamView = ({navigation}) => {
             
             </View>
             <Line/>
-            <View style={{paddingVertical: 20}}>
-            <SubTitle>Proyectos del equipo</SubTitle>
-            {projects.map((project) => {
+            <View style={{paddingVertical: 20, width: '100%'}}>
+            <SubTitle>Equipos del projecto</SubTitle>
+            {teams.map((team) => {
                 return (
-                    <ButtonText onPress={() => navigation.navigate('Project')} key={project.id} style={styles.projectContainer}>
-                      <View style={{flexDirection: 'column', alignItems:'flex-start', width:'70%'}}>
-                        <Text style={styles.projectName}>{project.name}</Text>
-                        <Text style={styles.projectDescription}>{project.description}</Text>
+                    <ButtonText onPress={() => navigation.navigate('Team')} key={team.id} style={styles.projectContainer}>
+                      <View style={{flexDirection:'column', alignItems:'flex-start', width:'70%'}}>
+                        <Text style={styles.projectName}>{team.name}</Text>
+                        <Text style={styles.projectDescription}>{team.description}</Text>
                       </View>
                         <View style={{height:50, alignItems:'flex-end', justifyContent:'center'}}>
 
@@ -97,7 +97,7 @@ const TeamView = ({navigation}) => {
             
             <ButtonText style={styles.botonContainer}>
               <Text style={{color:'black', textAlign:'center'}}>
-                Crear proyecto
+                Crear equipo
               </Text>
               </ButtonText>
             </View>
@@ -179,4 +179,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default TeamView;
+export default ProjectView;

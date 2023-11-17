@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import giraStyles from "./../../../components/style";
+import giraStyles from "../../../components/style";
 import { View, ScrollView, Image, Text } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import { Octicons } from "@expo/vector-icons";
-import { StyledContainer, InnerContainer, PageLogo, PageTitle, SubTitle, StyledFormArea, LeftIcon, StyledInputLabel, StyledTextInput, RigthIcon, StyledButton, ButtonText, Line, ExtraView, ExtraText, TextLink, TextLinkContent } from './../../../components/style';
-import { Colors } from "./../../../components/style";
+import { StyledContainer, InnerContainer, PageLogo, PageTitle, SubTitle, StyledFormArea, LeftIcon, StyledInputLabel, StyledTextInput, RigthIcon, StyledButton, ButtonText, Line, ExtraView, ExtraText, TextLink, TextLinkContent } from '../../../components/style';
+import { Colors } from "../../../components/style";
 import KeyboardWrapper from "../../../components/keyboardWrapper";
 
 const { secondary, primary, brand, purple , red} = Colors

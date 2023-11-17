@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import giraStyles, { ButtonText, StyledButton } from "./../../../components/style";
+import giraStyles, { ButtonText, StyledButton } from "../../../components/style";
 import { View, ScrollView, Image, Text } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import { Octicons } from "@expo/vector-icons";
-import { PageTitle } from "./../../../components/style";
-import { Colors } from "./../../../components/style";
+import { PageTitle } from "../../../components/style";
+import { Colors } from "../../../components/style";
 import KeyboardWrapper from "../../../components/keyboardWrapper";
 
 const { secondary, primary, brand, purple,red } = Colors
@@ -15,10 +15,10 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-export default function ViewTeams({navigation}){
-    const [teams, setTeams] = useState([]);
+export default function ViewProjects({navigation}){
+    const [projects, setProjects] = useState([]);
 
-    const fetchTeamsData = async () => {
+    const fetchProjectData = async () => {
       try {
         const email = await AsyncStorage.getItem('email');
         const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/get-team-names`,
@@ -26,8 +26,8 @@ export default function ViewTeams({navigation}){
           email: email,
         }
         );
-        const teamData = response.data;
-        setTeams(teamData || []);
+        const projectData = response.data;
+        setProjects(projectData || []);
         
       } catch (error) {
         console.error('Error al recuperar los datos de equipos:', error);
@@ -52,7 +52,7 @@ export default function ViewTeams({navigation}){
     }
     
     useEffect(() => {
-      fetchTeamsData();
+      fetchProjectData();
     }, []);
   
     return(
@@ -63,13 +63,13 @@ export default function ViewTeams({navigation}){
                 <StatusBar style="dark"/>
                 <View style={styleInnerContainer}>
                     <View style={{width: '100%', height: '100%' }}>
-                        {teams.map((name, index) => (
+                        {projects.map((name, index) => (
                             <View key={index} style={styleContainer}>
 
-                                {/* Nombre del equipo */}
+                                {/* Nombre del proyecto */}
                                 <View style={styleTeamContainer}>
                                     <ButtonText style={{fontSize:20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}
-                                    onPress={() => navigation.navigate('TeamView') /* handle your button action here */}
+                                    onPress={() => navigation.navigate('ProjectView') /* handle your button action here */}
                                     >
                                         {name}
                                     </ButtonText>
@@ -79,7 +79,7 @@ export default function ViewTeams({navigation}){
                                 <View style={styleContainer}>
                                     <StyledButton
                                         style={{backgroundColor: purple ,alignItems: 'center', justifyContent: 'center', marginHorizontal: 'auto'}}
-                                            onPress={() => navigation.navigate('EditTeam') /* handle your button action here */}>
+                                            onPress={() => navigation.navigate('EditProject') /* handle your button action here */}>
                                         <Octicons style={{width:40, padding: 2, paddingLeft: 6}} name={"pencil"} size={30} color={primary} />
                                     
                                     </StyledButton>

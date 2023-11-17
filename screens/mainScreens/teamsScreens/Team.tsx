@@ -9,9 +9,9 @@ const StatusBarHeight = Constants.statusBarHeight;
 import KeyboardWrapper from '../../../components/keyboardWrapper';
 import { PageTitle, SubTitle } from '../../../components/style';
 
-const Project = () => {
-  const [projectName, setProjectName] = useState('Projecto 1');
-  const [projectDescription, setProjectDescription] = useState(' Descripción del proyecto 1');
+const Team = () => {
+  const [teamName, setTeamName] = useState('Equipo 1');
+  const [teamDescription, setTeamDescription] = useState(' Descripción del equipo 1');
   const [taskList, setTaskList] = useState([
     { id: 1, name: 'Task 1', description: 'Description 1', status: 'To Do', assignedTo: 'nilo@mail.com' },
     { id: 2, name: 'Task 2', description: 'Description 2', status: 'In Progress', assignedTo: 'nacho@mail.com' },
@@ -27,10 +27,10 @@ const Project = () => {
     <ScrollView style={{padding:10, paddingEnd: 20, flex:1, height:"100%", paddingTop: StatusBarHeight + 50 }}>
     <View >
       
-      <PageTitle style={{color: purple}}> {projectName}</PageTitle>
+      <PageTitle style={{color: purple}}> {teamName}</PageTitle>
 
-      <Text style={{fontWeight: 'bold', fontSize: 18}}>Project Description:</Text>
-      <Text style={{fontSize: 20}}>{projectDescription}</Text>
+      <Text style={{fontWeight: 'bold', fontSize: 18}}>Team Description:</Text>
+      <Text style={{fontSize: 20}}>{teamDescription}</Text>
       <Line/>
       <View style={{flexDirection: 'row', gap: 20, marginVertical: 10}}>
         <SubTitle>Task List:</SubTitle>
@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
         textAlign: 'center',
       },
 })
-export default Project;
+export default Team;

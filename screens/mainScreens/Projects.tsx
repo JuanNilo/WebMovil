@@ -6,26 +6,27 @@ import { ButtonText, PageTitle, StyledButton, ButtonOption } from '../../compone
 import { Colors } from '../../components/style';
 
 import giraStyles from '../../components/style';
-import ViewTeams from './teamScreens/ViewTeams';
+import ViewTeams from './projectsScreens/ViewProjects';
 const {container, styleInnerContainer, styleDataUser} = giraStyles
 
 const {purple, yellow,brand,red, darkLight} = Colors;
 
 
-export default function Team({navigation}){
+export default function Projects({navigation}){
     const route = useRoute();
-    return(
+    return( 
         <ScrollView style={container}>
                 <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
         <View style={styleInnerContainer}>
             <View style={ styleDataUser}>
               <View style={{flexDirection: 'row', alignItems:'center', justifyContent:'center'}}>
-                <PageTitle style={{color:purple}}>EQUIPOS
+                <PageTitle style={{color:purple}}>
+                  PROYECTOS
                 </PageTitle>
-                {/* Crear equipo */}
+                {/* Crear proyecto */}
                 <ButtonOption
                     style={{backgroundColor: purple}}
-                    onPress={() => navigation.navigate('CreateTeam')}>
+                    onPress={() => navigation.navigate('CreateProject')}>
                   <Octicons name="plus" size={30} color="white"/>
 
                 </ButtonOption>
@@ -33,7 +34,7 @@ export default function Team({navigation}){
               </View>
             
 
-            {/* Lista de equipos */}           
+            {/* Lista de proyecto */}           
                 <ViewTeams navigation={navigation}/>
             </View>
             </View>

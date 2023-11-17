@@ -21,12 +21,12 @@ const Stack = createNativeStackNavigator();
 
 
 // Team
-import CreateTeam from '../screens/mainScreens/teamScreens/CreateTeam';
-import DeleteTeam from '../screens/mainScreens/teamScreens/DeleteTeam';
-import EditTeam from '../screens/mainScreens/teamScreens/EditTeam';
-import ViewTeams from '../screens/mainScreens/teamScreens/ViewTeams';
-import TeamView from '../screens/mainScreens/teamScreens/TeamView';
-import Project from '../screens/mainScreens/ProjectScreens/Project';
+import CreateProject from '../screens/mainScreens/projectsScreens/CreateProject';
+import DeleteTeam from '../screens/mainScreens/projectsScreens/DeleteTeam';
+import EditProject from '../screens/mainScreens/projectsScreens/EditProject';
+import ViewTeams from '../screens/mainScreens/projectsScreens/ViewProjects';
+import ProjectView from '../screens/mainScreens/projectsScreens/ProjectView';
+import Team from '../screens/mainScreens/teamsScreens/Team';
 
 const RootStack = () => {
     return(
@@ -52,12 +52,12 @@ const RootStack = () => {
                 <Stack.Screen options={{headerTintColor: purple}} name='EditData' component={EditData}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='EditPassword' component={EditPassword}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='EditMail' component={EditMail}/>
-                <Stack.Screen options={{headerTintColor: purple}} name='CreateTeam' component={CreateTeam}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='CreateProject' component={CreateProject}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='DeleteTeam' component={DeleteTeam}/>
-                <Stack.Screen options={{headerTintColor: purple}} name='EditTeam' component={EditTeam}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='EditProject' component={EditProject}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='ViewTeams' component={ViewTeams}/>
-                <Stack.Screen options={{headerTintColor: purple}} name='TeamView' component={TeamView}/>
-                <Stack.Screen options={{headerTintColor: purple}} name='Project' component={Project}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='ProjectView' component={ProjectView}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='Team' component={Team}/>
                 
             </Stack.Navigator>
         </NavigationContainer>

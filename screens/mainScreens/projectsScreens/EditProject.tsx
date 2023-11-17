@@ -48,15 +48,15 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-const EditTeam = ({navigation}) => {
+const EditProject = ({navigation}) => {
    
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [teamData, setTeamData] = useState({});
+    const [projectData, setProjectData] = useState({});
     
     // Recuperar datos desde el back
 
-    const fetchTeamsData = async () => {
+    const fetchProjectData = async () => {
         try {
           const email = await AsyncStorage.getItem('email');
           const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/get-team-names`,
@@ -64,30 +64,24 @@ const EditTeam = ({navigation}) => {
             email: email,
           }
           );
-          const teamData = response.data;
-          setTeamData(teamData || []);
+          const projectData = response.data;
+          setProjectData(projectData || []);
           
         } catch (error) {
-          console.error('Error al recuperar los datos de equipos:', error);
+          console.error('Error al recuperar los datos de proyectos:', error);
         }
       };
       
       
       useEffect(() => {
-        fetchTeamsData();
+        fetchProjectData();
       }, []);
 
-    const changeTeamName = async (teamName: string) => {
+    const changeProjectName = async (projectName: string) => {
         setError(false);
         try{
-            // const response = await axios.post('http://10.0.2.2:3000/api/auth/register',{
-            //     email,
-            //     firstName,
-            //     lastName,
-            //     password,
-            // });
             
-            navigation.navigate('Team');
+            navigation.navigate('Project');
             
         }catch (e: any){
             setError(true);
@@ -98,8 +92,8 @@ const EditTeam = ({navigation}) => {
 
     // Ref
 
-    const oldTeamRef = useRef();
-    const newTeamRef = useRef();
+    const oldProjectRef = useRef();
+    const newProjectRef = useRef();
 
     return(
         <KeyboardWrapper>
@@ -112,12 +106,11 @@ const EditTeam = ({navigation}) => {
                     }}
                     style={styleLogo}
                 />
-                    <PageTitle style={{color:purple}}>Equipos</PageTitle>
-                    <SubTitle>Cambiar nombre equipo</SubTitle>
+                    <PageTitle style={{color:purple}}>Proyectos</PageTitle>
+                    <SubTitle>Cambiar nombre proyecto</SubTitle>
                     <Formik
-                        initialValues={{oldTeamName: teamData.teamName, newTeamName: ''}}
-                        onSubmit={(values) => registerRequest(values.teamName)}
-                    >
+                        initialValues={{oldProjectName: projectData.projectName, newp: ''}}
+                        onSubmit={(values) => registerRequest(values.projectName)}p                    >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
                                 <StyledFormArea>
@@ -129,14 +122,14 @@ const EditTeam = ({navigation}) => {
                                     <Octicons style={styleIcon} name={"people"} size={30} color={purple}/>
 
                                     <TextInput
-                                        ref={oldTeamRef}
+                                        ref={oldProjectRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
-                                        value={values.oldTeamName}
-                                        placeholder={teamData.teamName}
-                                        onChangeText={handleChange('oldTeamName')}
-                                        onBlur={handleBlur('oldTeamName')}
-                                        onSubmitEditing={() => newTeamRef.current.focus()}
+                                        value={values.oldProjectName}
+                                        placeholder={projectData.projectName}
+                                        onChangeText={handleChange('oldProjectName')}
+                                        onBlur={handleBlur('oldProjectName')}
+                                        onSubmitEditing={() => newProjectRef.current.focus()}
                                         />
                                     </View>
 
@@ -147,14 +140,14 @@ const EditTeam = ({navigation}) => {
                                     <Octicons style={styleIcon} name={"people"} size={30} color={purple}/>
 
                                     <TextInput
-                                        ref={newTeamRef}
+                                        ref={newProjectRef}
                                         style={styleInput}
                                         placeholderTextColor={primary}
                                         value={values.newEmail}
-                                        placeholder={"Nuevo nombre de equipo"}
-                                        onChangeText={handleChange('newTeamName')}
-                                        onBlur={handleBlur('newTeamName')}
-                                        onSubmitEditing={() => changeEmail(values.teamData)}
+                                        placeholder={"Nuevo nombre de proyecto"}
+                                        onChangeText={handleChange('newProjectName')}
+                                        onBlur={handleBlur('newProjectName')}
+                                        onSubmitEditing={() => changeEmail(values.projectData)}
                                         />
                                     </View>
                                     
@@ -168,7 +161,7 @@ const EditTeam = ({navigation}) => {
                                     </View>
                                     <StyledButton 
                                         style={{backgroundColor: purple}}
-                                        onPress={() => changeEmail(values.odlTeamName,values.newTeamName)}>
+                                        onPress={() => changeEmail(values.odlProjectName,values.newProjectName)}>
                                         <ButtonText>
                                             Cambiar nombre
                                         </ButtonText>
@@ -184,4 +177,4 @@ const EditTeam = ({navigation}) => {
 }
 
 
-export default EditTeam;
+export default EditProject;

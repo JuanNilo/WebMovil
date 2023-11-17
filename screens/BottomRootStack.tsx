@@ -10,12 +10,12 @@ import { Ionicons } from "@expo/vector-icons";
 // Screens
 import User from './mainScreens/User';
 import Home from './mainScreens/Home';
-import Team from './mainScreens/Team';
+import Projects from './mainScreens/Projects';
 
 // Screen names
 const homeName = "Home";
 const userName = "User";
-const teamName = "Team";
+const projectName = "Projects";
 const editData = "EditData"
 
 const Tab = createBottomTabNavigator();
@@ -33,7 +33,7 @@ export default function BottomRootStack(){
         
             <Tab.Navigator
                 
-                initialRouteName={teamName}
+                initialRouteName={projectName}
                 screenOptions={({route}) => ({
                     tabBarIcon: ({focused, color, size}) => {
                         let iconName;
@@ -43,7 +43,7 @@ export default function BottomRootStack(){
                             iconName = focused ? 'home':'home-outline'
                         }else if (rn === userName ){
                             iconName = focused ? 'person' : 'person-outline'
-                        }else if (rn === teamName ){
+                        }else if (rn === projectName ){
                             iconName = focused ? 'terminal' : 'terminal-outline'
                         }
 
@@ -62,7 +62,7 @@ export default function BottomRootStack(){
                 })}
             >
                 <Tab.Screen name={homeName} component={Home} />
-                <Tab.Screen name={teamName} component={Team} />
+                <Tab.Screen name={projectName} component={Projects} />
                 <Tab.Screen name={userName} component={User} />
             </Tab.Navigator>
         
