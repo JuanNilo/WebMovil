@@ -99,6 +99,7 @@ export default function CreateTeam({navigation}){
                                         />
                                     </View>
                                     {/* Error */}
+                                    
                                     <View
                                         style={styleErrorView}
                                     >
