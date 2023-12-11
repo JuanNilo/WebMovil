@@ -5,13 +5,15 @@
       "nombre": "Tarea 1",
       "estado": "pendiente",
       "responsable": "juan@mail.com",
-      "descripcion": "Descripción de la tarea 1"
+      "project": "Proyecto 1",
+      "descripcion": "Diseñar e implementar una pantalla de edición de tareas para una aplicación de gestión de proyectos. La finalidad de esta tarea es proporcionar a los usuarios una interfaz intuitiva y eficiente para modificar y actualizar la información relacionada con una tarea específica.  "
     },
     {
       "id": 2,
       "nombre": "Tarea 2",
       "estado": "en progreso",
       "responsable": "juan@mail.com",
+      "project": "Proyecto 1",
       "descripcion": "Descripción de la tarea 2"
     },
     {
@@ -19,7 +21,16 @@
       "nombre": "Tarea 3",
       "estado": "completada",
       "responsable": "juan@mail.com",
+      "project": "Proyecto 2",
       "descripcion": "Descripción de la tarea 3"
+    },
+    {
+      "id": 4,
+      "nombre": "Tarea 4",
+      "estado": "pendiente",
+      "responsable": "juan@mail.com",
+      "project": "Proyecto 2",
+      "descripcion": "Descripción de la tarea 4"
     }
   ]
 }

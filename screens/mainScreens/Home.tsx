@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
 import * as React from 'react';
-import {View, Text, ScrollView} from 'react-native'
+import {View, Text, ScrollView, TouchableOpacity} from 'react-native'
 import KeyboardWrapper from '../../components/keyboardWrapper';
 import giraStyles, { PageTitle, SubTitle } from '../../components/style';
 import { useFocusEffect } from '@react-navigation/native';
@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import {tasks} from '../../components/data/task.json';
 import  Constants  from "expo-constants";
+import {AntDesign} from '@expo/vector-icons';
 import TaskCard from './taskScreens/TaskCard';
 
 interface userDataTypes {
@@ -50,25 +51,50 @@ export default function Home({navigation}){
             <KeyboardWrapper>
                 <ScrollView >
                     <View style={{
-                        paddingTop: 40 + StatusBarHeight,
+                        paddingTop: 40 + StatusBarHeight, backgroundColor:'white'
                     }}>
                         <SubTitle style={{color: Colors.purple, marginHorizontal: 10}}>Bienvenido {userData.firstName}!</SubTitle>
                     </View>
-                    <View style={{height: '100%', backgroundColor: 'white', paddingHorizontal: 10,paddingTop: 10, flex:1}}>
-                        <SubTitle style={{color: Colors.purple}}>Tareas</SubTitle>
-                       {/* Slider horizontal */}
+                    <View style={{height: '100%', borderColor:'#808080', backgroundColor:'#B4B4FC',borderBottomWidth:2, borderTopWidth:2, paddingHorizontal: 10,paddingTop: 10, flex:1}}>
+                        <TouchableOpacity onPress={() => navigation.navigate('ListTaskView')} style={{
+                            height: 50,
+                            alignItems: 'center',
+                            flexDirection: 'row',
+                        }}>
+                            <SubTitle style={{color: Colors.purple}}>Tareas</SubTitle>
+                            <AntDesign name="caretright" size={30} color="black"/>
+                        </TouchableOpacity>
+                        {/* Slider de tareas en curso */}
                         <ScrollView horizontal={true} style={{height: 200}}>
                             {task.map((item, index) => {
                                 return(
                                     <View key={index}>
-
-                                    <TaskCard  nombre={item.nombre} descripcion={item.descripcion} estado={item.estado}  />
+                                        {
+                                            item.estado != 'completada' 
+                                            ? (
+                                                <TouchableOpacity onPress={() => navigation.navigate('TaskView', {item})}>
+                                                <TaskCard   nombre={item.nombre} descripcion={item.descripcion} estado={item.estado}  />
+                                                    </TouchableOpacity>
+                                                ) : null
+                                            }
                                     </View>
                                 )
                             })}
                         </ScrollView>
                     </View>
-                    
+                    {/* Slider de proyectos */}
+                    <View style={{height: '100%', borderColor:'#808080', backgroundColor:'#FCF5B4',borderBottomWidth:2, borderTopWidth:2, paddingHorizontal: 10,paddingTop: 10, flex:1}}>
+                        <ScrollView horizontal={true} style={{height: 200}}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Projects')} style={{ 
+                            height: 50,
+                            alignItems: 'center',
+                            flexDirection: 'row',
+                             } }>
+                                <SubTitle style={{color: Colors.purple}}>Proyectos</SubTitle>
+                                <AntDesign name="caretright" size={30} color="black"/>
+                            </TouchableOpacity>
+                        </ScrollView>
+                    </View>
                     <View style={giraStyles.container}>
                         
                     </View>

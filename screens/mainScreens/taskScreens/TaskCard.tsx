@@ -10,7 +10,7 @@ import { Colors } from '../../../components/style';
     estado: string;
 }
 
-const TaskCard = ({nombre, descripcion, estado} : TaskCardProps, {navigation}) =>  {
+const TaskCard = ({nombre, descripcion, estado} : TaskCardProps) =>  {
     const [taskStatus, setTaskStatus] = useState(estado);
 
     let backgroundColorStatus;
@@ -34,12 +34,13 @@ const TaskCard = ({nombre, descripcion, estado} : TaskCardProps, {navigation}) =
     }
 
     return(
-        <TouchableOpacity onPress={() => navigation.navigate('CreateTask') } style={
+        <View  style={
             {
                 width: 200,
                 height: 150,
                 backgroundColor: 'white',
                 margin: 10,
+                marginHorizontal:5,
                 borderRadius: 10,
                 borderColor: 'black',
                 borderWidth: 2,
@@ -49,11 +50,15 @@ const TaskCard = ({nombre, descripcion, estado} : TaskCardProps, {navigation}) =
             }
         }>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>{nombre}</Text>
+            {/* quiero un View que todo el contenido que este por fuera sea invisible  */}
+            <View style={{height: 70, width: '100%',marginVertical: 5, overflow: 'hidden'}}>
             <Text style={giraStyles.styleLabel}>{descripcion}</Text>
+
+            </View>
             <View style={{backgroundColor: backgroundColorStatus, padding: 2, borderRadius: 5 }}>
                 <Text style={{color: textColorStatus, fontSize: 16, textAlign: 'left'}}>{estado}</Text>
             </View>
-        </TouchableOpacity>
+        </View>
     )
 }
 
