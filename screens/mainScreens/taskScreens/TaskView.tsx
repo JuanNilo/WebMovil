@@ -56,7 +56,7 @@ const TaskView = ({ route, navigation }) => {
                         ) : (
                             // Esta deshabilitado el modo edicion
                             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20}}>
-                                <PageTitle style={{color: 'black', marginHorizontal: 10}}>{item.nombre}</PageTitle>
+                                <PageTitle style={{color: 'black', marginHorizontal: 10}}>{editingName}</PageTitle>
                             <TouchableOpacity onPress={() => setEditMode(!editMode)}>
                                 <AntDesign name="edit" style={{marginTop: 5}} size={30} color="black" />
                             </TouchableOpacity>
@@ -98,7 +98,7 @@ const TaskView = ({ route, navigation }) => {
                         (
                             <View style={{paddingVertical: 14, paddingHorizontal: 4, borderWidth: 2, borderColor: 'transparent'}}>
 
-                            <Text style={{fontSize: 20}}>{item.descripcion}</Text>
+                            <Text style={{fontSize: 20}}>{editingDescription}</Text>
                             </View>
                         ) 
                         }

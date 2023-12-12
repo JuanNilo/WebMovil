@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import giraStyles, { ButtonText, StyledButton } from "../../../components/style";
-import { View, ScrollView, Image, Text, TextInput, Modal, Button, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Image, Text, TextInput, Modal, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import {useFocusEffect} from "@react-navigation/native";
 import { Octicons } from "@expo/vector-icons";
@@ -96,7 +96,7 @@ export default function ViewProjects({navigation}){
 
     const idLocalStorage = async (id: number) => {
         await AsyncStorage.setItem('id_project', id.toString());
-        navigation.navigate('ProjectView');
+        navigation.navigate('ProjectView', );
     }
     
     useEffect(() => {
@@ -116,47 +116,47 @@ export default function ViewProjects({navigation}){
                                 {
                                     index === editingIndex ? (
                                         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width:'100%'}}>
-                                            <View style={styleTeamContainer}>
+                                            <View style={styles.input}>
 
                                             <TextInput
-                                                style={{fontSize:20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}
+                                                style={styles.inputText}
                                                 onChangeText={handleNameChange}
                                                 value={editingName}
                                                 placeholder="Nuevo Nombre"
-                                                placeholderTextColor={purple}
+                                                placeholderTextColor={'black'}
                                                 />
                                             </View>
                                             {/* Boton Guardar */}
                                             <StyledButton
-                                                style={{backgroundColor: purple ,alignItems: 'center', justifyContent: 'center', marginHorizontal: 'auto'}}
+                                                style={styles.editButton}
                                                 onPress={() => editTeam("equipo") }>
-                                                <Octicons style={{width:40, padding: 2, paddingLeft: 6}} name={"check"} size={30} color={primary} />
+                                                <Octicons style={styles.iconStyle} name={"check"} size={30} color={primary} />
                                             </StyledButton>
                                             {/* Boton Eliminar */}
                                             <StyledButton
-                                                style={{backgroundColor: red, padding: 5, justifyContent:'center',alignItems:'center',marginHorizontal: 4}}
+                                                style={styles.deleteButton}
                                                     >
-                                                <Octicons style={{width:40, padding: 2, paddingLeft: 9}} name={"x"} size={35} color={Colors.darkLight} />    
+                                                <Octicons style={styles.iconStyle} name={"x"} size={35} color={'white'} />    
                                             </StyledButton>
                                         </View>
                                     ) : (
                                         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                                            <View style={styleTeamContainer}>
-                                                <ButtonText style={{fontSize:20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}
-                                                    onPress={() => idLocalStorage(projectsIds[index]) }
+                                            <View style={styles.input}>
+                                                <ButtonText style={styles.inputText}
+                                                    onPress={() => navigation.navigate('ProjectView',{name})}
                                                 >
                                                     {name}
                                                 </ButtonText>
                                                 </View>
                                             <StyledButton
-                                                style={{backgroundColor: purple ,alignItems: 'center', justifyContent: 'center', marginHorizontal: 'auto'}}
+                                                style={styles.editButton}
                                                 onPress={() => habdleEdit(index) }>
-                                                <Octicons style={{width:40, padding: 2, paddingLeft: 6}} name={"pencil"} size={30} color={primary} />
+                                                <Octicons style={styles.iconStyle} name={"pencil"} size={30} color={primary} />
                                             </StyledButton>
                                             <StyledButton
-                                                style={{backgroundColor: red, padding: 5, justifyContent:'center',alignItems:'center',marginHorizontal: 4}}
+                                                style={styles.deleteButton}
                                                     onPress={() =>  handleDeleteTeam(name)}>
-                                                <Octicons style={{width:40, padding: 2, paddingLeft: 9}} name={"x"} size={35} color={primary} />
+                                                <Octicons style={styles.iconStyle} name={"x"} size={35} color={primary} />
                                                     
                                                 </StyledButton>
                                         </View>
@@ -186,7 +186,7 @@ export default function ViewProjects({navigation}){
                                             <View style={{flexDirection:'row', alignItems:'center',backgroundColor: 'transparent', justifyContent:'center', padding:15}}>
                                                 {/* Eliminar */}
                                                 <TouchableOpacity
-                                                    style={{backgroundColor: purple ,alignItems: 'center',height:50, width:125, borderRadius: 5, justifyContent: 'center', marginHorizontal: 5}}
+                                                    style={{backgroundColor: 'red' ,alignItems: 'center',height:50, width:125, borderRadius: 5, justifyContent: 'center', marginHorizontal: 5}}
                                                     onPress={() => deleteTeam("equipo")}>
                                                     <ButtonText style={{fontSize:20, fontWeight:'bold', color: 'white', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
                                                         Si
@@ -213,3 +213,47 @@ export default function ViewProjects({navigation}){
         </KeyboardWrapper>
     )
 }
+
+const styles = StyleSheet.create({
+        editButton: {
+            backgroundColor: 'black',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginHorizontal: 'auto',
+        },
+        deleteButton: {
+            backgroundColor: 'red',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginHorizontal: 4,
+            padding: 5,
+        },
+        inputText:{
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: 'black',
+            textAlign: 'center',
+            padding: 10,
+            borderRadius: 5,
+            width: '100%',
+        },
+        input:{
+            flex: 1, 
+            backgroundColor: 'white', 
+            color: 'black', 
+            height: 50,
+            alignItems: 'center',
+            marginVertical: 5,
+            borderRadius: 10,
+            paddingHorizontal: 10,
+            fontSize: 16,
+            borderWidth: 3,
+            borderColor: 'black',
+            marginHorizontal: 4,
+        },
+        iconStyle:{
+            width:40, 
+            padding: 2, 
+            paddingLeft: 10
+        }
+})

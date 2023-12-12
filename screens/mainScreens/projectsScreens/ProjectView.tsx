@@ -15,7 +15,10 @@ import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 
 
-const ProjectView = ({navigation}) => {
+const ProjectView = ({navigation, route}) => {
+  const { name } = route.params;
+  console.log(name);
+  const [nameProject, setNameProject] = useState(name);
   const [nameMembers, setNameMembers] = useState([]);
   const [emailMembers, setEmailMembers] = useState([]);
   const [nameTeams, setNameTeams] = useState([]);
@@ -61,7 +64,7 @@ const ProjectView = ({navigation}) => {
         <ScrollView style={{padding:10, paddingEnd: 20, flex:1, height:"100%", paddingTop: StatusBarHeight + 40 }}>
             <View style={styles.container}>
     
-            <PageTitle style={{color:purple, fontSize:42}}>Proyecto 1</PageTitle>
+            <PageTitle style={{color:purple, fontSize:42}}>{nameProject}</PageTitle>
             <Line/>
             <SubTitle>Miembros del proyecto:</SubTitle>
             <View>

@@ -18,14 +18,31 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { SvgXml } from 'react-native-svg';
 
+// dame el type de error
+interface errorTypes {
+  response: {
+    data: {
+      message: string;
+    };
+  };
+}
 
-
+// dame el type de userData
+interface userDataTypes {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const User = ({ navigation }) => {
   const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [userData, setUserData] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+  const [userData, setUserData] = useState({} as userDataTypes);
   
   const avatar = createAvatar(lorelei, { seed: userData.email }).toString();
 
