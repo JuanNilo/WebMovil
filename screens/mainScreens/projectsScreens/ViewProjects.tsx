@@ -47,10 +47,10 @@ export default function ViewProjects({navigation}){
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     
-    const deleteTeam = async (teamName: string) => {
+    const deleteProject = async (id_project: number) => {
         setError(false)
         try{
-        //    Nacho juegue
+            
             
             navigation.navigate('Team');
             
