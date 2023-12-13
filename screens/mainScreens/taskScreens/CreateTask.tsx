@@ -8,7 +8,6 @@ import { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { useRef } from 'react';
 import { TouchableOpacity } from 'react-native';
-
 const StatusBarHeight = Constants.statusBarHeight;
 
 // necesito el tipeo de values
@@ -19,6 +18,8 @@ interface valuesTypes {
     status: string;
     encargado: string;
 }
+
+
 const CreateTask = ({navigation}) => {
     const nameTaskRef = useRef<TextInput>(null);
     const projectTaskRef = useRef<TextInput>(null);
@@ -26,6 +27,7 @@ const CreateTask = ({navigation}) => {
     const statusTaskRef = useRef<TextInput>(null);
     const encargadoTaskRef = useRef<TextInput>(null);
     const [error, setError] = useState(false);
+    const [startDate, setStartDate] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
 
@@ -71,9 +73,11 @@ const CreateTask = ({navigation}) => {
                         onSubmitEditing={() => statusTaskRef.current?.focus()}
                         />
                         {/* Estado */}
+
                         <Text style={styles.label}>Estado:</Text>
                         {/* el estado se da por un option de 3 opciones, pendiente, en progreso y completada */}
                         <View style={styles.pickerContainer}>
+
 
                         <Picker
                             style={styles.picker}
@@ -82,9 +86,9 @@ const CreateTask = ({navigation}) => {
                         }
                         
                         >
-                            <Picker.Item style={styles.selectOption} label="Pendiente" value="pendiente" />
-                            <Picker.Item style={styles.selectOption} label="En Progreso" value="en progreso" />
-                            <Picker.Item style={styles.selectOption} label="Completada" value="completada" />
+                            <Picker.Item style={styles.pickerContainer} color={'verde'} label="Pendiente" value="pendiente" />
+                            <Picker.Item style={styles.pickerContainer} label="En Progreso" value="en progreso" />
+                            <Picker.Item style={styles.pickerContainer} label="Completada" value="completada" />
                             </Picker>
                         
                         </View>
@@ -93,6 +97,16 @@ const CreateTask = ({navigation}) => {
                         <TextInput ref={encargadoTaskRef} style={styles.input} placeholder="Encargado" onChangeText={handleChange('encargado')} value={values.encargado} 
                         onSubmitEditing={() => console.log('pressed')}
                         onBlur={handleBlur('encargado')}/>
+
+                        {/* Fecha */}
+
+                        <Text>Fecha de inicio:</Text>
+                        <TextInput
+                        value={startDate}
+                        placeholder="dd/mm/aaaa"
+                        onChangeText={(text: string) => setStartDate(text)}
+                        />
+
                         {/* Mensaje de error */}
                         {
                             error ? (
@@ -167,11 +181,14 @@ const styles = StyleSheet.create({
     picker:{
         backgroundColor: 'white', 
     },
-    pickerContainer:{
-        borderWidth:3,
+    pickerContainer: {
+        backgroundColor: 'white',
+        borderWidth: 3,
         borderColor: 'black',
         borderRadius: 10,
-        overflow:'hidden', 
+        overflow: 'hidden',
+        color: 'black',
+        fontSize:16,
     },
     error:{
         backgroundColor: 'red', 

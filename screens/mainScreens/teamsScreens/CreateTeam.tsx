@@ -79,7 +79,7 @@ export default function CreateTeam({navigation}){
                         }}
                         style={styleLogo}
                     />
-                    <PageTitle style={{color: purple}}>Crear equipo</PageTitle>
+                    <PageTitle style={{color: 'black'}}>Crear equipo</PageTitle>
                     <Formik
                         initialValues={{name: ''}}
                         onSubmit={(values) => registerTeamRequest(values.name)}

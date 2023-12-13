@@ -24,7 +24,7 @@ const ListTaskView = ({ navigation }) => {
                         {/* quiero renderizar la stareas en una lista */}
                         {task.map((item, index) => {
                             return (
-                                <TouchableOpacity onPress={() => navigation.navigate('TaskView', {item})} key={index}>
+                                <TouchableOpacity onPress={() => navigation.navigate('TaskView', { item })} key={index}>
                                 <View style={styles.card} key={index}>
                                     <View style={{width: '90%'}}>
                                         <Text style={styles.titleCard} >{item.nombre}</Text>
