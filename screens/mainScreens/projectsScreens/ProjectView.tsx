@@ -17,7 +17,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const ProjectView = ({navigation, route}) => {
   const { name } = route.params;
-  console.log(name);
+  console.log('este es el nombre dl=e pro',name);
   const [nameProject, setNameProject] = useState(name);
   const [nameMembers, setNameMembers] = useState([]);
   const [emailMembers, setEmailMembers] = useState([]);
@@ -83,7 +83,7 @@ const ProjectView = ({navigation, route}) => {
                 
             )}
             {/* Boton agregar miembro */}
-            <ButtonText onPress={ () => navigation.navigate('AddMemberProject')} style={styles.botonContainer}>
+            <ButtonText onPress={ () => navigation.navigate('AddMemberProject', {nameProject})} style={styles.botonContainer}>
               <Text style={{color:'black', textAlign:'center'}}>
                 Añadir miembro
               </Text>

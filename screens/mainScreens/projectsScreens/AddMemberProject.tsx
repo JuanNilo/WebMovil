@@ -46,21 +46,22 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 
-export default function AddMemberProject({navigation}){
-    
+export default function AddMemberProject({navigation, route}){
+    const {nameProject} = route.params;
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const rol = 'administrador';	
+    const rol = 'trabajador';	
     const [mail, setMail] = useState('');
       useEffect(() => {
       }, []);
 
     const registerMemberProject = async (mail: string) => {
         try {
-          const email = await AsyncStorage.getItem('email');
+
+          console.log('esto es el email?? ',mail, 'esto es el nombre del proyecto?? ',nameProject, 'esto es el rol?? ',rol);
           const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/new-project`,{
             mail,
-            email,
+            nameProject,
             rol,
           });
           navigation.navigate('Projects');
