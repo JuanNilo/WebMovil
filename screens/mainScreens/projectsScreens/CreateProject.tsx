@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from "react";
 
 import giraStyles from "../../../components/style";
-import { TextInput, View, Text, ScrollView,Image } from 'react-native';
+import { TextInput, View, Text, ScrollView,Image, StyleSheet } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 
 //formik
@@ -82,7 +82,7 @@ export default function CreateProject({navigation}){
                         }}
                         style={styleLogo}
                     />
-                    <PageTitle style={{color: purple}}>Crear proyecto</PageTitle>
+                    <PageTitle style={{color: 'black'}}>Crear proyecto</PageTitle>
                     <Formik
                         initialValues={{name: ''}}
                         onSubmit={(values) => resgisterProjectRequest(values.name)}
@@ -92,11 +92,11 @@ export default function CreateProject({navigation}){
                                 <StyledFormArea>
                                     <Text style={styleLabel}>Ingrese nombre del proyecto</Text>
                                     <View style={styleContainer}>
-                                        <Octicons style={styleIcon} name={"people"} size={30} color={purple}/>
+                                        <Octicons style={styleIcon} name={"people"} size={30} color={'black'}/>
                                         <TextInput
                                             placeholder="Nombre de proyecto"
-                                            style={styleInput}
-                                            placeholderTextColor={primary}
+                                            style={styles.input}
+                                            placeholderTextColor={'black'}
                                             value={values.name}
                                             onChangeText={handleChange('name')}
                                             onBlur={handleBlur('name')}
@@ -111,7 +111,7 @@ export default function CreateProject({navigation}){
                                         </Text>
                                     </View>
                                     <StyledButton 
-                                        style={{backgroundColor: purple}}
+                                        style={{backgroundColor: 'black'}}
                                         onPress={() => resgisterProjectRequest(values.name)}>
                                         <ButtonText>
                                             Crear proyecto
@@ -126,3 +126,19 @@ export default function CreateProject({navigation}){
         </KeyboardWrapper>
     )
 }
+
+const styles = StyleSheet.create({
+    input:{
+        backgroundColor: '#fff',
+        padding: 15,
+        width:'90%',
+        borderColor:'black',
+        borderWidth:3,
+        borderRadius: 5,
+        fontSize: 18,
+        height: 60,
+        marginVertical: 3,
+        color: 'black',
+    },
+    
+})

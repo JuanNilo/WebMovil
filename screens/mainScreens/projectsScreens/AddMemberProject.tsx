@@ -82,7 +82,7 @@ export default function AddMemberProject({navigation}){
                         }}
                         style={styleLogo}
                     />
-                    <PageTitle style={{color: purple}}>Añadir miembro</PageTitle>
+                    <PageTitle style={{color: 'black'}}>Añadir miembro</PageTitle>
                     <Formik
                         initialValues={{mail: ''}}
                         onSubmit={(values) => registerMemberProject(values.mail)}

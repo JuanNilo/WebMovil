@@ -20,12 +20,12 @@ export default function Projects({navigation}){
         <View style={styleInnerContainer}>
             <View style={ styleDataUser}>
               <View style={{flexDirection: 'row', alignItems:'center', justifyContent:'center'}}>
-                <PageTitle style={{color:purple}}>
+                <PageTitle style={{color:'black'}}>
                   PROYECTOS
                 </PageTitle>
                 {/* Crear proyecto */}
                 <ButtonOption
-                    style={{backgroundColor: purple}}
+                    style={{backgroundColor: 'black'}}
                     onPress={() => navigation.navigate('CreateProject')}>
                   <Octicons name="plus" size={30} color="white"/>
 

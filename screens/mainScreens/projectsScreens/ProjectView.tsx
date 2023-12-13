@@ -15,7 +15,10 @@ import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 
 
-const ProjectView = ({navigation}) => {
+const ProjectView = ({navigation, route}) => {
+  const { name } = route.params;
+  console.log(name);
+  const [nameProject, setNameProject] = useState(name);
   const [nameMembers, setNameMembers] = useState([]);
   const [emailMembers, setEmailMembers] = useState([]);
   const [nameTeams, setNameTeams] = useState([]);
@@ -61,9 +64,9 @@ const ProjectView = ({navigation}) => {
         <ScrollView style={{padding:10, paddingEnd: 20, flex:1, height:"100%", paddingTop: StatusBarHeight + 40 }}>
             <View style={styles.container}>
     
-            <PageTitle style={{color:purple, fontSize:42}}>Proyecto 1</PageTitle>
+            <PageTitle style={{color:'black', fontSize:42}}>{nameProject}</PageTitle>
             <Line/>
-            <SubTitle>Miembros del proyecto:</SubTitle>
+            <Text style={styles.SubTitle}>Miembros del proyecto:</Text>
             <View>
 
             {emailMembers.map((email , index) => (
@@ -119,7 +122,6 @@ const ProjectView = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
   },
@@ -185,6 +187,10 @@ const styles = StyleSheet.create({
     paddingLeft: 11,
     borderRadius:10,
     marginHorizontal: 10,
+  },
+  SubTitle:{
+    fontSize: 20,
+    fontWeight: 'bold',
   }
 });
 

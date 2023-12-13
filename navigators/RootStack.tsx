@@ -32,6 +32,10 @@ import AddMemberProject from '../screens/mainScreens/projectsScreens/AddMemberPr
 import Team from '../screens/mainScreens/teamsScreens/Team';
 import CreateTeam from '../screens/mainScreens/teamsScreens/CreateTeam';
 
+// Task
+import CreateTask from '../screens/mainScreens/taskScreens/CreateTask';
+import TaskView from '../screens/mainScreens/taskScreens/TaskView';
+import ListTaskView from '../screens/mainScreens/taskScreens/ListTaskView';
 const RootStack = () => {
     return(
         <NavigationContainer>
@@ -64,6 +68,9 @@ const RootStack = () => {
                 <Stack.Screen options={{headerTintColor: purple}} name='Team' component={Team}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='AddMemberProject' component={AddMemberProject}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='CreateTeam' component={CreateTeam}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='CreateTask' component={CreateTask}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='TaskView' component={TaskView}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='ListTaskView' component={ListTaskView}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
