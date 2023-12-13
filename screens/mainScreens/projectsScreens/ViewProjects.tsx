@@ -72,11 +72,10 @@ export default function ViewProjects({navigation}){
     
     const deleteProject = async (id_project: number) => {
         setError(false)
-        try{
-            
+        
             
             navigation.navigate('Team');
-            
+    }    
     const [teamDeleteName, setTeamDeleteName] = useState('');
 
     const handleDeleteTeam = (teamName: string) => {
