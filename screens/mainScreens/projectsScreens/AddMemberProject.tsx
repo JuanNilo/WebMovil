@@ -51,20 +51,18 @@ export default function AddMemberProject({navigation, route}){
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const rol = 'trabajador';	
-    const [mail, setMail] = useState('');
       useEffect(() => {
       }, []);
 
-    const registerMemberProject = async (mail: string) => {
+    const registerMemberProject = async (email: string) => {
         try {
-
-          console.log('esto es el email?? ',mail, 'esto es el nombre del proyecto?? ',nameProject, 'esto es el rol?? ',rol);
-          const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/new-project`,{
-            mail,
-            nameProject,
+          const id = await AsyncStorage.getItem('id_project');
+          const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/new-member`,{
+            email,
             rol,
+            id,
           });
-          navigation.navigate('Projects');
+          navigation.navigate('ProjectView', {nameProject});
         } catch (error) {
           setError(true);
           setErrorMessage(error?.response?.data?.message);
@@ -85,8 +83,8 @@ export default function AddMemberProject({navigation, route}){
                     />
                     <PageTitle style={{color: 'black'}}>Añadir miembro</PageTitle>
                     <Formik
-                        initialValues={{mail: ''}}
-                        onSubmit={(values) => registerMemberProject(values.mail)}
+                        initialValues={{email: ''}}
+                        onSubmit={(values) => registerMemberProject(values.email)}
                     >
                         {
                             ({handleChange, handleBlur, handleSubmit, values}) => (
@@ -95,11 +93,11 @@ export default function AddMemberProject({navigation, route}){
                                     <View style={styleContainer}>
                                         <Octicons style={styleIcon} name={"people"} size={30} color={'black'}/>
                                         <TextInput
-                                            placeholder="correo@mail.com"
+                                            placeholder="correo@email.com"
                                             style={styles.InputContainer}
-                                            value={values.mail}
-                                            onChangeText={handleChange('mail')}
-                                            onBlur={handleBlur('mail')}
+                                            value={values.email}
+                                            onChangeText={handleChange('email')}
+                                            onBlur={handleBlur('email')}
                                         />
                                     </View>
                                     {/* Error */}
@@ -114,7 +112,7 @@ export default function AddMemberProject({navigation, route}){
 
                                     <StyledButton
                                         style={{backgroundColor:'black'}}
-                                        onPress={() => registerMemberProject(values.mail)}>
+                                        onPress={() => registerMemberProject(values.email)}>
                                         <ButtonText>
                                             Añadir miembro
                                         </ButtonText>

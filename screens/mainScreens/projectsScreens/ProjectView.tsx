@@ -17,7 +17,6 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const ProjectView = ({navigation, route}) => {
   const { name } = route.params;
-  console.log('este es el nombre dl=e pro',name);
   const [nameProject, setNameProject] = useState(name);
   const [nameMembers, setNameMembers] = useState([]);
   const [emailMembers, setEmailMembers] = useState([]);
