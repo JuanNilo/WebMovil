@@ -101,9 +101,9 @@ export default function ViewProjects({navigation}){
         }
     }
 
-    const idLocalStorage = async (id: number) => {
+    const idLocalStorage = async (id: number, name: string) => {
         await AsyncStorage.setItem('id_project', id.toString());
-        navigation.navigate('ProjectView', );
+        navigation.navigate('ProjectView', {name});
     }
     
     useEffect(() => {
@@ -150,7 +150,7 @@ export default function ViewProjects({navigation}){
                                         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                                             <View style={styles.input}>
                                                 <ButtonText style={styles.inputText}
-                                                    onPress={() => navigation.navigate('ProjectView',{name})}
+                                                    onPress={() => idLocalStorage(index, name)}
                                                 >
                                                     {name}
                                                 </ButtonText>
