@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { ButtonText, Colors, Line } from '../../../components/style';
-
+import { tasks } from "../../../components/data/task.json";
 const { purple } = Colors;
 import  Constants  from "expo-constants";
 const StatusBarHeight = Constants.statusBarHeight;
@@ -9,16 +9,14 @@ const StatusBarHeight = Constants.statusBarHeight;
 import KeyboardWrapper from '../../../components/keyboardWrapper';
 import { PageTitle, SubTitle } from '../../../components/style';
 
-const Team = () => {
-  const [teamName, setTeamName] = useState('Equipo 1');
+const Team = ({navigation, route}) => {
+  const { name } = route.params;
+  const [teamName, setTeamName] = useState(name);
   const [teamDescription, setTeamDescription] = useState(' Descripción del equipo 1');
-  const [taskList, setTaskList] = useState([
-    { id: 1, name: 'Task 1', description: 'Description 1', status: 'To Do', assignedTo: 'nilo@mail.com' },
-    { id: 2, name: 'Task 2', description: 'Description 2', status: 'In Progress', assignedTo: 'nacho@mail.com' },
-  ]);
+  const [taskList, setTaskList] = useState(tasks);
 
   const addTask = () => {
-    // Implement the logic to add a new task to the task list
+    navigation.navigate('CreateTask');
   };
   
 
@@ -27,7 +25,7 @@ const Team = () => {
     <ScrollView style={{padding:10, paddingEnd: 20, flex:1, height:"100%", paddingTop: StatusBarHeight + 50 }}>
     <View >
       
-      <PageTitle style={{color: purple}}> {teamName}</PageTitle>
+      <PageTitle style={{color: 'black'}}> {teamName}</PageTitle>
 
       <Text style={{fontWeight: 'bold', fontSize: 18}}>Team Description:</Text>
       <Text style={{fontSize: 20}}>{teamDescription}</Text>
@@ -37,26 +35,21 @@ const Team = () => {
         <ButtonText style={styles.botonContainer}  onPress={addTask} >Añadir tarea</ButtonText>
       </View>
 
-      {taskList.map((task) => ( 
-        <View key={task.id} style={styles.projectContainer}>
-            <Text>{task.name}</Text>
-            <Text>{task.status}</Text>
-            <Text>{task.assignedTo}</Text>
+      {taskList.map((item) => ( 
+        <TouchableOpacity key={item.id} onPress={() => navigation.navigate('TaskView', {item})}>
+        <View key={item.id} style={styles.projectContainer}>
+            <Text>{item.nombre}</Text>
+            <Text>{item.estado}</Text>
+            <Text>{item.estado}</Text>
             {/* add logic to show description task */}
             
             
         </View>
+        </TouchableOpacity>
       ))}
       </View>
       <Line/>
-      {/* Contenido de tarea */}
-         <View style={styles.taskDetail}>
-            <Text>{taskList[0].name}</Text>
-            <Text>{taskList[0].description}</Text>
-            <Text>{taskList[0].status}</Text>
-            <Text>{taskList[0].assignedTo}</Text>
-            
-            </View>
+
       </ScrollView>
     </KeyboardWrapper>
 

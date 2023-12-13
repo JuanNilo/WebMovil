@@ -69,37 +69,6 @@ export default function ViewProjects({navigation}){
     
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    
-    const deleteProject = async (id_project: number) => {
-        setError(false)
-        
-            
-            navigation.navigate('Team');
-    }    
-    const [teamDeleteName, setTeamDeleteName] = useState('');
-
-    const handleDeleteTeam = (teamName: string) => {
-        setTeamDeleteName(teamName);
-        setModalVisible(true);
-    }
-
-    const handleCancelDelete = () => {
-        setModalVisible(false);
-        setTeamDeleteName('');
-    }
-
-    const deleteTeam = async () => {
-        setModalVisible(false);
-        console.log(teamDeleteName)
-        try{
-
-            // Logica eliminar equipo
-        }catch (e: any){
-            setError(true);
-            setErrorMessage(e?.response?.data?.message);
-            console.log({error: e?.response?.data?.message});
-        }
-    }
 
     const idLocalStorage = async (id: number, name: string) => {
         await AsyncStorage.setItem('id_project', id.toString());
@@ -120,33 +89,7 @@ export default function ViewProjects({navigation}){
                     <View style={{width: '100%', height: '100%' }}>
                         {projectsNames.map((name, index) => (
                             <View key={index} style={styleContainer}>
-                                {
-                                    index === editingIndex ? (
-                                        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width:'100%'}}>
-                                            <View style={styles.input}>
-
-                                            <TextInput
-                                                style={styles.inputText}
-                                                onChangeText={handleNameChange}
-                                                value={editingName}
-                                                placeholder="Nuevo Nombre"
-                                                placeholderTextColor={'black'}
-                                                />
-                                            </View>
-                                            {/* Boton Guardar */}
-                                            <StyledButton
-                                                style={styles.editButton}
-                                                onPress={() => editTeam("equipo") }>
-                                                <Octicons style={styles.iconStyle} name={"check"} size={30} color={primary} />
-                                            </StyledButton>
-                                            {/* Boton Eliminar */}
-                                            <StyledButton
-                                                style={styles.deleteButton}
-                                                    >
-                                                <Octicons style={styles.iconStyle} name={"x"} size={35} color={'white'} />    
-                                            </StyledButton>
-                                        </View>
-                                    ) : (
+                                
                                         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                                             <View style={styles.input}>
                                                 <ButtonText style={styles.inputText}
@@ -155,62 +98,9 @@ export default function ViewProjects({navigation}){
                                                     {name}
                                                 </ButtonText>
                                                 </View>
-                                            <StyledButton
-                                                style={styles.editButton}
-                                                onPress={() => habdleEdit(index) }>
-                                                <Octicons style={styles.iconStyle} name={"pencil"} size={30} color={primary} />
-                                            </StyledButton>
-                                            <StyledButton
-                                                style={styles.deleteButton}
-                                                    onPress={() =>  handleDeleteTeam(name)}>
-                                                <Octicons style={styles.iconStyle} name={"x"} size={35} color={primary} />
-                                                    
-                                                </StyledButton>
+                                        
                                         </View>
-                                    )
-                                }
-                                <Modal
-                                    animationType="slide"
-                                    onDismiss={() => console.log("Modal closed")}
-                                    onShow={() => console.log("Modal showed")}
-                                    transparent
-                                    visible={modalVisible}
-                                >
-
-                                    <View style={{flex: 1, justifyContent: 'flex-end', alignItems:'center'}}>
-                                        <TouchableOpacity style={{height: '50%', width:'100%'}} onPress={() => setModalVisible(false)}/>
-                                        <View style={{height: '50%', width:'95%', backgroundColor: '#fff', borderTopLeftRadius: 25, borderTopRightRadius: 25}}>
-                                            <View style={{flexDirection:'row', alignItems:'flex-end',backgroundColor: 'transparent', justifyContent:'flex-end', padding:15}}>
-                                                <ButtonText  onPress={() => setModalVisible(false)}> 
-                                                    <Octicons style={{width:40, padding: 2, paddingLeft: 9}} name={"x"} size={35} color={'black'} />
-                                                </ButtonText>
-                                            </View>
-                                            <View style={{flexDirection:'row', alignItems:'center',backgroundColor: 'transparent', justifyContent:'center', padding:15}}>
-                                                <Text style={{fontSize: 20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
-                                                    ¿Está seguro que desea eliminar el proyecto?
-                                                </Text>
-                                            </View>
-                                            <View style={{flexDirection:'row', alignItems:'center',backgroundColor: 'transparent', justifyContent:'center', padding:15}}>
-                                                {/* Eliminar */}
-                                                <TouchableOpacity
-                                                    style={{backgroundColor: 'red' ,alignItems: 'center',height:50, width:125, borderRadius: 5, justifyContent: 'center', marginHorizontal: 5}}
-                                                    onPress={() => deleteTeam("equipo")}>
-                                                    <ButtonText style={{fontSize:20, fontWeight:'bold', color: 'white', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
-                                                        Si
-                                                    </ButtonText>
-                                                </TouchableOpacity>
-                                                {/* Cancelar */}
-                                                <TouchableOpacity
-                                                    style={{backgroundColor: 'white', justifyContent:'center', borderColor: 'black', borderWidth:2,height:50, width:125,borderRadius: 5, alignItems:'center',marginHorizontal:5}}
-                                                    onPress={() => handleCancelDelete()}>
-                                                    <ButtonText style={{fontSize:20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
-                                                        No
-                                                    </ButtonText>
-                                                </TouchableOpacity>
-                                            </View>    
-                                        </View>
-                                    </View>
-                                </Modal>
+                                    
                             </View>
                         ))}     
                        
