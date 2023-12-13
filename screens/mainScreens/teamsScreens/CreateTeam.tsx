@@ -60,7 +60,7 @@ export default function CreateTeam({navigation}){
             name,
             id_project,
           });
-          navigation.navigate('Projects');
+          navigation.goBack();
         } catch (error) {
           setError(true);
           setErrorMessage(error?.response?.data?.message);

@@ -1,0 +1,64 @@
+{
+    "comments": [
+        {
+            "commentId": 1,
+            "taskId": 1,
+            "authorEmail": "john@example.com",
+            "comment": "Esta tarea requiere la integración con el sistema de autenticación existente."
+        },
+        {
+            "commentId": 2,
+            "taskId": 2,
+            "authorEmail": "jane@example.com",
+            "comment": "Es importante tener en cuenta la usabilidad y la experiencia del usuario al diseñar esta interfaz."
+        },
+        {
+            "commentId": 3,
+            "taskId": 3,
+            "authorEmail": "alex@example.com",
+            "comment": "Se deben realizar ajustes en la configuración de la base de datos para mejorar la velocidad de las consultas."
+        },
+        {
+            "commentId": 4,
+            "taskId": 1,
+            "authorEmail": "mary@example.com",
+            "comment": "Sería útil agregar una función de búsqueda a esta tarea."
+        },
+        {
+            "commentId": 5,
+            "taskId": 2,
+            "authorEmail": "peter@example.com",
+            "comment": "¿Podemos utilizar una biblioteca de componentes para acelerar el desarrollo de la interfaz?"
+        },
+        {
+            "commentId": 6,
+            "taskId": 3,
+            "authorEmail": "sara@example.com",
+            "comment": "¿Hay algún requisito específico para la seguridad de la base de datos?"
+        },
+        {
+            "commentId": 7,
+            "taskId": 1,
+            "authorEmail": "david@example.com",
+            "comment": "¿Podemos utilizar una API externa para obtener datos adicionales para esta tarea?"
+        },
+        {
+            "commentId": 8,
+            "taskId": 2,
+            "authorEmail": "emily@example.com",
+            "comment": "¿Qué navegadores debemos tener en cuenta al diseñar la interfaz?"
+        },
+        {
+            "commentId": 9,
+            "taskId": 3,
+            "authorEmail": "michael@example.com",
+            "comment": "¿Hay alguna restricción de rendimiento que debamos tener en cuenta al realizar ajustes en la base de datos?"
+        },
+        {
+            "commentId": 10,
+            "taskId": 1,
+            "authorEmail": "laura@example.com",
+            "comment": "¿Podemos utilizar una biblioteca de gráficos para visualizar datos en esta tarea?"
+        }
+    ]
+}

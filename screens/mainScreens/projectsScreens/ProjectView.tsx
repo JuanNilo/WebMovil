@@ -23,7 +23,6 @@ const ProjectView = ({navigation, route}) => {
   const [adminAviable, setAdminAviable] = useState(true);
 
   const [nameProject, setNameProject] = useState(name);
-  const [nameMembers, setNameMembers] = useState([]);
   const [emailMembers, setEmailMembers] = useState([]);
   const [nameTeams, setNameTeams] = useState([]);
   const [idTeams, setIdTeams] = useState([]);
@@ -75,6 +74,7 @@ const ProjectView = ({navigation, route}) => {
       const response = await axios.get(`http://10.0.2.2:3002/api/on/members/members/${id_project}`);
       const memberData = response.data;
       setEmailMembers(memberData.emails);
+
       console.log(emailMembers);
     } catch (error) {
       console.error('Error al recuperar los datos de miembros:', error);
@@ -152,10 +152,14 @@ const ProjectView = ({navigation, route}) => {
                     <View key={index} style={styles.memberContainer}>
                         <SvgXml xml={createAvatar(lorelei, { seed: email }).toString()} style={styles.logo} />
 
-                        <View style={{flexDirection:'column', alignItems:'flex-start', width:'55%'}}>
+                        <View style={{flexDirection:'column', alignItems:'flex-start', width:'65%'}}>
                           <Text style={styles.memberName}>{email}</Text>
                         </View>
-                        <Octicons name="x" style={styles.boton} size={30} color="white"/>
+                        {
+                          adminAviable ?
+                          <Octicons name="x" style={styles.boton} size={30} color="white"/>
+                          : null
+                        }
                     </View>)
                 
             )}
@@ -179,9 +183,9 @@ const ProjectView = ({navigation, route}) => {
               </ButtonText>
             {nameTeams.map((name, index) => {
                 return (
-                  <View style={{flexDirection:"row"}}>
+                  <View key={name} style={{flexDirection:"row"}}>
 
-                    <ButtonText onPress={() => navigation.navigate('Team', {name})} key={index} style={styles.projectContainer}>
+                    <ButtonText onPress={() => navigation.navigate('Team', {name})} key={index} style={[styles.projectContainer, adminAviable ? {width: '85%'} : {width:'100%'}]}>
                       <View style={{flexDirection:'column', alignItems:'flex-start', width:'70%'}}>
                         <Text style={styles.projectName}>{name}</Text>
                       </View>
@@ -205,7 +209,7 @@ const ProjectView = ({navigation, route}) => {
             {
               adminAviable ?
 
-              <ButtonText style={[styles.botonContainer, {backgroundColor:'#D80101', borderColor:'red'}]} onPress= {() => handleDeleteTeam(nameProject)}>
+              <ButtonText style={[styles.botonContainer, {backgroundColor:'red', borderColor:'red'}]} onPress= {() => handleDeleteTeam(nameProject)}>
                 <Text style={{color:'white', textAlign:'center'}}>
                   Eliminar proyecto
                 </Text>
@@ -289,7 +293,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   memberName: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: 'bold',
     marginHorizontal: 2,
   },
@@ -304,7 +308,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderColor: "black",
     borderWidth: 3,
-    width: '85%',
   },
   botonContainer: {
     backgroundColor: 'white',
@@ -337,6 +340,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   editButton: {
+    width:'20%',
     backgroundColor: 'black',
     alignItems: 'center',
     justifyContent: 'center',

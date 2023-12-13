@@ -8,6 +8,7 @@ import { Colors } from '../../../components/style';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { TextInput } from 'react-native';
+import { comments } from "../../../components/data/comments.json";
 const StatusBarHeight = Constants.statusBarHeight;
 
 const TaskView = ({ route, navigation }) => {
@@ -18,6 +19,13 @@ const TaskView = ({ route, navigation }) => {
     const [statusSelected, setStatusSelected] = useState(item.estado);
     const [editingDescription, setEditingDescription] = useState(item.descripcion);
     const [editingStatus, setEditingStatus] = useState(item.estado);
+
+    // Esto tiene que ser cambiado por la query de comentarios
+    const lisComments = comments;
+    
+    const filteredComments = lisComments.filter((comment) => comment.taskId === item.id);
+
+
 
     const handleNameChange = (text: string) => {
         setEditingName(text);
@@ -106,8 +114,10 @@ const TaskView = ({ route, navigation }) => {
                 </View>
                
             </View>
+
+            {/* Estado de tareas */}
             
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 10}}>
+            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 10, borderColor: 'black', borderTopWidth: 2, borderBottomWidth: 2}}>
 
                 <TouchableOpacity onPress={() => handleStatusChange('pendiente')} style={{backgroundColor: statusSelected === 'pendiente' ?  '#0288E5' : '#CFCFCF', padding: 5}}>
                     <Text style={{color: statusSelected == 'pendiente' ?  'white' : 'black',fontWeight: 'bold', fontSize: 18}}>Pendiente</Text>
@@ -120,8 +130,24 @@ const TaskView = ({ route, navigation }) => {
                 </TouchableOpacity>
                 </View>
          
+            {/* Comentarios */}
+            <View style={{paddingVertical: 20}} >
+                <View style={{flexDirection: 'row', alignItems:'center', justifyContent:"center", gap: 10}}>
+                    <SubTitle style={{textAlign: 'center'}}>Comentarios</SubTitle>
+                    <TouchableOpacity style={{paddingBottom: 10}}  onPress={() => navigation.navigate('CreateComment', item)}>
+                        <AntDesign name="message1" size={30} color="black" style={{textAlign: 'center'}} />
+                    </TouchableOpacity>
+                </View>
+                {
+                    filteredComments.map((comment, index) => (
+                        <View key={index} style={{backgroundColor: '#CFCFCF', padding: 10, margin: 5, borderRadius: 10}}>
+                            <Text style={{fontSize: 18, fontWeight: 'bold'}}>{comment.authorEmail}</Text>
+                            <Text style={{fontSize: 16}}>{comment.comment}</Text>
+                        </View>
+                    ))
+                }
+            </View>
         </View>
-
 
         </ScrollView>
     </KeyboardWrapper>

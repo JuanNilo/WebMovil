@@ -98,6 +98,7 @@ export default function AddMemberProject({navigation, route}){
                                             value={values.email}
                                             onChangeText={handleChange('email')}
                                             onBlur={handleBlur('email')}
+                                            onSubmitEditing={()=> registerMemberProject(values.email)}
                                         />
                                     </View>
                                     {/* Error */}
