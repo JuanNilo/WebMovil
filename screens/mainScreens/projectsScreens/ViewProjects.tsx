@@ -52,10 +52,9 @@ export default function ViewProjects({navigation}){
         }
         );
         const projectData = response.data;
-        console.log(projectData);
         setProjectsIds(projectData.ids);
         setProjectsNames(projectData.names);
-        
+        console.log('\n\n',projectData);
       } catch (error) {
         console.error('Error al recuperar los datos de equipos:', error);
       }
@@ -93,7 +92,7 @@ export default function ViewProjects({navigation}){
                                         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                                             <View style={styles.input}>
                                                 <ButtonText style={styles.inputText}
-                                                    onPress={() => idLocalStorage(index, name)}
+                                                    onPress={() => idLocalStorage(projectsIds[index], name)}
                                                 >
                                                     {name}
                                                 </ButtonText>

@@ -30,6 +30,7 @@ const CreateTask = ({navigation}) => {
     const [startDate, setStartDate] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
+    const [date, setDate] = useState(new Date(''));
 
     const handleSubmit = (values:valuesTypes) => {
         console.log(values);
@@ -99,13 +100,7 @@ const CreateTask = ({navigation}) => {
                         onBlur={handleBlur('encargado')}/>
 
                         {/* Fecha */}
-
-                        <Text>Fecha de inicio:</Text>
-                        <TextInput
-                        value={startDate}
-                        placeholder="dd/mm/aaaa"
-                        onChangeText={(text: string) => setStartDate(text)}
-                        />
+                        
 
                         {/* Mensaje de error */}
                         {
