@@ -1,16 +1,16 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import giraStyles from "../../../components/style";
-import { TextInput, View, Text, ScrollView,Image, StyleSheet } from 'react-native';
+import { TextInput, View, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 
 //formik
 import { Formik } from "formik";
 
 // Icons 
-import {Octicons, Ionicons} from "@expo/vector-icons";
-
-import { 
+import { Octicons, Ionicons } from "@expo/vector-icons";
+import { Picker } from '@react-native-picker/picker';
+import {
     StyledContainer,
     InnerContainer,
     PageLogo,
@@ -33,11 +33,11 @@ import {
 
 } from '../../../components/style';
 
-const {styleInput, styleIcon, styleInnerContainer,styleContainer, styleIconContainer, container,styleLabel, styleErrorMessage, styleErrorView, styleLogo} = giraStyles
+const { styleInput, styleIcon, styleInnerContainer, styleContainer, styleIconContainer, container, styleLabel, styleErrorMessage, styleErrorView, styleLogo } = giraStyles
 
 // Colors
 
-const {primary , secondary, purple} = Colors; 
+const { primary, secondary, purple } = Colors;
 
 // Keyboards
 
@@ -46,61 +46,80 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 
-export default function AddMemberProject({navigation, route}){
-    const {nameProject} = route.params;
+export default function AddMemberProject({ navigation, route }) {
+    const { nameProject } = route.params;
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const rol = 'trabajador';	
-      useEffect(() => {
-      }, []);
+    useEffect(() => {
+    }, []);
 
-    const registerMemberProject = async (email: string) => {
+    const registerMemberProject = async (email: string, rol: string) => {
+        console.log('email', email, 'rol', rol);
         try {
-          const id = await AsyncStorage.getItem('id_project');
-          const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/new-member`,{
-            email,
-            rol,
-            id,
-          });
-          navigation.navigate('ProjectView', {nameProject});
+            const id = await AsyncStorage.getItem('id_project');
+            const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/new-member`, {
+                email,
+                rol,
+                id,
+            });
+            navigation.navigate('ProjectView', { nameProject });
         } catch (error) {
-          setError(true);
-          setErrorMessage(error?.response?.data?.message);
-          console.error('Error al registar miembro', error);
+            setError(true);
+            setErrorMessage(error?.response?.data?.message);
+            console.error('Error al registar miembro', error);
         }
-      };
-     
-    return(
+    };
+
+    return (
         <KeyboardWrapper>
             <ScrollView style={container}>
                 <StatusBar style="dark" />
                 <View style={styleInnerContainer}>
                     <Image
                         source={{
-                        uri: 'https://reactnative.dev/img/tiny_logo.png',
+                            uri: 'https://reactnative.dev/img/tiny_logo.png',
                         }}
                         style={styleLogo}
                     />
-                    <PageTitle style={{color: 'black'}}>Añadir miembro</PageTitle>
+                    <PageTitle style={{ color: 'black' }}>Añadir miembro</PageTitle>
                     <Formik
-                        initialValues={{email: ''}}
-                        onSubmit={(values) => registerMemberProject(values.email)}
+                        initialValues={{ email: '', rol: 'desarrollador' }}
+                        onSubmit={(values) => registerMemberProject(values.email, values.rol)}
                     >
                         {
-                            ({handleChange, handleBlur, handleSubmit, values}) => (
+                            ({ handleChange, handleBlur, handleSubmit, values }) => (
                                 <StyledFormArea>
                                     <Text style={styles.TextLabel}>Ingrese el correo del miembro</Text>
                                     <View style={styleContainer}>
-                                        <Octicons style={styleIcon} name={"people"} size={30} color={'black'}/>
+                                        <Octicons style={styleIcon} name={"people"} size={30} color={'black'} />
                                         <TextInput
                                             placeholder="correo@email.com"
                                             style={styles.InputContainer}
                                             value={values.email}
                                             onChangeText={handleChange('email')}
                                             onBlur={handleBlur('email')}
-                                            onSubmitEditing={()=> registerMemberProject(values.email)}
                                         />
                                     </View>
+
+                                    {/* dame un select con los roles: administrador, disenador, programador */}
+                                    <View style={{flexDirection:'row', flex: 1, alignItems: 'center'}}>
+                                    <Octicons style={[styleIcon,{paddingTop:20}]} name={"stack"} size={30} color={'black'} />
+                                    <View style={styles.pickerContainer}>
+                                        <Picker
+                                            style={styles.picker}
+                                            selectedValue={values.rol}
+                                            onValueChange={handleChange('rol')
+                                        }
+                                        
+                                        >
+
+                                            <Picker.Item style={styles.pickerContainer} label="Desarrollador" value="desarrollador" />
+                                            <Picker.Item style={styles.pickerContainer} label="Diseñador" value="diseñador" />
+                                            <Picker.Item style={styles.pickerContainer} label="Administrador" value="administrador" />
+                                        </Picker>
+                                    </View>
+                                    </View>
+
                                     {/* Error */}
                                     <View
                                         style={styleErrorView}
@@ -111,14 +130,14 @@ export default function AddMemberProject({navigation, route}){
                                     </View>
                                     <View>
 
-                                    <StyledButton
-                                        style={{backgroundColor:'black'}}
-                                        onPress={() => registerMemberProject(values.email)}>
-                                        <ButtonText>
-                                            Añadir miembro
-                                        </ButtonText>
-                                    </StyledButton>
-                                            </View>
+                                        <StyledButton
+                                            style={{ backgroundColor: 'black' }}
+                                            onPress={() => registerMemberProject(values.email, values.rol)}>
+                                            <ButtonText>
+                                                Añadir miembro
+                                            </ButtonText>
+                                        </StyledButton>
+                                    </View>
                                 </StyledFormArea>
                             )
                         }
@@ -130,7 +149,7 @@ export default function AddMemberProject({navigation, route}){
 }
 
 const styles = StyleSheet.create({
-    InputContainer : {
+    InputContainer: {
         backgroundColor: 'white',
         borderRadius: 10,
         flexDirection: 'row',
@@ -158,5 +177,19 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
         textAlign: 'center',
-    }
+    },
+    picker: {
+        backgroundColor: 'white',
+    },
+    pickerContainer: {
+        marginTop: 20,
+        width: '80%',
+        backgroundColor: 'white',
+        borderWidth: 3,
+        borderColor: 'black',
+        borderRadius: 10,
+        overflow: 'hidden',
+        color: 'black',
+        fontSize: 16,
+    },
 })
