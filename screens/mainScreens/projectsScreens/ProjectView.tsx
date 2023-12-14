@@ -74,7 +74,6 @@ const ProjectView = ({navigation, route}) => {
       const response = await axios.get(`http://10.0.2.2:3002/api/on/members/members/${id_project}`);
       const memberData = response.data;
       setEmailMembers(memberData.emails);
-
       console.log(emailMembers);
     } catch (error) {
       console.error('Error al recuperar los datos de miembros:', error);
