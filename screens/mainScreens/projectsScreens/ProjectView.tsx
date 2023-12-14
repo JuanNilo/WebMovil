@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, Image, FlatList, StyleSheet,ScrollView, TextInput } from 'react-native';
 import KeyboardWrapper from '../../../components/keyboardWrapper';
 import giraStyles, { ButtonText, Line, PageTitle, SubTitle, StyledButton } from '../../../components/style';
@@ -20,8 +20,21 @@ import {AntDesign} from '@expo/vector-icons';
 const ProjectView = ({navigation, route}) => {
   const { name } = route.params;
 
-  const [adminAviable, setAdminAviable] = useState(true);
+  const fetchUserData = async () => {
+    try {
+      const userEmail = await AsyncStorage.getItem('email');
+      setUserEmail(userEmail);
+    } catch (error) {
+      console.error('Error al recuperar los datos del usuario:', error);
+    }
+  }
 
+  useEffect(() => {
+    fetchUserData();
+  });
+
+  const [adminAviable, setAdminAviable] = useState(true);
+  const [userEmail, setUserEmail] = useState('' as string);
   const [nameProject, setNameProject] = useState(name);
   const [emailMembers, setEmailMembers] = useState([]);
   const [nameTeams, setNameTeams] = useState([]);
@@ -127,11 +140,11 @@ const ProjectView = ({navigation, route}) => {
                   {
                     adminAviable ?
                     (
-                      <StyledButton
-                    style={styles.editButton}
+                      <TouchableOpacity
+                      style={{paddingTop: 5}}
                     onPress={() => setEditMode(!editMode) }>
-                    <Octicons style={styles.iconStyle} name={"pencil"} size={30} color={'white'} />
-                  </StyledButton>
+                    <Octicons style={styles.iconStyle} name={"pencil"} size={30} color={'black'} />
+                  </TouchableOpacity>
                     )
                     : null
                   }
@@ -156,7 +169,7 @@ const ProjectView = ({navigation, route}) => {
                           <Text style={styles.memberName}>{email}</Text>
                         </View>
                         {
-                          adminAviable ?
+                          adminAviable && email !== userEmail ?
                           <Octicons name="x" style={styles.boton} size={30} color="white"/>
                           : null
                         }
