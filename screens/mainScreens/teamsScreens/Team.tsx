@@ -75,12 +75,26 @@ const Team = ({navigation, route}) => {
     }
   }
 
-
+  const handleDeleteTask = async (idTask: number) => {
+    try {
+      const id_task = idTask.toString();
+      const response = await axios.get(`http://10.0.2.2:1000/api/ts/tasks/task-idTeam/${id_task}`);
+      console.log('idTask', idTask);
+      fetchTaskData();
+    } catch (error) {
+      console.error('Error al eliminar la tarea:', error);
+    }
+  }
 
   useEffect(() => {
-    fetchTeamMembers();
-    fetchTaskData();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+        fetchTeamMembers();
+        fetchTaskData();
+    });
+    return unsubscribe;
+  }
+    , [navigation]);
+
 
   return (
     <KeyboardWrapper>
@@ -117,13 +131,14 @@ const Team = ({navigation, route}) => {
         <SubTitle>Miembros:</SubTitle>
         <ButtonText style={styles.botonContainer}  onPress={() => navigation.navigate('AddMemberTeam',{idTeam, name})} >Añadir miembro</ButtonText>
       </View>
-      <View>
+      {/* Scroll de miembros */}
+      <ScrollView style={{height: 150, overflow: 'hidden', paddingBottom: 20}}>
       {members.map((item) => ( 
         <View key={item} style={styles.projectContainer}>
             <Text style={styles.mailMember}>{item}</Text>
         </View>
       ))}
-      </View>
+      </ScrollView>
       
       <Line/>
       <View style={{flexDirection: 'row', gap: 20, marginVertical: 10}}>
@@ -132,13 +147,18 @@ const Team = ({navigation, route}) => {
       </View>
 
       {taskList.map((item) => ( 
-        <TouchableOpacity key={item.id} onPress={() => navigation.navigate('TaskView', {item})}>
-        <View key={item.id} style={styles.projectContainer}>
-            <Text>{item.name}</Text>
-            <Text>{item.state}</Text>
-            <Text>{item.email}</Text>
+        <View key={item.id} style={{flexDirection: 'row', alignItems:'center', justifyContent:"space-between", maxWidth:'95%' }}>
+          <TouchableOpacity onPress={() => navigation.navigate('TaskView', {item})}>
+          <View key={item.id} style={[styles.projectContainer,{width:'90%'}]}>
+              <Text>{item.name}</Text>
+              <Text>{item.state}</Text>
+              <Text>{item.email}</Text>
+          </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={{width:'10%'}} onPress={() => handleDeleteTask(item.id)}>
+            <AntDesign name="delete" size={24} color="black" />
+          </TouchableOpacity>
         </View>
-        </TouchableOpacity>
       ))}
       </View>
       <Line/>

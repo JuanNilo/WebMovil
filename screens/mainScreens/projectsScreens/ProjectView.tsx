@@ -184,15 +184,13 @@ const editProjectName = async (newName: string) => {
 
             <Line/>
             <Text style={styles.SubTitle}>Miembros del proyecto:</Text>
-            <View>
+            <View style={{paddingVertical: 10}}>
 
             {emailMembers.map((email , index) => (
                
                    
                     <View key={index} style={styles.memberContainer}>
-                        <SvgXml xml={createAvatar(lorelei, { seed: email }).toString()} style={styles.logo} />
-
-                        <View style={{flexDirection:'column', alignItems:'flex-start', width:'65%'}}>
+                        <View style={[ styles.memberList, {flexDirection:'column', alignItems:'flex-start', width:'85%'}]}>
                           <Text style={styles.memberName}>{email}</Text>
                         </View>
                         {
@@ -391,7 +389,16 @@ iconStyle:{
   width:35, 
   padding: 2, 
   paddingLeft: 5
-}
+},
+memberList: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  backgroundColor: '#fff',
+  borderRadius: 10,
+  padding: 10,
+  marginVertical: 5,
+},
 });
 
 export default ProjectView;

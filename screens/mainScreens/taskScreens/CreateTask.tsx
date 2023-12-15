@@ -113,7 +113,7 @@ const CreateTask = ({navigation, route}) => {
                     <View style={{paddingHorizontal: 10, paddingBottom: 50}}>
                         <Text style={styles.label}>Nombre de la tarea:</Text>
                         <TextInput ref={nameTaskRef} style={styles.input} placeholder="Nombre de la tarea" onChangeText={handleChange('name')} value={values.name} onBlur={handleBlur('name')}
-                        onSubmitEditing={() => projectTaskRef.current?.focus()}
+                        onSubmitEditing={() => descriptionTaskRef.current?.focus()}
                         />
                         
                         {/* Descripcion */}
