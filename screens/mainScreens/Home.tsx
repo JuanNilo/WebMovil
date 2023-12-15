@@ -73,14 +73,11 @@ export default function Home({navigation}){
     }
   };
 
-  const fetchTeamData = async ()=> {
+  const fetchTeamData = async () => {
     try {
         const email = await AsyncStorage.getItem('email');
-        const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/get-teams`,
-        {
-          email: email,
-        }
-        );
+        console.log(email);
+        const response = await axios.get(`http://10.0.2.2:4000/api/in/middle/get-teams/${email}`);
         const teamsData = response.data;
         setTeamsIds(teamsData.ids);
         setTeamsNames(teamsData.names);
