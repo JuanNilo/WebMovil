@@ -31,6 +31,7 @@ const Team = ({navigation, route}) => {
   const [members, setMembers] = useState([]);
   const [editMode, setEditMode] = useState(false);
 
+  const [filteredTasks, setFilteredTasks] = useState(taskList  as Task[]);
   const fetchTeamMembers = async () => {
     try {
       const response = await axios.get(`http://10.0.2.2:4000/api/in/members/members/${idTeam}`);
@@ -68,7 +69,7 @@ const Team = ({navigation, route}) => {
       const id_team = idTeam.toString();
       const response = await axios.get(`http://10.0.2.2:1000/api/ts/tasks/task-idTeam/${id_team}`);
       const taskData = response.data;
-      console.log('\n\n\n\n\n',taskData)
+      setFilteredTasks(taskData);
       setTaskList(taskData);
     } catch (error) {
       console.error('Error al recuperar los datos de las tareas:', error);
@@ -105,6 +106,17 @@ const Team = ({navigation, route}) => {
     , [navigation]);
 
 
+const handleFilterTask = (taskState: string) => {
+  if(taskState === 'todas') {
+    setFilteredTasks(taskList);
+    return;
+  }else{
+    const filterTask = taskList.filter(task => task.state === taskState);
+    setFilteredTasks(filterTask);
+    console.log('filteredTasks', filteredTasks);
+  }
+};
+    
   return (
     <KeyboardWrapper>
     <ScrollView style={{padding:10, paddingEnd: 20, flex:1, height:"100%", paddingTop: StatusBarHeight + 50 }}>
@@ -158,14 +170,22 @@ const Team = ({navigation, route}) => {
         <SubTitle>Task List:</SubTitle>
         <ButtonText style={styles.botonContainer}  onPress={addTask} >Añadir tarea</ButtonText>
       </View>
+      
+        {/* Botones para filtrar las tareas por status */}
+        <View style={{flexDirection: 'row', justifyContent: 'center', marginVertical: 10}}>
+          <ButtonText style={[styles.botonContainer, {width:90,alignItems:'center', justifyContent:'center',  backgroundColor:'#C2ABF6'}]} onPress={() => handleFilterTask('todas')} >Todas</ButtonText>
+          <ButtonText style={[styles.botonContainer, {width:90,alignItems:'center', justifyContent:'center',  backgroundColor:'#ABD1F6'}]} onPress={() => handleFilterTask('pendiente')} >Pendientes</ButtonText>
+          <ButtonText style={[styles.botonContainer, {width:90,alignItems:'center', justifyContent:'center',  backgroundColor:'#F6DCAB'}]} onPress={() => handleFilterTask('en progreso')} >En progreso</ButtonText>
+          <ButtonText style={[styles.botonContainer, {width:90,alignItems:'center', justifyContent:'center',  backgroundColor:'#D5F6AB'}]} onPress={() => handleFilterTask('completada')} >Completadas</ButtonText>
+        </View>
 
-      {taskList.map((item) => ( 
+      {filteredTasks.map((item) => ( 
         <View key={item.id} style={{flexDirection: 'row', alignItems:'center', justifyContent:"space-between", maxWidth:'95%' }}>
           <TouchableOpacity onPress={() => navigation.navigate('TaskView', {item})}>
-          <View key={item.id} style={[styles.projectContainer,{width:'90%'}]}>
-              <Text>{item.name}</Text>
+          <View key={item.id} style={[styles.projectContainer,{alignItems:'flex-start', height: 100, flexDirection: 'column',width:350}]}>
+              <Text style={{fontSize:18, fontWeight: 'bold'}}>{item.name}</Text>
               <Text>{item.state}</Text>
-              <Text>{item.email}</Text>
+              <Text style={{fontSize: 16}}>{item.email}</Text>
           </View>
           </TouchableOpacity>
           <TouchableOpacity style={{width:'10%'}} onPress={() => handleDeleteTask(item.id)}>
