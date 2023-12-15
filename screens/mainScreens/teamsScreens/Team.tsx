@@ -30,8 +30,27 @@ const Team = ({navigation, route}) => {
   const [taskList, setTaskList] = useState([] as Task[] );
   const [members, setMembers] = useState([]);
   const [editMode, setEditMode] = useState(false);
-
   const [filteredTasks, setFilteredTasks] = useState(taskList  as Task[]);
+
+  // Buscador
+  const [searchQuery, setSearchQuery] = useState('');
+
+    const handleSearch = (query: string) => {
+      setSearchQuery(query);
+    };
+
+    const handleFilterByName = (taskName: string) => {
+      if (taskName === '') {
+        setFilteredTasks(filteredTasks);
+        return;
+      } else {
+        const lowercaseTaskName = taskName.toLowerCase();
+        const filterTask = taskList.filter(task => task.name.toLowerCase().includes(lowercaseTaskName));
+        setFilteredTasks(filterTask);
+        console.log('\n\n\nfilteredTasks', filteredTasks);
+      }
+    }
+
   const fetchTeamMembers = async () => {
     try {
       const response = await axios.get(`http://10.0.2.2:4000/api/in/members/members/${idTeam}`);
@@ -178,6 +197,20 @@ const handleFilterTask = (taskState: string) => {
           <ButtonText style={[styles.botonContainer, {width:90,alignItems:'center', justifyContent:'center',  backgroundColor:'#F6DCAB'}]} onPress={() => handleFilterTask('en progreso')} >En progreso</ButtonText>
           <ButtonText style={[styles.botonContainer, {width:90,alignItems:'center', justifyContent:'center',  backgroundColor:'#D5F6AB'}]} onPress={() => handleFilterTask('completada')} >Completadas</ButtonText>
         </View>
+        <View style={{flexDirection: 'row', gap:10 }}>
+
+            <TextInput
+          style={{ marginBottom: 10, backgroundColor:'white', padding: 8, fontSize: 18, borderRadius: 10, borderColor: 'black', borderWidth: 2, width: 300 }}
+          placeholder="Buscar tarea"
+          onChangeText={handleSearch}
+          value={searchQuery}
+          />
+        <TouchableOpacity
+        style={{paddingTop: 5, marginBottom: 10}}
+        onPress={() => handleFilterByName(searchQuery) }>
+        <Octicons style={styles.iconStyle} name={"search"} size={30} color={'black'} />
+      </TouchableOpacity>
+          </View>
 
       {filteredTasks.map((item) => ( 
         <View key={item.id} style={{flexDirection: 'row', alignItems:'center', justifyContent:"space-between", maxWidth:'95%' }}>
