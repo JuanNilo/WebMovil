@@ -31,6 +31,7 @@ import AddMemberProject from '../screens/mainScreens/projectsScreens/AddMemberPr
 // Team
 import Team from '../screens/mainScreens/teamsScreens/Team';
 import CreateTeam from '../screens/mainScreens/teamsScreens/CreateTeam';
+import AddMemberTeam from '../screens/mainScreens/teamsScreens/AddMemberteam';
 
 // Task
 import CreateTask from '../screens/mainScreens/taskScreens/CreateTask';
@@ -71,6 +72,7 @@ const RootStack = () => {
                 <Stack.Screen options={{headerTintColor: purple}} name='CreateTask' component={CreateTask}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='TaskView' component={TaskView}/>
                 <Stack.Screen options={{headerTintColor: purple}} name='ListTaskView' component={ListTaskView}/>
+                <Stack.Screen options={{headerTintColor: purple}} name='AddMemberTeam' component={AddMemberTeam}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

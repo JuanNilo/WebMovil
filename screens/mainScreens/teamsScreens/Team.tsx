@@ -10,7 +10,7 @@ import KeyboardWrapper from '../../../components/keyboardWrapper';
 import { PageTitle, SubTitle } from '../../../components/style';
 
 const Team = ({navigation, route}) => {
-  const { name } = route.params;
+  const {  idTeam,name } = route.params;
   const [teamName, setTeamName] = useState(name);
   const [teamDescription, setTeamDescription] = useState(' Descripción del equipo 1');
   const [taskList, setTaskList] = useState(tasks);
@@ -29,6 +29,13 @@ const Team = ({navigation, route}) => {
 
       <Text style={{fontWeight: 'bold', fontSize: 18}}>Team Description:</Text>
       <Text style={{fontSize: 20}}>{teamDescription}</Text>
+      <Line/>
+      {/* Lista de miembros */}
+      <View style={{flexDirection: 'row', gap: 20, marginVertical: 10}}>
+        <SubTitle>Miembros:</SubTitle>
+        <ButtonText style={styles.botonContainer}  onPress={() => navigation.navigate('AddMemberTeam',{teamName})} >Añadir miembro</ButtonText>
+      </View>
+      
       <Line/>
       <View style={{flexDirection: 'row', gap: 20, marginVertical: 10}}>
         <SubTitle>Task List:</SubTitle>

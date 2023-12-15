@@ -75,9 +75,10 @@ const editProjectName = async (newName: string) => {
 
     const response = await axios.put(`http://10.0.2.2:3002/api/on/project/${id_project}`, updatedData);
     if (response.status === 200) {
-      console.log('Nombre del equipo actualizado con éxito');
+      console.log('Nombre del proyecto actualizado con éxito');
+      setEditMode(!editMode);
     } else {
-      console.error('Error al actualizar el nombre del equipo. Estado de la respuesta:', response.status);
+      console.error('Error al actualizar el nombre del proyecto. Estado de la respuesta:', response.status);
     }
     }catch (e: any){
       setError(true);
@@ -92,7 +93,6 @@ const editProjectName = async (newName: string) => {
       const id_project = await AsyncStorage.getItem('id_project');
       const response = await axios.get(`http://10.0.2.2:4000/api/in/teams/project/${id_project}`);
       const teamData = response.data;
-      console.log(teamData);
       setIdTeams(teamData.ids);
       setNameTeams(teamData.names);
     } catch (error) {
@@ -111,6 +111,11 @@ const editProjectName = async (newName: string) => {
     } catch (error) {
       console.error('Error al recuperar los datos de miembros:', error);
     }
+  }
+
+  const handleTeamNavigation = (index: number, name:string) => {
+    const idTeam = idTeams[index];
+    navigation.navigate('Team', {idTeam, name});
   }
 
   useFocusEffect(
@@ -146,7 +151,7 @@ const editProjectName = async (newName: string) => {
                     placeholder="Nuevo Nombre"
                     placeholderTextColor={'black'}
                   />
-                  <TouchableOpacity onPress={() => setEditMode(!editMode)}>
+                  <TouchableOpacity onPress={() => editProjectName(editingName)}>
                     <AntDesign name="checkcircleo" style={{marginTop: 5}} size={30} color="black" />
                   </TouchableOpacity>
                   
@@ -155,7 +160,7 @@ const editProjectName = async (newName: string) => {
                  :
                 (
                   <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'center'}}>
-                  <PageTitle style={{color:'black', fontSize:42}}>{nameProject}</PageTitle>
+                  <PageTitle style={{color:'black', fontSize:42}}>{editingName}</PageTitle>
                   {
                     adminAviable ?
                     (
@@ -217,7 +222,7 @@ const editProjectName = async (newName: string) => {
                 return (
                   <View key={name} style={{flexDirection:"row"}}>
 
-                    <ButtonText onPress={() => navigation.navigate('Team', {name})} key={index} style={[styles.projectContainer, adminAviable ? {width: '85%'} : {width:'100%'}]}>
+                    <ButtonText onPress={() => handleTeamNavigation(index, name)} key={index} style={[styles.projectContainer, adminAviable ? {width: '85%'} : {width:'100%'}]}>
                       <View style={{flexDirection:'column', alignItems:'flex-start', width:'70%'}}>
                         <Text style={styles.projectName}>{name}</Text>
                       </View>
