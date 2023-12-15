@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, ScrollView, TextInput, Modal } from 'react-native';
 import KeyboardWrapper from '../../../components/keyboardWrapper';
 import Constants from 'expo-constants';
@@ -10,8 +10,9 @@ import { useRef } from 'react';
 import DateTimePicker, { DateType } from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
 import { AntDesign } from '@expo/vector-icons';
-
+import axios from 'axios';
 import { TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const StatusBarHeight = Constants.statusBarHeight;
 
 // necesito el tipeo de values
@@ -24,7 +25,8 @@ interface valuesTypes {
 }
 
 
-const CreateTask = ({navigation}) => {
+const CreateTask = ({navigation, route}) => {
+    const { idTeam, teamName  } = route.params;
     const nameTaskRef = useRef<TextInput>(null);
     const projectTaskRef = useRef<TextInput>(null);
     const descriptionTaskRef = useRef<TextInput>(null);
@@ -32,7 +34,7 @@ const CreateTask = ({navigation}) => {
     const encargadoTaskRef = useRef<TextInput>(null);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    
+    const [encargados, setEncargados] = useState([]);
 
     // Fechas
     // Fecha inicio
@@ -43,18 +45,57 @@ const CreateTask = ({navigation}) => {
     const [modalEndDate, setModalEndDate] = useState(false);
     const [endDate, setEndDate] = useState<DateType>(new Date());
 
-    const handleSubmit = (values:valuesTypes) => {
-        console.log(values, startDate, endDate);
-        
-        if(values.name === '' || values.project === '' || values.description === '' || values.status === '' || values.encargado === ''){
-        setError(true);
-        setErrorMessage('☠️ Error al crear la tarea ☠️');
-        }else{
-            setError(false);
-            setErrorMessage('');
-            navigation.goBack();
+    // Encargados
+    const fetchTeamMembers = async () => {
+        try {
+          const response = await axios.get(`http://10.0.2.2:4000/api/in/members/members/${idTeam}`);
+          const members = response.data;
+          console.log('members', members.emails);
+          setEncargados(members.emails);
+        } catch (error) {
+          console.error('Error al recuperar los datos del usuario:', error);
         }
-    }
+      };
+    
+        useEffect(() => {
+            fetchTeamMembers();
+        }, []);
+
+        const handleSubmit = async (values: valuesTypes) => {
+            console.log(values, startDate, endDate);
+        
+            if(values.name === ''  || values.description === '' || values.status === '' || values.encargado === ''){
+            setError(true);
+            setErrorMessage('☠️ Error al crear la tarea ☠️');
+            }else{
+                try {
+                    const name = values.name;
+                    const description = values.description;
+                    const state = values.status;
+                    const email = values.encargado;
+                    const initial_date = startDate;
+                    const final_date = endDate;
+                    const id_team = idTeam;
+
+                    const response = await axios.post(`http://10.0.2.2:1000/api/ts/tasks/`,{
+                        name,
+                        description,
+                        state,
+                        initial_date,
+                        final_date,
+                        id_team,
+                        email,
+                    });
+                    navigation.goBack();
+                } catch (error) {
+                    setError(true);
+                    setErrorMessage(error?.response?.data?.message);
+                    console.error('Error al registar miembro', error);
+                }
+            }
+        }
+
+
     return (
         <KeyboardWrapper>
             <ScrollView>
@@ -63,7 +104,7 @@ const CreateTask = ({navigation}) => {
                 </View>
                 <Formik
                  
-                    initialValues={{name:'', project:'', description:'', status:'pendiente',     encargado:''}} 
+                    initialValues={{name:'',  description:'', status:'pendiente', encargado:''}} 
                     onSubmit={(values) => {
                         console.log(values);
                     }}
@@ -74,11 +115,7 @@ const CreateTask = ({navigation}) => {
                         <TextInput ref={nameTaskRef} style={styles.input} placeholder="Nombre de la tarea" onChangeText={handleChange('name')} value={values.name} onBlur={handleBlur('name')}
                         onSubmitEditing={() => projectTaskRef.current?.focus()}
                         />
-                        {/* Projecto */}
-                        <Text style={styles.label}>Proyecto:</Text>
-                        <TextInput ref={projectTaskRef} style={styles.input} placeholder="Proyecto" onChangeText={handleChange('project')} value={values.project} onBlur={handleBlur('project')}
-                        onSubmitEditing={() => descriptionTaskRef.current?.focus()}
-                        />
+                        
                         {/* Descripcion */}
                         <Text style={styles.label}>Descripcion:</Text>
                         <TextInput ref={descriptionTaskRef} style={styles.input} placeholder="Descripcion" onChangeText={handleChange('description')} value={values.description} onBlur={handleBlur('description')}
@@ -104,11 +141,30 @@ const CreateTask = ({navigation}) => {
                             </Picker>
                         
                         </View>
+                        {/* Equipos */}
+                        <Text style={styles.label}>Equipo:</Text>
+                        <View style={styles.pickerContainer}>
+                        <Text style={{fontSize: 20, padding: 10, fontWeight: 'bold'}}>{teamName}</Text>
+                            
+                        </View>
                         {/* Encargado */}
                         <Text style={styles.label}>Encargado:</Text>
-                        <TextInput ref={encargadoTaskRef} style={styles.input} placeholder="Encargado" onChangeText={handleChange('encargado')} value={values.encargado} 
-                        onSubmitEditing={() => console.log('pressed')}
-                        onBlur={handleBlur('encargado')}/>
+                        <View style={styles.pickerContainer}>
+                        <Picker
+                            style={styles.picker}
+                            selectedValue={values.encargado}
+                            onValueChange={handleChange('encargado')
+                        }>
+                            {
+                                encargados.map((item, index) => {
+                                    return (
+                                        <Picker.Item key={index} style={styles.pickerContainer} label={item} value={item} />
+                                    )
+                                })
+                            }
+                        
+                        </Picker>
+                        </View>
 
                         {/* Fecha Inicio */}
                         

@@ -5,20 +5,53 @@ import Constants from 'expo-constants';
 import { SubTitle, PageTitle } from "../../../components/style";
 import { Colors } from "../../../components/style";
 import {tasks} from '../../../components/data/task.json';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const StatusBarHeight = Constants.statusBarHeight;
 
+interface Task {
+    id: number,
+    name: string,
+    description: string,
+    state: string,
+    id_team: number,
+    initial_date: string,
+    final_date: string,
+    email: string,
+}
+
 const ListTaskView = ({ navigation }) => {
-    const [task, setTask] = useState(tasks);
+    const [task, setTask] = useState([] as Task[]);
+
+    const fetchTaskData = async () => {
+        try {
+            const email = await AsyncStorage.getItem('email');
+            const response = await axios.get(`http://10.0.2.2:1000/api/ts/tasks/tasks-email/data=${email}`);
+            const taskData = response.data;
+            setTask(taskData);
+        } catch (error) {
+            console.error('Error al recuperar los datos del usuario:', error);
+        }
+    }
+
+    useEffect(() => {
+        fetchTaskData();
+    }
+    , []);
+
+    
+
+
     return(
         <KeyboardWrapper>
             <ScrollView>
                 <View style={{paddingTop: 50 + StatusBarHeight}}>
                     <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20}}>
                     <PageTitle style={{color: 'black', marginHorizontal: 10}}>Lista de Tareas</PageTitle>
-                    <AntDesign name="pluscircleo" style={{marginTop: 5}} size={30} color="black" onPress={() => navigation.navigate('CreateTask')}/>
+                    
                     </View>
                     <View>
                         {/* quiero renderizar la stareas en una lista */}
@@ -27,10 +60,9 @@ const ListTaskView = ({ navigation }) => {
                                 <TouchableOpacity onPress={() => navigation.navigate('TaskView', { item })} key={index}>
                                 <View style={styles.card} key={index}>
                                     <View style={{width: '90%'}}>
-                                        <Text style={styles.titleCard} >{item.nombre}</Text>
-                                        <Text>{item.descripcion}</Text>
-                                        <Text style={{fontSize: 18}} >{item.project}</Text>
-                                        <Text style={{fontSize: 18, fontWeight: 'bold'}} >{item.estado}</Text>
+                                        <Text style={styles.titleCard} >{item.name}</Text>
+                                        <Text>{item.description}</Text>
+                                        <Text style={{fontSize: 18, fontWeight: 'bold'}} >{item.state}</Text>
                                     </View>
                                     <AntDesign name="caretright" size={30} color="black"/>
                                 </View>

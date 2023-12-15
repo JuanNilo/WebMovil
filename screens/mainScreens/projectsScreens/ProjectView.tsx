@@ -115,7 +115,8 @@ const editProjectName = async (newName: string) => {
 
   const handleTeamNavigation = (index: number, name:string) => {
     const idTeam = idTeams[index];
-    navigation.navigate('Team', {idTeam, name});
+    const id_project = idTeams[index];
+    navigation.navigate('Team', {idTeam, name, nameProject});
   }
 
   useFocusEffect(
@@ -212,12 +213,14 @@ const editProjectName = async (newName: string) => {
             <View style={{paddingVertical: 20, width: '100%'}}>
 
               {/* Equipos del proyecto */}
+            <View style={{flexDirection: 'row', gap: 10}}> 
+
             <SubTitle>Equipos del proyecto</SubTitle>
-            <ButtonText style={styles.botonContainer} onPress= {() => navigation.navigate('CreateTeam')}>
-              <Text style={{color:'black', textAlign:'center'}}>
-                Crear equipo
-              </Text>
-              </ButtonText>
+            
+              <TouchableOpacity style={{backgroundColor:'white', borderRadius: 40}} onPress= {() => navigation.navigate('CreateTeam')}>
+                <AntDesign name="plus" style={{marginTop: 10, paddingHorizontal: 10}} size={30} color="black" />
+              </TouchableOpacity>
+            </View>
             {nameTeams.map((name, index) => {
                 return (
                   <View key={name} style={{flexDirection:"row"}}>

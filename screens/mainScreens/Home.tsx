@@ -35,7 +35,7 @@ export default function Home({navigation}){
     const [userData, setUserData] = useState({});
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [task, setTask] = useState(tasks);
+    const [task, setTask] = useState([] as any[]);
     const [projectsIds, setProjectsIds] = useState([] as string[]);
     const [projectsNames, setProjectsNames] = useState([] as string[]);
     
@@ -83,17 +83,26 @@ export default function Home({navigation}){
     }
   }
 
-  useEffect(()=> {
-    fetchUserData();
-    fetchProjectData();
-    fetchTeamData();
-  },[])
+  const fetchTaskData = async () => {
+    try {
+        const email = await AsyncStorage.getItem('email');
+        const response = await axios.get(`http://10.0.2.2:1000/api/ts/tasks/tasks-email/data=${email}`);
+        const taskData = response.data;
+        console.log('=======taskData', taskData)
+        setTask(taskData);
+    } catch (error) {
+        console.error('Error al recuperar los datos del usuario:', error);
+    }
+}
+
+
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
         fetchUserData();
         fetchProjectData();
         fetchTeamData();
+        fetchTaskData();
     });
     return unsubscribe;
   }
@@ -129,20 +138,29 @@ const handleNavigationTeam = (name: string, index: number) => {
                         </TouchableOpacity>
                         {/* Slider de tareas en curso */}
                         <ScrollView horizontal={true} style={{height: 200}}>
-                            {task.map((item, index) => {
-                                return(
-                                    <View key={index}>
+                            {
+                                task.length > 0 ?
+                                (
+
+                                    task.map((item, index) => {
+                                        return(
+                                            <View key={index}>
                                         {
                                             item.estado != 'completada' 
                                             ? (
                                                 <TouchableOpacity onPress={() => navigation.navigate('TaskView', {item})}>
-                                                <TaskCard   nombre={item.nombre} descripcion={item.descripcion} estado={item.estado}  />
+                                                <TaskCard   nombre={item.name} descripcion={item.description} estado={item.state}  />
                                                     </TouchableOpacity>
                                                 ) : null
                                             }
                                     </View>
                                 )
-                            })}
+                            })
+                            ) :
+                            (
+                                <Text style={{fontSize: 20, fontWeight:'bold'}}>No tienes tareas pipipi</Text>
+                                )
+                        }
                         </ScrollView>
                     </View>
                     {/* Slider de proyectos */}

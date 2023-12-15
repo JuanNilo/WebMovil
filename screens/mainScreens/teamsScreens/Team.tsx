@@ -12,10 +12,22 @@ const StatusBarHeight = Constants.statusBarHeight;
 import KeyboardWrapper from '../../../components/keyboardWrapper';
 import { PageTitle, SubTitle } from '../../../components/style';
 
+
+interface Task {
+  id: number,
+  name: string,
+  description: string,
+  state: string,
+  id_team: number,
+  initial_date: string,
+  final_date: string,
+  email: string,
+}
+
 const Team = ({navigation, route}) => {
-  const { idTeam, name } = route.params;
+  const { idTeam, name, nameProject } = route.params;
   const [teamName, setTeamName] = useState(name);
-  const [taskList, setTaskList] = useState(tasks);
+  const [taskList, setTaskList] = useState([] as Task[] );
   const [members, setMembers] = useState([]);
   const [editMode, setEditMode] = useState(false);
 
@@ -31,7 +43,7 @@ const Team = ({navigation, route}) => {
   };
 
   const addTask = () => {
-    navigation.navigate('CreateTask');
+    navigation.navigate('CreateTask', {idTeam, teamName, nameProject});
   };
   
   const editTeamName = async (newName: string) => {
@@ -51,8 +63,23 @@ const Team = ({navigation, route}) => {
     }
   }
 
+  const fetchTaskData = async () => {
+    try {
+      const id_team = idTeam.toString();
+      const response = await axios.get(`http://10.0.2.2:1000/api/ts/tasks/task-idTeam/${id_team}`);
+      const taskData = response.data;
+      console.log('\n\n\n\n\n',taskData)
+      setTaskList(taskData);
+    } catch (error) {
+      console.error('Error al recuperar los datos de las tareas:', error);
+    }
+  }
+
+
+
   useEffect(() => {
     fetchTeamMembers();
+    fetchTaskData();
   }, []);
 
   return (
@@ -107,9 +134,9 @@ const Team = ({navigation, route}) => {
       {taskList.map((item) => ( 
         <TouchableOpacity key={item.id} onPress={() => navigation.navigate('TaskView', {item})}>
         <View key={item.id} style={styles.projectContainer}>
-            <Text>{item.nombre}</Text>
-            <Text>{item.estado}</Text>
-            <Text>{item.estado}</Text>
+            <Text>{item.name}</Text>
+            <Text>{item.state}</Text>
+            <Text>{item.email}</Text>
         </View>
         </TouchableOpacity>
       ))}

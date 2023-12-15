@@ -14,23 +14,22 @@ const StatusBarHeight = Constants.statusBarHeight;
 
 interface Task {
     id: number,
-    nombre: string,
-    descripcion: string,
-    estado: string,
-    fecha_inicio: string,
-    fecha_fin: string,
-    id_proyecto: number,
-    id_equipo: number,
-    id_usuario: number,
+    name: string,
+    description: string,
+    state: string,
+    id_team: number,
+    initial_date: string,
+    final_date: string,
+    email: string,
 }
 
 const TaskView = ({ route, navigation }) => {
     const { item } = route.params;
     const [editAviable, setEditAviable] = useState(true);
     const [editMode, setEditMode] = useState(false);
-    const [editingName, setEditingName] = useState(item.nombre);
-    const [statusSelected, setStatusSelected] = useState(item.estado);
-    const [editingDescription, setEditingDescription] = useState(item.descripcion);
+    const [editingName, setEditingName] = useState(item.name);
+    const [statusSelected, setStatusSelected] = useState(item.state);
+    const [editingDescription, setEditingDescription] = useState(item.description);
 
     // Comentarios
     const [comment, setComment] = React.useState('');
@@ -118,7 +117,7 @@ const TaskView = ({ route, navigation }) => {
                         <View style={{ height: '100%', padding: 5 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={{ fontSize: 20, fontWeight: 'bold' }}>responsable: </Text>
-                                <Text style={{ fontSize: 18 }}>{item.responsable}</Text>
+                                <Text style={{ fontSize: 18 }}>{item.email}</Text>
                             </View>
                             {/* Descripcion */}
                             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Descripcion: </Text>
