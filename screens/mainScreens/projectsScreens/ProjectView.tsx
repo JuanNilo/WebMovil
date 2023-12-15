@@ -65,6 +65,26 @@ const ProjectView = ({navigation, route}) => {
         console.log({error: e?.response?.data?.message});
     }
 }
+const editProjectName = async (newName: string) => {
+  try {
+    const id_project = await AsyncStorage.getItem('id_project');
+    
+    const updatedData = {
+      name: newName
+    };
+
+    const response = await axios.put(`http://10.0.2.2:3002/api/on/project/${id_project}`, updatedData);
+    if (response.status === 200) {
+      console.log('Nombre del equipo actualizado con éxito');
+    } else {
+      console.error('Error al actualizar el nombre del equipo. Estado de la respuesta:', response.status);
+    }
+    }catch (e: any){
+      setError(true);
+      setErrorMessage(e?.response?.data?.message);
+      console.log({error: e?.response?.data?.message});
+  }
+};
  
   
   const fetchTeamsData = async () => {
