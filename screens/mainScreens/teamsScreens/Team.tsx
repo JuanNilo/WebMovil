@@ -85,6 +85,16 @@ const Team = ({navigation, route}) => {
     }
   }
 
+  const handleDeleteMember = async (id: number, email: string) => {
+     try {
+      const response = await axios.delete(`http://10.0.2.2:4000/api/in/members/member-team/${email}`, {data: {id},});
+      console.log('id_member', id);
+      fetchTeamMembers();
+    } catch (error) {
+      console.error('Error al eliminar el miembro:', error);
+    }
+  }
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
         fetchTeamMembers();
@@ -135,7 +145,7 @@ const Team = ({navigation, route}) => {
       {members.map((item) => ( 
         <View key={item} style={styles.projectContainer}>
             <Text style={styles.mailMember}>{item}</Text>
-            <TouchableOpacity onPress={()=> console.log('press')}>
+            <TouchableOpacity onPress={()=> handleDeleteMember(idTeam, item)}>
             <AntDesign  name="delete" size={24} color="black" />
 
             </TouchableOpacity>
