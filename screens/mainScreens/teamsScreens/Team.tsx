@@ -41,9 +41,6 @@ const Team = ({navigation, route}) => {
             <Text>{item.nombre}</Text>
             <Text>{item.estado}</Text>
             <Text>{item.estado}</Text>
-            {/* add logic to show description task */}
-            
-            
         </View>
         </TouchableOpacity>
       ))}

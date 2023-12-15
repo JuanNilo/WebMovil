@@ -132,7 +132,7 @@ const CreateTask = ({navigation}) => {
                                 <TouchableOpacity style={{height: '30%', width: '100%'}} onPress={() => setModalStartDate(false)}></TouchableOpacity>
                                 <View style={{backgroundColor: 'white', height: '65%', width: '100%', justifyContent: 'center', alignItems: 'center'}}>
                                 <Text style={{fontSize: 24, fontWeight: 'bold', color: 'black', textAlign: 'center', padding: 10}}>Fecha de inicio</Text>
-                                <DateTimePicker selectedItemColor='black'  value={startDate} onValueChange={(date) => setStartDate(date)}  />
+                                <DateTimePicker mode='date' minimumDate={dayjs().startOf('day')} selectedItemColor='black'  value={startDate} onValueChange={(date) => setStartDate(date)}  />
                                 <TouchableOpacity style={[styles.button, {paddingHorizontal: 40}]} onPress={() => setModalStartDate(false)}>
                                     <Text style={styles.buttonText}>Aceptar</Text>
                                 </TouchableOpacity>
@@ -146,7 +146,7 @@ const CreateTask = ({navigation}) => {
                                 <TouchableOpacity style={{height: '30%', width: '100%'}} onPress={() => setModalEndDate(false)}></TouchableOpacity>
                                 <View style={{backgroundColor: 'white', height: '65%', width: '100%', justifyContent: 'center', alignItems: 'center'}}>
                                 <Text style={{fontSize: 24, fontWeight: 'bold', color: 'black', textAlign: 'center', padding: 10}}>Fecha de termino</Text>
-                                <DateTimePicker  selectedItemColor='black' value={endDate} onValueChange={(date) => setEndDate(date)}  />
+                                <DateTimePicker mode='date' minimumDate={dayjs().startOf('day')}  selectedItemColor='black' value={endDate} onValueChange={(date) => setEndDate(date)}  />
                                 <TouchableOpacity style={[styles.button, {paddingHorizontal: 40}]} onPress={() => setModalEndDate(false)}>
                                     <Text style={styles.buttonText}>Aceptar</Text>
                                 </TouchableOpacity>
