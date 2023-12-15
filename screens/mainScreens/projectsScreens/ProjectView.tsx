@@ -53,6 +53,43 @@ const ProjectView = ({navigation, route}) => {
     setModalVisible(false);
   }
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const membersPerPage = 3;
+  const totalMembers = emailMembers.length;
+
+  const maxPage = Math.ceil(totalMembers / membersPerPage);
+
+  const indexOfLastMember = currentPage * membersPerPage;
+  const indexOfFirstMember = indexOfLastMember - membersPerPage;
+  const currentMembers = emailMembers.slice(indexOfFirstMember, indexOfLastMember);
+
+  const handleChangePage = (page: number, action: string) => {
+    if (action === 'next' && currentPage < maxPage) {
+      setCurrentPage(currentPage + page);
+    } else if (action === 'prev' && currentPage > 1) {
+      setCurrentPage(currentPage - 1); // Corregido para restar la página en lugar de sumarla
+    }
+  };
+
+  // Paginacion de team
+  const [currentTeamPage, setCurrentTeamPage] = useState(1);
+  const teamsPerPage = 3;
+  const totalTeams = nameTeams.length;
+
+  const maxPageTeam = Math.ceil(totalTeams / teamsPerPage);
+
+  const indexOfLastTeam = currentTeamPage * teamsPerPage;
+  const indexOfFirstTeam = indexOfLastTeam - teamsPerPage;
+  const currentTeams = nameTeams.slice(indexOfFirstTeam, indexOfLastTeam);
+
+
+  const handleTeamPageChange = (page: number, direction: string) => {
+    if (direction === 'next' && currentTeamPage < maxPageTeam) {
+      setCurrentTeamPage(currentTeamPage + page);
+    } else if (direction === 'prev' && currentTeamPage > 1) {
+      setCurrentTeamPage(currentTeamPage - 1);
+    }
+  };
   const deleteTeam = async (id_team: number) => {
     setModalVisible(false);
     console.log(id_team);
@@ -128,6 +165,7 @@ const editProjectName = async (newName: string) => {
     }, [])
     );
 
+
   const handleDeleteTeam = (id_team: number) => {
     setTeamDeleteIndex(id_team);
     setModalVisible(true);
@@ -184,23 +222,32 @@ const editProjectName = async (newName: string) => {
 
             <Line/>
             <Text style={styles.SubTitle}>Miembros del proyecto:</Text>
-            <View style={{paddingVertical: 10}}>
+            <View >
 
-            {emailMembers.map((email , index) => (
-               
-                   
-                    <View key={index} style={styles.memberContainer}>
-                        <View style={[ styles.memberList, {flexDirection:'column', alignItems:'flex-start', width:'85%'}]}>
-                          <Text style={styles.memberName}>{email}</Text>
-                        </View>
-                        {
-                          adminAviable && email !== userEmail ?
-                          <Octicons name="x" style={styles.boton} size={30} color="white"/>
-                          : null
-                        }
-                    </View>)
-                
-            )}
+            
+          
+              <View style={{paddingVertical: 10, height: 180, overflow: 'hidden'}}>
+
+              {currentMembers.map((email, index) => (
+                <View key={index} style={styles.memberContainer}>
+                  <View style={[styles.memberList, { flexDirection: 'column', alignItems: 'flex-start', width: '85%' }]}>
+                    <Text style={styles.memberName}>{email}</Text>
+                  </View>
+                  {adminAviable && email !== userEmail ? <Octicons name="x" style={styles.boton} size={30} color="white" /> : null}
+                </View>
+              ))}
+
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                <TouchableOpacity onPress={() => handleChangePage(-1, 'prev')} >
+                  <Octicons name="chevron-left" style={{width:40, padding: 2, paddingLeft: 5}} size={30} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleChangePage(1, 'next')}>
+                  <Octicons name="chevron-right" style={{width:40, padding: 2, paddingLeft: 5}} size={30} color="black" />
+                </TouchableOpacity>
+              </View>
+              
+
             {/* Boton agregar miembro */}
             <ButtonText onPress={ () => navigation.navigate('AddMemberProject', {nameProject})} style={styles.botonContainer}>
               <Text style={{color:'black', textAlign:'center'}}>
@@ -221,27 +268,58 @@ const editProjectName = async (newName: string) => {
                 <AntDesign name="plus" style={{marginTop: 10, paddingHorizontal: 10}} size={30} color="black" />
               </TouchableOpacity>
             </View>
-            {nameTeams.map((name, index) => {
-                return (
-                  <View key={name} style={{flexDirection:"row"}}>
+            <View style={{height: 250}}>
 
-                    <ButtonText onPress={() => handleTeamNavigation(index, name)} key={index} style={[styles.projectContainer, adminAviable ? {width: '85%'} : {width:'100%'}]}>
-                      <View style={{flexDirection:'column', alignItems:'flex-start', width:'70%'}}>
-                        <Text style={styles.projectName}>{name}</Text>
-                      </View>
-                    </ButtonText>
-                    {
-                      adminAviable ?
-                      (
-                        <TouchableOpacity style={{height:50, alignItems:'flex-end', justifyContent:'center'}} onPress={() => deleteTeam(idTeams[index])}>
-                          <Octicons  name="x" style={styles.boton} size={30} color="white"/>
-                        </TouchableOpacity>
-                      ) : null
-                    }
-                        
-                  </View>
-                )
+
+            {currentTeams.map((name, index) => {
+              return (
+                <View key={name} style={{ flexDirection: "row" }}>
+                  <ButtonText
+                    onPress={() => handleTeamNavigation(index, name)}
+                    key={index}
+                    style={[
+                      styles.projectContainer,
+                      adminAviable ? { width: "85%" } : { width: "100%" },
+                    ]}
+                  >
+                    <View
+                      style={{ flexDirection: "column", alignItems: "flex-start", width: "70%" }}
+                    >
+                      <Text style={styles.projectName}>{name}</Text>
+                    </View>
+                  </ButtonText>
+                  {adminAviable ? (
+                    <TouchableOpacity
+                      style={{ height: 50, alignItems: "flex-end", justifyContent: "center" }}
+                      onPress={() => deleteTeam(idTeams[index])}
+                    >
+                      <Octicons name="x" style={styles.boton} size={30} color="white" />
+                    </TouchableOpacity>
+                  ) : null}
+                </View>
+              );
             })}
+
+            <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
+              <TouchableOpacity onPress={() => handleTeamPageChange(-1, "prev")}>
+                <Octicons
+                  name="chevron-left"
+                  style={{ width: 40, padding: 2, paddingLeft: 5 }}
+                  size={30}
+                  color="black"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleTeamPageChange(1, "next")}>
+                <Octicons
+                  name="chevron-right"
+                  style={{ width: 40, padding: 2, paddingLeft: 5 }}
+                  size={30}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
+
+            </View>
             
             </View>
             {/* Eliminar proyecto */}

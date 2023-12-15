@@ -27,7 +27,7 @@ interface Task {
 
 const TaskView = ({ route, navigation }) => {
     const { item } = route.params;
-    console.log(item);
+    console.log(item)
     const [editAviable, setEditAviable] = useState(true);
     const [editMode, setEditMode] = useState(false);
     const [editingName, setEditingName] = useState(item.name);
@@ -56,6 +56,7 @@ const TaskView = ({ route, navigation }) => {
                 comment,
                 id_task,
             })
+            fetchCommentData();
         }catch (e: any){
             setError(true);
             setErrorMessage(e?.response?.data?.message);
@@ -65,22 +66,40 @@ const TaskView = ({ route, navigation }) => {
 
     }
 
+
     // Esto tiene que ser cambiado por la query de comentarios
     const fetchCommentData = async () => {
         try {
           const id_task = item.id;
-          console.log(id_task);
           const response = await axios.get(`http://10.0.2.2:1000/api/ts/comments/comment-idTask/${id_task}`);
           const commentData = response.data;
           setCommentsIds(commentData.commentsIds);
           setCommentsAuthors(commentData.commentsAuthors);
           setCommentsComments(commentData.commentsComments);
-          console.log('\n\n',commentData);
+          setComment('');
         } catch (error) {
           console.error('Error al recuperar los datos de comentarios:', error);
         }
     };
 
+    const handleEditTask = async () => {    
+        try {
+            const updatedData = {
+                name: editingName,
+                description: editingDescription,
+                state: statusSelected,
+            };
+            const id_task = item.id;
+            const response = await axios.put(`http://10.0.2.2:1000/api/ts/tasks/${id_task}`, updatedData);
+            if(response.status === 200){
+                setEditMode(!editMode);
+              }else{
+                console.log('Error al actualizar el nombre del proyecto');
+              }
+        } catch (error) {
+            console.error('Error al actualizar el nombre del proyecto:', error);
+        }
+    }
 
 
     const handleNameChange = (text: string) => {
@@ -116,7 +135,7 @@ const TaskView = ({ route, navigation }) => {
                                                 value={editingName}
                                                 placeholder="Nuevo Nombre"
                                             />
-                                            <TouchableOpacity onPress={() => setEditMode(!editMode)}>
+                                            <TouchableOpacity onPress={() => handleEditTask()}>
                                                 <AntDesign name="checkcircleo" style={{ marginTop: 5 }} size={30} color="black" />
                                             </TouchableOpacity>
                                         </View>
@@ -138,16 +157,13 @@ const TaskView = ({ route, navigation }) => {
                         )
                     }
 
-                    <TouchableOpacity onPress={() => navigation.navigate('ProjectView', item.project)} style={{ backgroundColor: '#FCF5B4', alignItems: 'center', borderColor: 'black', borderBottomWidth: 2, borderTopWidth: 2 }}>
-                        <Text style={styles.subTitle}>{item.project}</Text>
-                    </TouchableOpacity>
+                    <View  style={{ backgroundColor: '#FCF5B4', alignItems: 'center', borderColor: 'black', borderBottomWidth: 2, borderTopWidth: 2 }}>
+                        <Text style={styles.subTitle}>{item.email}</Text>
+                    </View>
                     {/* Zona de descripcion y estatus */}
                     <View style={styles.container}>
                         <View style={{ height: '100%', padding: 5 }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>responsable: </Text>
-                                <Text style={{ fontSize: 18 }}>{item.email}</Text>
-                            </View>
+                            
                             {/* Descripcion */}
                             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Descripcion: </Text>
                             {
@@ -203,8 +219,8 @@ const TaskView = ({ route, navigation }) => {
                         
                                 commentsIds.map((index) => (
                                     <View key={index} style={{ backgroundColor: '#CFCFCF', padding: 10, margin: 5, borderRadius: 10 }}>
-                                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{commentsAuthors[index]}</Text>
-                                    <Text style={{ fontSize: 16 }}>{commentsComments[index]}</Text>
+                                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{commentsAuthors[index-1]}</Text>
+                                    <Text style={{ fontSize: 16 }}>{commentsComments[index-1]}</Text>
                                     </View>
                                     ))
                                 
