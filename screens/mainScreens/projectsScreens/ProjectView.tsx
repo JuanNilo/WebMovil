@@ -173,21 +173,24 @@ const editProjectName = async (newName: string) => {
   }
 
   const handleDeleteProjectConfirm = async () => {
-    const id_project = await AsyncStorage.getItem('id_project');
     try {
-      const response = await axios.delete(`http://`);
+      const id_project = await AsyncStorage.getItem('id_project');
+      const response = await axios.delete(`http://10.0.2.2:3002/api/on/middle/delete-proyect/${id_project}`);
+      console.log('id_project', id_project);
+      fetchMembersData();
+      navigation.navigate('Home');
     } catch (error) {
       console.error('Error al eliminar el proyecto:', error);
-      }
+    }
   }
 
   const handleDeleteMemeber = async (email: string) => {
     try {
       const id_project = await AsyncStorage.getItem('id_project');
-      // const response = await axios.delete(`http://
-      console.log('elimando', email)
-    }
-    catch (error) {
+      const response = await axios.delete(`http://10.0.2.2:3002/api/on/members/member-project/${email}`, {data: {id_project},});
+      console.log('id_member', id_project);
+      fetchMembersData();
+    } catch (error) {
       console.error('Error al eliminar el miembro:', error);
     }
   }
