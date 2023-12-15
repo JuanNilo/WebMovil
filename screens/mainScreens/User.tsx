@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import giraStyles from "./../../components/style";
-import { View, ScrollView, Image, Text } from 'react-native';
+import { View, ScrollView, Image, Text, Touchable } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import { Octicons } from "@expo/vector-icons";
 import { StyledContainer, InnerContainer, PageLogo, PageTitle, SubTitle, StyledFormArea, LeftIcon, StyledInputLabel, StyledTextInput, RigthIcon, StyledButton, ButtonText, Line, ExtraView, ExtraText, TextLink, TextLinkContent } from './../../components/style';
@@ -8,7 +8,7 @@ import { Colors } from "./../../components/style";
 import { createAvatar } from "@dicebear/core";
 import { pixelArt, funEmoji, lorelei,  } from "@dicebear/collection";
 const { secondary, primary, brand, purple } = Colors
-
+import { TouchableOpacity } from "react-native";
 const { styleIcon, styleInnerContainer, styleContainer, styleDataUser,styleIconContainer, container, styleLabel, styleErrorMessage, styleErrorView, styleUserLogo } = giraStyles
 
 import KeyboardWrapper from "../../components/keyboardWrapper";
@@ -61,6 +61,17 @@ const User = ({ navigation }) => {
   useFocusEffect(() => {
     fetchUserData();
   });
+
+  const handleDeleteAccount = async () => {
+    try {
+      const email = await AsyncStorage.getItem('email');
+      // const response = await axios.delete(`http://
+    } catch (error) {
+      setError(true);
+      setErrorMessage(error?.response?.data?.message);
+      console.error('Error al eliminar la cuenta:', error);
+    }
+  }
 
   return (
     <KeyboardWrapper>
@@ -130,6 +141,13 @@ const User = ({ navigation }) => {
                 Editar contraseña
               </ButtonText>
             </StyledButton>
+            {/* Eliminar cuenta */}
+            <TouchableOpacity
+              onPress={() => handleDeleteAccount() }
+              style={{backgroundColor: 'red', borderRadius: 10, width: 200, height: 50, alignSelf: 'center', justifyContent:'center',marginTop: 20, }}
+              >
+              <Text style={{color: "white", fontSize: 20,fontWeight:'bold', alignItems:'center', justifyContent:'center', textAlign: 'center',}}>Eliminar cuenta</Text>
+            </TouchableOpacity>
             <Line />
             </View>
         </View>
