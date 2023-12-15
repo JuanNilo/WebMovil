@@ -75,11 +75,10 @@ const Team = ({navigation, route}) => {
     }
   }
 
-  const handleDeleteTask = async (idTask: number) => {
+  const handleDeleteTask = async (id: number) => {
     try {
-      const id_task = idTask.toString();
-      const response = await axios.get(`http://10.0.2.2:1000/api/ts/tasks/task-idTeam/${id_task}`);
-      console.log('idTask', idTask);
+      const response = await axios.delete(`http://10.0.2.2:1000/api/ts/tasks/delete-task/${id}`);
+      console.log('idTask', id);
       fetchTaskData();
     } catch (error) {
       console.error('Error al eliminar la tarea:', error);
