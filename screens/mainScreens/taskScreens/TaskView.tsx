@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text, ScrollView } from 'react-native';
 import KeyboardWrapper from '../../../components/keyboardWrapper';
@@ -9,6 +9,8 @@ import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { TextInput } from 'react-native';
 import { comments } from "../../../components/data/comments.json";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const StatusBarHeight = Constants.statusBarHeight;
 
@@ -25,6 +27,7 @@ interface Task {
 
 const TaskView = ({ route, navigation }) => {
     const { item } = route.params;
+    console.log(item);
     const [editAviable, setEditAviable] = useState(true);
     const [editMode, setEditMode] = useState(false);
     const [editingName, setEditingName] = useState(item.name);
@@ -35,25 +38,48 @@ const TaskView = ({ route, navigation }) => {
     const [comment, setComment] = React.useState('');
     const [error, setError] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState('');
+    const [commentsIds, setCommentsIds] = React.useState([]);
+    const [commentsAuthors, setCommentsAuthors] = React.useState([]);
+    const [commentsComments, setCommentsComments] = React.useState([]);    
 
 
     const handleCommentChange = (text: string) => {
         setComment(text);
     }
 
-    const handleCommentSubmit = () => {
-        if (comment === '') {
+    const handleCommentSubmit = async (comment: string) => {
+        try{
+            const id_task = item.id;
+            const authorEmail = await AsyncStorage.getItem('email');
+            const response = await axios.post(`http://10.0.2.2:1000/api/ts/comments`, {
+                authorEmail,
+                comment,
+                id_task,
+            })
+        }catch (e: any){
             setError(true);
-            setErrorMessage('Debe escribir un comentario');
-            return;
+            setErrorMessage(e?.response?.data?.message);
+            console.log({error: e?.response?.data?.message});
         }
-        console.log(comment);
+        
+
     }
 
     // Esto tiene que ser cambiado por la query de comentarios
-    const lisComments = comments;
-
-    const filteredComments = lisComments.filter((comment) => comment.taskId === item.id);
+    const fetchCommentData = async () => {
+        try {
+          const id_task = item.id;
+          console.log(id_task);
+          const response = await axios.get(`http://10.0.2.2:1000/api/ts/comments/comment-idTask/${id_task}`);
+          const commentData = response.data;
+          setCommentsIds(commentData.commentsIds);
+          setCommentsAuthors(commentData.commentsAuthors);
+          setCommentsComments(commentData.commentsComments);
+          console.log('\n\n',commentData);
+        } catch (error) {
+          console.error('Error al recuperar los datos de comentarios:', error);
+        }
+    };
 
 
 
@@ -71,6 +97,9 @@ const TaskView = ({ route, navigation }) => {
 
         }
     }
+    useEffect(() => {
+        fetchCommentData();
+    }, []);
     return (
         <KeyboardWrapper>
             <ScrollView>
@@ -168,17 +197,17 @@ const TaskView = ({ route, navigation }) => {
                                 <AntDesign name="message1" size={30} color="black" style={{ textAlign: 'center', paddingBottom:10 }} />
                         </View>
                             {
-                                filteredComments.length === 0 ? 
+                                commentsIds.length === 0 ? 
                                 (<Text style={{fontSize:18, fontWeight:'bold',paddingHorizontal:10}}>No hay comentarios...</Text>)
                                 : 
-                        (
-                                filteredComments.map((comment, index) => (
+                        
+                                commentsIds.map((index) => (
                                     <View key={index} style={{ backgroundColor: '#CFCFCF', padding: 10, margin: 5, borderRadius: 10 }}>
-                                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{comment.authorEmail}</Text>
-                                    <Text style={{ fontSize: 16 }}>{comment.comment}</Text>
+                                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{commentsAuthors[index]}</Text>
+                                    <Text style={{ fontSize: 16 }}>{commentsComments[index]}</Text>
                                     </View>
                                     ))
-                                )
+                                
                         }
                     </View>
                     {/* Agregar comentario */}
@@ -190,7 +219,7 @@ const TaskView = ({ route, navigation }) => {
                                 onChangeText={handleCommentChange}
                                 value={comment}
                                 multiline={true}
-                                onSubmitEditing={() => handleCommentSubmit()}
+                                onSubmitEditing={() => handleCommentSubmit(comment)}
                                 placeholder="Comentario..."
                             />
                         </View>
@@ -200,7 +229,7 @@ const TaskView = ({ route, navigation }) => {
                         {/* Boton de submit */}
                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                             <TouchableOpacity style={styles.buttonSubmit}
-                                onPress={() => handleCommentSubmit()}
+                                onPress={() => handleCommentSubmit(comment)}
                             >
                                 <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>Agregar comentario</Text>
                             </TouchableOpacity>

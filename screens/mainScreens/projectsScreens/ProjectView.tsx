@@ -42,7 +42,7 @@ const ProjectView = ({navigation, route}) => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [editingName, setEditingName] = useState(nameProject);
-  const [teamDeleteName, setTeamDeleteName] = useState('');
+  const [teamDeleteIndex, setTeamDeleteIndex] = useState(0);
 
   // Modal
   const [modalVisible, setModalVisible] = useState(false);
@@ -53,12 +53,14 @@ const ProjectView = ({navigation, route}) => {
     setModalVisible(false);
   }
 
-  const deleteTeam = async () => {
+  const deleteTeam = async (id_team: number) => {
     setModalVisible(false);
-    console.log(teamDeleteName)
+    console.log(id_team);
     try{
-
-        // Logica eliminar equipo
+      const id = id_team.toString();
+      console.log(id);
+      const response = await axios.delete(`http://10.0.2.2:4000/api/in/middle/delete-team/${id}`);
+      console.log(response);
     }catch (e: any){
         setError(true);
         setErrorMessage(e?.response?.data?.message);
@@ -126,8 +128,8 @@ const editProjectName = async (newName: string) => {
     }, [])
     );
 
-  const handleDeleteTeam = (teamName: string) => {
-    setTeamDeleteName(teamName);
+  const handleDeleteTeam = (id_team: number) => {
+    setTeamDeleteIndex(id_team);
     setModalVisible(true);
   }
 
@@ -233,10 +235,9 @@ const editProjectName = async (newName: string) => {
                     {
                       adminAviable ?
                       (
-                        <View style={{height:50, alignItems:'flex-end', justifyContent:'center'}}>
-
-                        <Octicons  name="x" style={styles.boton} size={30} color="white"/>
-                        </View>
+                        <TouchableOpacity style={{height:50, alignItems:'flex-end', justifyContent:'center'}} onPress={() => deleteTeam(idTeams[index])}>
+                          <Octicons  name="x" style={styles.boton} size={30} color="white"/>
+                        </TouchableOpacity>
                       ) : null
                     }
                         
@@ -249,7 +250,7 @@ const editProjectName = async (newName: string) => {
             {
               adminAviable ?
 
-              <ButtonText style={[styles.botonContainer, {backgroundColor:'red', borderColor:'red'}]} onPress= {() => handleDeleteTeam(nameProject)}>
+              <ButtonText style={[styles.botonContainer, {backgroundColor:'red', borderColor:'red'}]} onPress= {() => handleDeleteTeam()}>
                 <Text style={{color:'white', textAlign:'center'}}>
                   Eliminar proyecto
                 </Text>
@@ -283,7 +284,7 @@ const editProjectName = async (newName: string) => {
                                                 {/* Eliminar */}
                                                 <TouchableOpacity
                                                     style={{backgroundColor: 'red' ,alignItems: 'center',height:50, width:125, borderRadius: 5, justifyContent: 'center', marginHorizontal: 5}}
-                                                    onPress={() => deleteTeam()}>
+                                                    >
                                                     <ButtonText style={{fontSize:20, fontWeight:'bold', color: 'white', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
                                                         Si
                                                     </ButtonText>
