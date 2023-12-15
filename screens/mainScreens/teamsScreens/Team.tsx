@@ -10,7 +10,7 @@ import KeyboardWrapper from '../../../components/keyboardWrapper';
 import { PageTitle, SubTitle } from '../../../components/style';
 
 const Team = ({navigation, route}) => {
-  const {  idTeam,name } = route.params;
+  const { idTeam, name } = route.params;
   const [teamName, setTeamName] = useState(name);
   const [teamDescription, setTeamDescription] = useState(' Descripción del equipo 1');
   const [taskList, setTaskList] = useState(tasks);
@@ -33,7 +33,7 @@ const Team = ({navigation, route}) => {
       {/* Lista de miembros */}
       <View style={{flexDirection: 'row', gap: 20, marginVertical: 10}}>
         <SubTitle>Miembros:</SubTitle>
-        <ButtonText style={styles.botonContainer}  onPress={() => navigation.navigate('AddMemberTeam',{teamName})} >Añadir miembro</ButtonText>
+        <ButtonText style={styles.botonContainer}  onPress={() => navigation.navigate('AddMemberTeam',{idTeam, name})} >Añadir miembro</ButtonText>
       </View>
       
       <Line/>

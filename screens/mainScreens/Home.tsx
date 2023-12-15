@@ -41,6 +41,7 @@ export default function Home({navigation}){
     const [task, setTask] = useState(tasks);
     const [projectsIds, setProjectsIds] = useState([] as string[]);
     const [projectsNames, setProjectsNames] = useState([] as string[]);
+    const [teamData, setTeamData] = useState([] as teamDataTypes[]);
     const [teamsIds, setTeamsIds] = useState([] as string[]);
     const [teamssNames, setTeamsNames] = useState([] as string[]);
     const fetchUserData = async () => {
@@ -79,8 +80,10 @@ export default function Home({navigation}){
         console.log(email);
         const response = await axios.get(`http://10.0.2.2:4000/api/in/middle/get-teams/${email}`);
         const teamsData = response.data;
+        setTeamData(teamsData);
         setTeamsIds(teamsData.ids);
         setTeamsNames(teamsData.names);
+        console.log('----team data-----', teamsData.length);
         console.log('\n\n',teamsData);
     } catch (error) {
         console.error('Error al recuperar los datos de equipos:', error);
@@ -170,7 +173,7 @@ export default function Home({navigation}){
                         <SubTitle style={{color: 'black'}}>Equipos</SubTitle>
                         <ScrollView horizontal={true} style={{height: 200}}>
                             {   
-                                teamssNames.length > 0 ?
+                                teamData.length > 0 ?
                                 (
                                 teamssNames.map((item, index) => {
                                     return(
