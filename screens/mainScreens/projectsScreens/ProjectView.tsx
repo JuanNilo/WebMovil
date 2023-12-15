@@ -97,6 +97,7 @@ const ProjectView = ({navigation, route}) => {
       const id = id_team.toString();
       console.log(id);
       const response = await axios.delete(`http://10.0.2.2:4000/api/in/middle/delete-team/${id}`);
+      fetchTeamsData();
       console.log(response);
     }catch (e: any){
         setError(true);
@@ -166,9 +167,29 @@ const editProjectName = async (newName: string) => {
     );
 
 
-  const handleDeleteTeam = (id_team: number) => {
-    setTeamDeleteIndex(id_team);
+    // Eliminar projecto
+  const handleDeleteProject = async () => {
     setModalVisible(true);
+  }
+
+  const handleDeleteProjectConfirm = async () => {
+    const id_project = await AsyncStorage.getItem('id_project');
+    try {
+      const response = await axios.delete(`http://`);
+    } catch (error) {
+      console.error('Error al eliminar el proyecto:', error);
+      }
+  }
+
+  const handleDeleteMemeber = async (email: string) => {
+    try {
+      const id_project = await AsyncStorage.getItem('id_project');
+      // const response = await axios.delete(`http://
+      console.log('elimando', email)
+    }
+    catch (error) {
+      console.error('Error al eliminar el miembro:', error);
+    }
   }
 
   const handleNameChange = (text: string) => {
@@ -233,7 +254,12 @@ const editProjectName = async (newName: string) => {
                   <View style={[styles.memberList, { flexDirection: 'column', alignItems: 'flex-start', width: '85%' }]}>
                     <Text style={styles.memberName}>{email}</Text>
                   </View>
-                  {adminAviable && email !== userEmail ? <Octicons name="x" style={styles.boton} size={30} color="white" /> : null}
+                  {adminAviable && email !== userEmail ? 
+                    <TouchableOpacity onPress={() => handleDeleteMemeber(email)} >
+
+                      <Octicons name="x" style={styles.boton} size={30} color="white" /> 
+                    </TouchableOpacity>
+                    : null}
                 </View>
               ))}
 
@@ -300,7 +326,7 @@ const editProjectName = async (newName: string) => {
               );
             })}
 
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 0 }}>
               <TouchableOpacity onPress={() => handleTeamPageChange(-1, "prev")}>
                 <Octicons
                   name="chevron-left"
@@ -326,7 +352,7 @@ const editProjectName = async (newName: string) => {
             {
               adminAviable ?
 
-              <ButtonText style={[styles.botonContainer, {backgroundColor:'red', borderColor:'red'}]} onPress= {() => handleDeleteTeam()}>
+              <ButtonText style={[styles.botonContainer, {backgroundColor:'red', borderColor:'red'}]} onPress= {() => handleDeleteProject()}>
                 <Text style={{color:'white', textAlign:'center'}}>
                   Eliminar proyecto
                 </Text>
@@ -361,7 +387,7 @@ const editProjectName = async (newName: string) => {
                                                 <TouchableOpacity
                                                     style={{backgroundColor: 'red' ,alignItems: 'center',height:50, width:125, borderRadius: 5, justifyContent: 'center', marginHorizontal: 5}}
                                                     >
-                                                    <ButtonText style={{fontSize:20, fontWeight:'bold', color: 'white', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
+                                                    <ButtonText onPress={() =>  handleDeleteProjectConfirm()} style={{fontSize:20, fontWeight:'bold', color: 'white', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
                                                         Si
                                                     </ButtonText>
                                                 </TouchableOpacity>

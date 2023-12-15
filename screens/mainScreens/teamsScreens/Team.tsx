@@ -136,6 +136,10 @@ const Team = ({navigation, route}) => {
       {members.map((item) => ( 
         <View key={item} style={styles.projectContainer}>
             <Text style={styles.mailMember}>{item}</Text>
+            <TouchableOpacity onPress={()=> console.log('press')}>
+            <AntDesign  name="delete" size={24} color="black" />
+
+            </TouchableOpacity>
         </View>
       ))}
       </ScrollView>
