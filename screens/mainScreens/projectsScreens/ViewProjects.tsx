@@ -31,35 +31,20 @@ export default function ViewProjects({navigation}){
         setEditingName(value);
     }
 
-    const editTeam = async (teamName: string) => {
-        try{
-            // Nacho juegue
-            setEditingIndex(-1);
-            setEditingName('');
-        }catch (e: any){
-            setError(true);
-            setErrorMessage(e?.response?.data?.message);
-            console.log({error: e?.response?.data?.message});
-        }
-    }
+    
 
     const fetchProjectData = async () => {
-      try {
-        const email = await AsyncStorage.getItem('email');
-        const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/get-projects`,
-        {
-          email: email,
+        try {
+          const email = await AsyncStorage.getItem('email');
+          const response = await axios.get(`http://10.0.2.2:3002/api/on/middle/get-projects/data=${email}`);
+          const projectData = response.data;
+          setProjectsIds(projectData.ids);
+          setProjectsNames(projectData.names);
+          console.log('\n\n',projectData);
+        } catch (error) {
+          console.error('Error al recuperar los datos de proyectos:', error);
         }
-        );
-        const projectData = response.data;
-        setProjectsIds(projectData.ids);
-        setProjectsNames(projectData.names);
-        console.log('\n\n',projectData);
-      } catch (error) {
-        console.error('Error al recuperar los datos de equipos:', error);
-      }
-    };
-
+      };
     useFocusEffect(
         useCallback(() => {
             fetchProjectData();

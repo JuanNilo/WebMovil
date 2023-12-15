@@ -27,11 +27,8 @@ interface userDataTypes {
 }
 
 interface teamDataTypes {
-    nombre: string;
-    descripcion: string;
+    name: string;
     id: string;
-    createdAt: string;
-    updatedAt: string;
 }
 
 export default function Home({navigation}){
@@ -41,9 +38,10 @@ export default function Home({navigation}){
     const [task, setTask] = useState(tasks);
     const [projectsIds, setProjectsIds] = useState([] as string[]);
     const [projectsNames, setProjectsNames] = useState([] as string[]);
-    const [teamData, setTeamData] = useState([] as teamDataTypes[]);
+    
+    const [teamsNames, setTeamsNames] = useState([] as string[]);
     const [teamsIds, setTeamsIds] = useState([] as string[]);
-    const [teamssNames, setTeamsNames] = useState([] as string[]);
+
     const fetchUserData = async () => {
     try {
       const email = await AsyncStorage.getItem('email');
@@ -60,11 +58,7 @@ export default function Home({navigation}){
   const fetchProjectData = async () => {
     try {
       const email = await AsyncStorage.getItem('email');
-      const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/get-projects`,
-      {
-        email: email,
-      }
-      );
+      const response = await axios.get(`http://10.0.2.2:3002/api/on/middle/get-projects/data=${email}`);
       const projectData = response.data;
       setProjectsIds(projectData.ids);
       setProjectsNames(projectData.names);
@@ -78,13 +72,12 @@ export default function Home({navigation}){
     try {
         const email = await AsyncStorage.getItem('email');
         console.log(email);
-        const response = await axios.get(`http://10.0.2.2:4000/api/in/middle/get-teams/${email}`);
+        const response = await axios.get(`http://10.0.2.2:4000/api/in/middle/get-teams/data=${email}`);
         const teamsData = response.data;
-        setTeamData(teamsData);
-        setTeamsIds(teamsData.ids);
         setTeamsNames(teamsData.names);
-        console.log('----team data-----', teamsData.length);
-        console.log('\n\n',teamsData);
+        setTeamsIds(teamsData.ids);
+        console.log('====',teamsData);
+        
     } catch (error) {
         console.error('Error al recuperar los datos de equipos:', error);
     }
@@ -96,9 +89,23 @@ export default function Home({navigation}){
     fetchTeamData();
   },[])
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+        fetchUserData();
+        fetchProjectData();
+        fetchTeamData();
+    });
+    return unsubscribe;
+  }
+    , [navigation]);
+
   const idLocalStorage = async (id: number, name: string) => {
     await AsyncStorage.setItem('id_project', id.toString());
     navigation.navigate('ProjectView', {name});
+}
+
+const handleNavigationTeam = (name: string, index: number) => {
+    navigation.navigate('Team', {idTeam: teamsIds[index], name});
 }
 
   const StatusBarHeight = Constants.statusBarHeight;
@@ -172,14 +179,14 @@ export default function Home({navigation}){
                     <View style={{height:'100%', borderColor:'black', borderBottomWidth: 2, paddingHorizontal:10, paddingTop:10, flex:1, backgroundColor:'#D5F6AB'}}>
                         <SubTitle style={{color: 'black'}}>Equipos</SubTitle>
                         <ScrollView horizontal={true} style={{height: 200}}>
-                            {   
-                                teamData.length > 0 ?
+                             {   
+                                teamsNames.length > 0 ?
                                 (
-                                teamssNames.map((item, index) => {
+                                teamsNames.map((item, index) => {
                                     return(
                                         <View key={index}>
-                                            <TouchableOpacity onPress={() => navigation.navigate('TeamView', {item})}>
-                                                <Text>{item}</Text>
+                                            <TouchableOpacity onPress={() => handleNavigationTeam(item, index)}>
+                                                <ProjectCard nombre={item}/>
                                             </TouchableOpacity>
                                         </View>
                                     )
@@ -191,7 +198,7 @@ export default function Home({navigation}){
                                         <Text style={{fontSize: 18, fontWeight:'bold'}}>No perteneces a ningun equipo</Text>
                                     </View>
                                 )
-                            }
+                            } 
                         </ScrollView>
                     </View>
                 </ScrollView>
