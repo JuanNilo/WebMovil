@@ -65,11 +65,11 @@ const User = ({ navigation }) => {
   const handleDeleteAccount = async () => {
     try {
       const email = await AsyncStorage.getItem('email');
-      // const response = await axios.delete(`http://
+      const response = await axios.delete(`http://10.0.2.2:3000/api/users/${email}`);
+      console.log('email', email);
+      navigation.navigate('Login');
     } catch (error) {
-      setError(true);
-      setErrorMessage(error?.response?.data?.message);
-      console.error('Error al eliminar la cuenta:', error);
+      console.error('Error al eliminar el proyecto:', error);
     }
   }
 
