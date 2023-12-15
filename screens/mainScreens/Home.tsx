@@ -39,9 +39,10 @@ export default function Home({navigation}){
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [task, setTask] = useState(tasks);
-    const [teams, setTeams] = useState([] as teamDataTypes[]);
     const [projectsIds, setProjectsIds] = useState([] as string[]);
     const [projectsNames, setProjectsNames] = useState([] as string[]);
+    const [teamsIds, setTeamsIds] = useState([] as string[]);
+    const [teamssNames, setTeamsNames] = useState([] as string[]);
     const fetchUserData = async () => {
     try {
       const email = await AsyncStorage.getItem('email');
@@ -68,18 +69,24 @@ export default function Home({navigation}){
       setProjectsNames(projectData.names);
       console.log('\n\n',projectData);
     } catch (error) {
-      console.error('Error al recuperar los datos de equipos:', error);
+      console.error('Error al recuperar los datos de proyectos:', error);
     }
   };
 
   const fetchTeamData = async ()=> {
     try {
-      const id = await AsyncStorage.getItem('id_project');
-    //   const response = await axios.get(`http://
-    }catch(error){
-        setError(true);
-        setErrorMessage(error?.response?.data?.message);
-        console.error('Error al recuperar los datos del equipo:', error);
+        const email = await AsyncStorage.getItem('email');
+        const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/get-teams`,
+        {
+          email: email,
+        }
+        );
+        const teamsData = response.data;
+        setTeamsIds(teamsData.ids);
+        setTeamsNames(teamsData.names);
+        console.log('\n\n',teamsData);
+    } catch (error) {
+        console.error('Error al recuperar los datos de equipos:', error);
     }
   }
 
@@ -166,13 +173,13 @@ export default function Home({navigation}){
                         <SubTitle style={{color: 'black'}}>Equipos</SubTitle>
                         <ScrollView horizontal={true} style={{height: 200}}>
                             {   
-                                teams.length > 0 ?
+                                teamssNames.length > 0 ?
                                 (
-                                teams.map((item, index) => {
+                                teamssNames.map((item, index) => {
                                     return(
                                         <View key={index}>
                                             <TouchableOpacity onPress={() => navigation.navigate('TeamView', {item})}>
-                                                <Text>{item.nombre}</Text>
+                                                <Text>{item}</Text>
                                             </TouchableOpacity>
                                         </View>
                                     )
