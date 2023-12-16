@@ -199,18 +199,20 @@ const editProjectName = async (newName: string) => {
       const email = deleteMemberEmail.toString();
       console.log(email);
       setModalMemberVisible(false);
+  
       const id = await AsyncStorage.getItem('id_project');
-        if (id !== null){
-
-          console.log(id);
-          const response = await axios.delete(`http://10.0.2.2:3002/api/on/members/member-project/${email}`, {data: {id}});
-          console.log('id_member', id);
-          fetchMembersData();
-        }
+      if (id !== null && id !== '') {
+        console.log(id);
+  
+        const response = await axios.delete(`http://10.0.2.2:3002/api/on/members/member-project/${email}/${id}`);
+        console.log('id_member', id);
+        
+        fetchMembersData();
+      }
     } catch (error) {
-      console.log('Error al eliminar el miembro:', error)
+      console.log('Error al eliminar el miembro:', error);
     }
-  }
+  };
 
   const handleDeleteTeamConfirm = async () => {
     setModalTeamVisible(false);

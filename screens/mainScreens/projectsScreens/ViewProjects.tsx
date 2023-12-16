@@ -36,7 +36,8 @@ export default function ViewProjects({navigation}){
     const fetchProjectData = async () => {
         try {
           const email = await AsyncStorage.getItem('email');
-          const response = await axios.get(`http://10.0.2.2:3002/api/on/middle/get-projects/data=${email}`);
+          console.log(email);
+          const response = await axios.get(`http://10.0.2.2:3002/api/on/middle/get-projects/${email}`);
           const projectData = response.data;
           setProjectsIds(projectData.ids);
           setProjectsNames(projectData.names);

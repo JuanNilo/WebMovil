@@ -59,7 +59,7 @@ export default function Home({navigation}){
   const fetchProjectData = async () => {
     try {
       const email = await AsyncStorage.getItem('email');
-      const response = await axios.get(`http://10.0.2.2:3002/api/on/middle/get-projects/data=${email}`);
+      const response = await axios.get(`http://10.0.2.2:3002/api/on/middle/get-projects/${email}`);
       const projectData = response.data;
       setProjectsIds(projectData.ids);
       setProjectsNames(projectData.names);
@@ -73,7 +73,7 @@ export default function Home({navigation}){
     try {
         const email = await AsyncStorage.getItem('email');
         console.log(email);
-        const response = await axios.get(`http://10.0.2.2:4000/api/in/middle/get-teams/data=${email}`);
+        const response = await axios.get(`http://10.0.2.2:4000/api/in/middle/get-teams/${email}`);
         const teamsData = response.data;
         setTeamsNames(teamsData.names);
         setTeamsIds(teamsData.ids);
@@ -89,7 +89,7 @@ export default function Home({navigation}){
         const email = emailUser;
         const response = await axios.get(`http://10.0.2.2:1000/api/ts/tasks/tasks-email/data=${email}`);
         const taskData = response.data;
-        console.log('=======taskData', taskData)
+        //console.log('=======taskData', taskData)
         setTask(taskData);
     } catch (error) {
         console.error('Error al recuperar los datos del usuario:', error);
@@ -100,14 +100,14 @@ const emailUserStorage = async () => {
     const data = await AsyncStorage.getItem('email');
     if(data != null){
         setEmailUser(data);
+        console.log('\n\n',emailUser);
     }
-    console.log('\n\n',emailUser)
+    
 }
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
         emailUserStorage();
-        
         fetchUserData();
         fetchProjectData();
         fetchTeamData();
