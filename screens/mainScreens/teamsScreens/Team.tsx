@@ -8,7 +8,7 @@ import axios from 'axios';
 import  Constants  from "expo-constants";
 import {AntDesign} from '@expo/vector-icons';
 const StatusBarHeight = Constants.statusBarHeight;
-
+import { Modal } from 'react-native';
 import KeyboardWrapper from '../../../components/keyboardWrapper';
 import { PageTitle, SubTitle } from '../../../components/style';
 import { ENDPOINT_MS_TEAM } from '@env';
@@ -33,7 +33,8 @@ const Team = ({navigation, route}) => {
   const [members, setMembers] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [filteredTasks, setFilteredTasks] = useState(taskList  as Task[]);
-
+  const [modalTask, setModalTask] = useState(false);
+  const [idTaskDelete, setIdTaskDelete] = useState(-1);
   // Buscador
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -97,10 +98,12 @@ const Team = ({navigation, route}) => {
     }
   }
 
-  const handleDeleteTask = async (id: number) => {
+  const handleDeleteTaskConfirm = async () => {
     try {
+      const id = idTaskDelete.toString();
       const response = await axios.delete(`${ENDPOINT_MS_TASK}/tasks/delete-task/${id}`);
       console.log('idTask', id);
+      setModalTask(false);
       fetchTaskData();
     } catch (error) {
       console.error('Error al eliminar la tarea:', error);
@@ -137,6 +140,16 @@ const handleFilterTask = (taskState: string) => {
     console.log('filteredTasks', filteredTasks);
   }
 };
+
+const handleDeleteTask = (id: number) => {
+  setModalTask(true);
+  setIdTaskDelete(id);
+  fetchTeamMembers();
+}
+
+const handleCancelDelete = () => {
+  setModalTask(false);
+}
     
   return (
     <KeyboardWrapper>
@@ -230,7 +243,50 @@ const handleFilterTask = (taskState: string) => {
       ))}
       </View>
       <Line/>
+         {/* Modal fecho inicio */}
+         <Modal
+                                    animationType="slide"
+                                    onDismiss={() => console.log("Modal closed")}
+                                    onShow={() => console.log("Modal showed")}
+                                    transparent
+                                    visible={modalTask}
+                                >
 
+                                    <View style={{flex: 1, justifyContent: 'flex-end', alignItems:'center'}}>
+                                        <TouchableOpacity style={{height: '50%', width:'100%'}} onPress={() => setModalTask(false)}/>
+                                        <View style={{height: '50%', width:'95%', backgroundColor: '#fff', borderTopLeftRadius: 25, borderTopRightRadius: 25}}>
+                                            <View style={{flexDirection:'row', alignItems:'flex-end',backgroundColor: 'transparent', justifyContent:'flex-end', padding:15}}>
+                                                <ButtonText  onPress={() => setModalTask(false)}> 
+                                                    <Octicons style={{width:40, padding: 2, paddingLeft: 9}} name={"x"} size={35} color={'black'} />
+                                                </ButtonText>
+                                            </View>
+                                            <View style={{flexDirection:'row', alignItems:'center',backgroundColor: 'transparent', justifyContent:'center', padding:15}}>
+                                                <Text style={{fontSize: 20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
+                                                    ¿Está seguro que deasea eliminar la tarea?
+                                                </Text>
+                                            </View>
+                                            <View style={{flexDirection:'row', alignItems:'center',backgroundColor: 'transparent', justifyContent:'center', padding:15}}>
+                                                {/* Eliminar */}
+                                                <TouchableOpacity
+                                                    style={{backgroundColor: 'red' ,alignItems: 'center',height:50, width:125, borderRadius: 5, justifyContent: 'center', marginHorizontal: 5}}
+                                                    >
+                                                    <ButtonText onPress={() =>  handleDeleteTaskConfirm()} style={{fontSize:20, fontWeight:'bold', color: 'white', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
+                                                        Si
+                                                    </ButtonText>
+                                                </TouchableOpacity>
+                                                {/* Cancelar */}
+                                                <TouchableOpacity
+                                                    style={{backgroundColor: 'white', justifyContent:'center', borderColor: 'black', borderWidth:2,height:50, width:125,borderRadius: 5, alignItems:'center',marginHorizontal:5}}
+                                                    onPress={() => handleCancelDelete()}>
+                                                    <ButtonText style={{fontSize:20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
+                                                        No
+                                                    </ButtonText>
+                                                </TouchableOpacity>
+                                            </View>    
+                                        </View>
+                                    </View>
+                                </Modal>
+         
       </ScrollView>
     </KeyboardWrapper>
 

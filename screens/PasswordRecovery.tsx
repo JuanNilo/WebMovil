@@ -70,6 +70,7 @@ const PasswordRecovery = ({navigation}) => {
         }catch (e: any){
             setError(true);
             setErrorMessage(e?.response?.data?.message);
+            setIsLoading(false);
             console.log({error: e?.response?.data?.message});
         }
     };

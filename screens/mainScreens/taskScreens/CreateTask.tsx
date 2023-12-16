@@ -48,6 +48,11 @@ const CreateTask = ({navigation, route}) => {
     const [modalEndDate, setModalEndDate] = useState(false);
     const [endDate, setEndDate] = useState<DateType>(new Date());
 
+
+    // Loading 
+    const [isLoading, setIsLoading] = useState(false);
+
+    
     // Encargados
     const fetchTeamMembers = async () => {
         try {
@@ -65,8 +70,9 @@ const CreateTask = ({navigation, route}) => {
         }, []);
 
         const handleSubmit = async (values: valuesTypes) => {
-            console.log(values, startDate, endDate);
-        
+            
+            setIsLoading(true);
+            
             if(values.name === ''  || values.description === '' || values.status === '' || values.encargado === ''){
             setError(true);
             setErrorMessage('☠️ Error al crear la tarea ☠️');
@@ -89,9 +95,11 @@ const CreateTask = ({navigation, route}) => {
                         id_team,
                         email,
                     });
+                    setIsLoading(false);
                     navigation.goBack();
                 } catch (error) {
                     setError(true);
+                    setIsLoading(false);
                     setErrorMessage(error?.response?.data?.message);
                     console.error('Error al registar miembro', error);
                 }
@@ -222,9 +230,13 @@ const CreateTask = ({navigation, route}) => {
                             ) : null
                         }
                         {/* Boton */}
-                        <TouchableOpacity style={styles.button} onPress={() => handleSubmit(values)}>
-                            <Text style={styles.buttonText}>Crear Tarea</Text>
+                        <TouchableOpacity style={[styles.button, { opacity: isLoading ? 0.5 : 1 }]} onPress={() => handleSubmit(values)} disabled={isLoading}>
+                            <Text style={styles.buttonText}>
+                                {isLoading ? 'Creando tarea...' : 'Crear tarea'}
+
+                            </Text>
                         </TouchableOpacity>
+                        
 
                     </View>
     )}

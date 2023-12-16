@@ -15,11 +15,12 @@ export default function AddMemberTeam({navigation, route}) {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [email, setEmail] = useState('')
-
+    const [isLoading, setIsLoading] = useState(false);
     const [emailMembers, setEmailMembers] = useState([] as string[]);
 
     const registerMemberTeam = async (email: string) => {
         try {
+            setIsLoading(true);
             const id = idTeam.toString();
             const response = await axios.post(`${ENDPOINT_MS_TEAM}/middle/new-member`, {
                 email,
@@ -28,9 +29,11 @@ export default function AddMemberTeam({navigation, route}) {
             navigation.goBack();
         }catch (e: any){
             setError(true);
-            setErrorMessage(e?.response?.data?.message);
+            setIsLoading(false);
+            setErrorMessage('Error al agregar miembro al equipo');
             console.log({error: e?.response?.data?.message});
         }
+        setIsLoading(false);
     }
 
     const fetchMembersData = async () => {
@@ -86,9 +89,10 @@ export default function AddMemberTeam({navigation, route}) {
                             </Picker>
                             </View>
 
-                            <TouchableOpacity style={styles.boton} onPress={() => registerMemberTeam(values.email)}>
-                                <Text style={{fontWeight:'bold', fontSize: 18}}>Agregar miembro</Text>
+                            <TouchableOpacity style={styles.boton} onPress={() => registerMemberTeam(values.email)} disabled={isLoading}>
+                                <Text style={{fontWeight:'bold', fontSize: 18}}>  {isLoading ? 'Creando tarea...' : 'Agregar miembro'}</Text>
                             </TouchableOpacity>
+                            <Text style={{color:'red', fontWeight:'bold'}}>{errorMessage}</Text>
                             </View>
                         )
                     }

@@ -71,6 +71,7 @@ const SignUp = ({navigation}) => {
                 
             }catch (e: any){
                 setError(true);
+                setIsLoading(false);
                 setErrorMessage(e?.response?.data?.message);
                 console.log({error: e?.response?.data?.message});
             }

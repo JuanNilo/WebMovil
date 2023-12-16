@@ -55,8 +55,11 @@ export default function AddMemberProject({ navigation, route }) {
     useEffect(() => {
     }, []);
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const registerMemberProject = async (email: string, rol: string) => {
         console.log('email', email, 'rol', rol);
+        setIsLoading(true);
         try {
             const id = await AsyncStorage.getItem('id_project');
             const response = await axios.post(`${ENDPOINT_MS_PROJECT}/middle/new-member`, {
@@ -64,9 +67,11 @@ export default function AddMemberProject({ navigation, route }) {
                 rol,
                 id,
             });
+            setIsLoading(false);
             navigation.navigate('ProjectView', { nameProject });
         } catch (error) {
             setError(true);
+            setIsLoading(false);
             setErrorMessage(error?.response?.data?.message);
             console.error('Error al registar miembro', error);
         }
@@ -131,14 +136,18 @@ export default function AddMemberProject({ navigation, route }) {
                                         </Text>
                                     </View>
                                     <View>
-
                                         <StyledButton
                                             style={{ backgroundColor: 'black' }}
-                                            onPress={() => registerMemberProject(values.email, values.rol)}>
-                                            <ButtonText>
-                                                Añadir miembro
-                                            </ButtonText>
-                                        </StyledButton>
+                                        onPress={async () => { setIsLoading(true); // Activar el estado de carga al presionar el botón
+                                        try {
+                                            await registerMemberProject(values.email, values.rol);
+                                        } finally {
+                                        setIsLoading(false);}
+                                        }} disabled={isLoading}>
+                                        <ButtonText>
+                                            {isLoading ? 'Cargando...' : 'Añadir miembro'}
+                                        </ButtonText>
+                                    </StyledButton >
                                     </View>
                                 </StyledFormArea>
                             )

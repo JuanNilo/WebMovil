@@ -3,7 +3,7 @@ import { StatusBar } from "expo-status-bar";
 
 import axios from "axios";
 
-import { TextInput, View, Text } from 'react-native';
+import { TextInput, View, Text, TouchableOpacity } from 'react-native';
 
 //formik
 import { Formik } from "formik";
@@ -156,6 +156,7 @@ const Login = ({navigation}) => {
                                             {isLoading ? 'Cargando...' : 'Iniciar sesión'}
                                         </ButtonText>
                                     </StyledButton >
+                                    
                                     <Line />
                 
                                     <ExtraView>
