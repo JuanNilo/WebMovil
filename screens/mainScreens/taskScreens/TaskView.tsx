@@ -11,6 +11,7 @@ import { TextInput } from 'react-native';
 import { comments } from "../../../components/data/comments.json";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { ENDPOINT_MS_TASK } from '@env';
 
 const StatusBarHeight = Constants.statusBarHeight;
 
@@ -51,7 +52,7 @@ const TaskView = ({ route, navigation }) => {
         try{
             const id_task = item.id;
             const authorEmail = await AsyncStorage.getItem('email');
-            const response = await axios.post(`http://10.0.2.2:1000/api/ts/comments`, {
+            const response = await axios.post(`${ENDPOINT_MS_TASK}/comments`, {
                 authorEmail,
                 comment,
                 id_task,
@@ -72,7 +73,7 @@ const TaskView = ({ route, navigation }) => {
     const fetchCommentData = async () => {
         try {
           const id_task = item.id;
-          const response = await axios.get(`http://10.0.2.2:1000/api/ts/comments/comment-idTask/${id_task}`);
+          const response = await axios.get(`${ENDPOINT_MS_TASK}/comments/comment-idTask/${id_task}`);
           const commentData = response.data;
           setCommentsIds(commentData.commentsIds);
           setCommentsAuthors(commentData.commentsAuthors);
@@ -91,7 +92,7 @@ const TaskView = ({ route, navigation }) => {
                 state: statusSelected,
             };
             const id_task = item.id;
-            const response = await axios.put(`http://10.0.2.2:1000/api/ts/tasks/${id_task}`, updatedData);
+            const response = await axios.put(`${ENDPOINT_MS_TASK}/tasks/${id_task}`, updatedData);
             if(response.status === 200){
                 setEditMode(!editMode);
               }else{

@@ -16,6 +16,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
 import { Modal } from 'react-native';
 import {AntDesign} from '@expo/vector-icons';
+import { ENDPOINT_MS_PROJECT } from '@env';
+import { ENDPOINT_MS_TEAM } from '@env';
 
 const ProjectView = ({navigation, route}) => {
   const { name } = route.params;
@@ -102,7 +104,7 @@ const ProjectView = ({navigation, route}) => {
     try{
       const id = id_team.toString();
       console.log(id);
-      const response = await axios.delete(`http://10.0.2.2:4000/api/in/middle/delete-team/${id}`);
+      const response = await axios.delete(`${ENDPOINT_MS_TEAM}/middle/delete-team/${id}`);
       fetchTeamsData();
       console.log(response);
     }catch (e: any){
@@ -119,7 +121,7 @@ const editProjectName = async (newName: string) => {
       name: newName
     };
 
-    const response = await axios.put(`http://10.0.2.2:3002/api/on/project/${id_project}`, updatedData);
+    const response = await axios.put(`${ENDPOINT_MS_PROJECT}/project/${id_project}`, updatedData);
     if (response.status === 200) {
       console.log('Nombre del proyecto actualizado con éxito');
       setEditMode(!editMode);
@@ -137,7 +139,7 @@ const editProjectName = async (newName: string) => {
   const fetchTeamsData = async () => {
     try {
       const id_project = await AsyncStorage.getItem('id_project');
-      const response = await axios.get(`http://10.0.2.2:4000/api/in/teams/project/${id_project}`);
+      const response = await axios.get(`${ENDPOINT_MS_TEAM}/teams/project/${id_project}`);
       const teamData = response.data;
       setIdTeams(teamData.ids);
       setNameTeams(teamData.names);
@@ -150,7 +152,7 @@ const editProjectName = async (newName: string) => {
     try {
       const id_project = await AsyncStorage.getItem('id_project');
       console.log(id_project);
-      const response = await axios.get(`http://10.0.2.2:3002/api/on/members/members/${id_project}`);
+      const response = await axios.get(`${ENDPOINT_MS_PROJECT}/members/members/${id_project}`);
       const memberData = response.data;
       setEmailMembers(memberData.emails);
       console.log(emailMembers);
@@ -185,7 +187,7 @@ const editProjectName = async (newName: string) => {
   const handleDeleteProjectConfirm = async () => {
     try {
       const id_project = await AsyncStorage.getItem('id_project');
-      const response = await axios.delete(`http://10.0.2.2:3002/api/on/middle/delete-proyect/${id_project}`);
+      const response = await axios.delete(`${ENDPOINT_MS_PROJECT}/middle/delete-proyect/${id_project}`);
       console.log('id_project', id_project);
       fetchMembersData();
       navigation.navigate('Home');
@@ -204,7 +206,7 @@ const editProjectName = async (newName: string) => {
       if (id !== null && id !== '') {
         console.log(id);
   
-        const response = await axios.delete(`http://10.0.2.2:3002/api/on/members/member-project/${email}/${id}`);
+        const response = await axios.delete(`${ENDPOINT_MS_PROJECT}/members/member-project/${email}/${id}`);
         console.log('id_member', id);
         
         fetchMembersData();
@@ -220,7 +222,7 @@ const editProjectName = async (newName: string) => {
     try{
       const id = deleteTeamId
       console.log(id);
-      const response = await axios.delete(`http://10.0.2.2:4000/api/in/middle/delete-team/${id}`);
+      const response = await axios.delete(`${ENDPOINT_MS_TEAM}/middle/delete-team/${id}`);
       fetchTeamsData();
       console.log(response);
     }catch (e: any){

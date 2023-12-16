@@ -13,14 +13,14 @@ const { styleIcon, styleInnerContainer, styleContainer, styleDataUser,styleIconC
 
 import axios from "axios";
 
+import { ENDPOINT_MS_USER } from '@env';
 
 export default function DeleteTeam({navigation}){
     const [teams, setTeams] = useState([]);
 
     const fetchUserData = async () => {
       try {
-        const email = 'juan@mail.com';
-        const response = await axios.get(`http://localhost:3000/api/users/`);
+        const response = await axios.get(`${ENDPOINT_MS_USER}/users/`);
         const userData = response.data;
         setTeams(userData.teams); // Supongo que los equipos están en una propiedad 'teams' de userData
       } catch (error) {

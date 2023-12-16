@@ -7,6 +7,8 @@ import { Octicons } from "@expo/vector-icons";
 import { PageTitle } from "../../../components/style";
 import { Colors } from "../../../components/style";
 import KeyboardWrapper from "../../../components/keyboardWrapper";
+import { ENDPOINT_MS_PROJECT } from '@env';
+
 
 const { secondary, primary, brand, purple,red } = Colors
 
@@ -37,7 +39,7 @@ export default function ViewProjects({navigation}){
         try {
           const email = await AsyncStorage.getItem('email');
           console.log(email);
-          const response = await axios.get(`http://10.0.2.2:3002/api/on/middle/get-projects/${email}`);
+          const response = await axios.get(`${ENDPOINT_MS_PROJECT}/middle/get-projects/${email}`);
           const projectData = response.data;
           setProjectsIds(projectData.ids);
           setProjectsNames(projectData.names);

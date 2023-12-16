@@ -46,6 +46,8 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 
+import { ENDPOINT_MS_PROJECT } from '@env';
+
 export default function CreateProject({navigation}){
     
     const [error, setError] = useState(false);
@@ -58,7 +60,7 @@ export default function CreateProject({navigation}){
     const resgisterProjectRequest = async (name: string) => {
         try {
           const email = await AsyncStorage.getItem('email');
-          const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/new-project`,{
+          const response = await axios.post(`${ENDPOINT_MS_PROJECT}/middle/new-project`,{
             name,
             email,
             rol,

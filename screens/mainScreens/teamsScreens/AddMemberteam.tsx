@@ -7,6 +7,8 @@ import axios from "axios";
 import { Formik } from "formik"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Picker } from "@react-native-picker/picker"
+import { ENDPOINT_MS_PROJECT } from '@env';
+import { ENDPOINT_MS_TEAM } from '@env';
 
 export default function AddMemberTeam({navigation, route}) {
     const {idTeam, name} = route.params;
@@ -19,7 +21,7 @@ export default function AddMemberTeam({navigation, route}) {
     const registerMemberTeam = async (email: string) => {
         try {
             const id = idTeam.toString();
-            const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/new-member`, {
+            const response = await axios.post(`${ENDPOINT_MS_TEAM}/middle/new-member`, {
                 email,
                 id,
             });
@@ -35,7 +37,7 @@ export default function AddMemberTeam({navigation, route}) {
         try {
           const id_project = await AsyncStorage.getItem('id_project');
           console.log(id_project);
-          const response = await axios.get(`http://10.0.2.2:3002/api/on/members/members/${id_project}`);
+          const response = await axios.get(`${ENDPOINT_MS_PROJECT}/members/members/${id_project}`);
           const memberData = response.data;
           setEmailMembers(memberData.emails);
           console.log('==== ',memberData.emails);

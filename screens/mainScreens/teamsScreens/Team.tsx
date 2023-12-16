@@ -11,6 +11,8 @@ const StatusBarHeight = Constants.statusBarHeight;
 
 import KeyboardWrapper from '../../../components/keyboardWrapper';
 import { PageTitle, SubTitle } from '../../../components/style';
+import { ENDPOINT_MS_TEAM } from '@env';
+import { ENDPOINT_MS_TASK } from '@env';
 
 
 interface Task {
@@ -53,7 +55,7 @@ const Team = ({navigation, route}) => {
 
   const fetchTeamMembers = async () => {
     try {
-      const response = await axios.get(`http://10.0.2.2:4000/api/in/members/members/${idTeam}`);
+      const response = await axios.get(`${ENDPOINT_MS_TEAM}/members/members/${idTeam}`);
       const members = response.data;
       console.log('members', members.emails);
       setMembers(members.emails);
@@ -72,7 +74,7 @@ const Team = ({navigation, route}) => {
         name: newName,
       };
       const id_team = idTeam.toString();
-      const response = await axios.put(`http://10.0.2.2:4000/api/in/teams/${id_team}`, updatedData);
+      const response = await axios.put(`${ENDPOINT_MS_TEAM}/teams/${id_team}`, updatedData);
       if(response.status === 200){
         setEditMode(!editMode);
       }else{
@@ -86,7 +88,7 @@ const Team = ({navigation, route}) => {
   const fetchTaskData = async () => {
     try {
       const id_team = idTeam.toString();
-      const response = await axios.get(`http://10.0.2.2:1000/api/ts/tasks/task-idTeam/${id_team}`);
+      const response = await axios.get(`${ENDPOINT_MS_TASK}/tasks/task-idTeam/${id_team}`);
       const taskData = response.data;
       setFilteredTasks(taskData);
       setTaskList(taskData);
@@ -97,7 +99,7 @@ const Team = ({navigation, route}) => {
 
   const handleDeleteTask = async (id: number) => {
     try {
-      const response = await axios.delete(`http://10.0.2.2:1000/api/ts/tasks/delete-task/${id}`);
+      const response = await axios.delete(`${ENDPOINT_MS_TASK}/tasks/delete-task/${id}`);
       console.log('idTask', id);
       fetchTaskData();
     } catch (error) {
@@ -107,7 +109,7 @@ const Team = ({navigation, route}) => {
 
   const handleDeleteMember = async (id: number, email: string) => {
      try {
-      const response = await axios.delete(`http://10.0.2.2:4000/api/in/members/member-team/${email}`, {data: {id},});
+      const response = await axios.delete(`${ENDPOINT_MS_TEAM}/members/member-team/${email}`, {data: {id},});
       console.log('id_member', id);
       fetchTeamMembers();
     } catch (error) {

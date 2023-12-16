@@ -13,6 +13,9 @@ import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 import { TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ENDPOINT_MS_TASK } from '@env';
+import { ENDPOINT_MS_TEAM } from '@env';
+
 const StatusBarHeight = Constants.statusBarHeight;
 
 // necesito el tipeo de values
@@ -48,7 +51,7 @@ const CreateTask = ({navigation, route}) => {
     // Encargados
     const fetchTeamMembers = async () => {
         try {
-          const response = await axios.get(`http://10.0.2.2:4000/api/in/members/members/${idTeam}`);
+          const response = await axios.get(`${ENDPOINT_MS_TEAM}/members/members/${idTeam}`);
           const members = response.data;
           console.log('members', members.emails);
           setEncargados(members.emails);
@@ -77,7 +80,7 @@ const CreateTask = ({navigation, route}) => {
                     const final_date = endDate;
                     const id_team = idTeam;
 
-                    const response = await axios.post(`http://10.0.2.2:1000/api/ts/tasks/`,{
+                    const response = await axios.post(`${ENDPOINT_MS_TASK}/tasks/`,{
                         name,
                         description,
                         state,

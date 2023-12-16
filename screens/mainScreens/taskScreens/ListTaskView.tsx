@@ -10,6 +10,7 @@ import { StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ENDPOINT_MS_TASK } from '@env';
 const StatusBarHeight = Constants.statusBarHeight;
 
 interface Task {
@@ -29,7 +30,7 @@ const ListTaskView = ({ navigation }) => {
     const fetchTaskData = async () => {
         try {
             const email = await AsyncStorage.getItem('email');
-            const response = await axios.get(`http://10.0.2.2:1000/api/ts/tasks/tasks-email/data=${email}`);
+            const response = await axios.get(`${ENDPOINT_MS_TASK}/tasks/tasks-email/data=${email}`);
             const taskData = response.data;
             setTask(taskData);
         } catch (error) {

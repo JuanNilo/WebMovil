@@ -35,6 +35,8 @@ import {
 
 } from '../../../components/style';
 
+import { ENDPOINT_MS_USER } from '@env';
+
 const {styleInput, styleIcon, styleInnerContainer,styleContainer, styleIconContainer, container,styleLabel, styleErrorMessage, styleErrorView, styleLogo} = giraStyles
 
 // Colors
@@ -63,7 +65,7 @@ const EditMail = ({navigation}) => {
     const fetchUserData = async () => {
         try {
           const email = await AsyncStorage.getItem('email');
-          const response = await axios.get(`http://10.0.2.2:3000/api/users/profile/${email}`);
+          const response = await axios.get(`${ENDPOINT_MS_USER}/users/profile/${email}`);
           const userData = response.data;
           setUserData(userData);
         } catch (error) {
@@ -82,7 +84,7 @@ const EditMail = ({navigation}) => {
         try{
             const oldEmail = await AsyncStorage.getItem('email');
             console.log (oldEmail);
-            const response = await axios.post('http://10.0.2.2:3000/api/users/update-email',{
+            const response = await axios.post(`${ENDPOINT_MS_USER}/users/update-email`,{
                 oldEmail,
                 emailInput,
                 newEmail,

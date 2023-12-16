@@ -33,6 +33,8 @@ import {
 
 } from '../../../components/style';
 
+import { ENDPOINT_MS_PROJECT } from '@env';
+
 const { styleInput, styleIcon, styleInnerContainer, styleContainer, styleIconContainer, container, styleLabel, styleErrorMessage, styleErrorView, styleLogo } = giraStyles
 
 // Colors
@@ -57,7 +59,7 @@ export default function AddMemberProject({ navigation, route }) {
         console.log('email', email, 'rol', rol);
         try {
             const id = await AsyncStorage.getItem('id_project');
-            const response = await axios.post(`http://10.0.2.2:3002/api/on/middle/new-member`, {
+            const response = await axios.post(`${ENDPOINT_MS_PROJECT}/middle/new-member`, {
                 email,
                 rol,
                 id,

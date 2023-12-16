@@ -32,6 +32,7 @@ import {
     TextLinkContent
 
 } from './../components/style';
+import { ENDPOINT_MS_USER } from '@env';
 
 const {styleInput, styleIcon, styleInnerContainer,styleContainer, styleIconContainer, container,styleLabel, styleErrorMessage, styleErrorView} = giraStyles
 
@@ -59,7 +60,7 @@ const SignUp = ({navigation}) => {
             setErrorMessage('Contraseñas no coinciden!');
         }else{
             try{
-                const response = await axios.post('http://10.0.2.2:3000/api/auth/register',{
+                const response = await axios.post(`${ENDPOINT_MS_USER}/auth/register`,{
                     email,
                     firstName,
                     lastName,

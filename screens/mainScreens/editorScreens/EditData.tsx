@@ -48,6 +48,7 @@ import axios from "axios";
 import { useRoute } from "@react-navigation/native";
 import { useAsyncStorage } from "../../../localStorage/localStorage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ENDPOINT_MS_USER } from '@env';
 
 
 const EditData = ({navigation}) => {
@@ -62,7 +63,7 @@ const EditData = ({navigation}) => {
     const fetchUserData = async () => {
       try {
         const email = await AsyncStorage.getItem('email');
-        const response = await axios.get(`http://10.0.2.2:3000/api/users/profile/${email}`);
+        const response = await axios.get(`${ENDPOINT_MS_USER}/users/profile/${email}`);
         const userData = response.data;
         setUserData(userData);
         console.log(userData);
@@ -82,7 +83,7 @@ const EditData = ({navigation}) => {
         setError(false);
         try{
             const email = await AsyncStorage.getItem('email');
-            const response = await axios.post('http://10.0.2.2:3000/api/users/update-profile',{
+            const response = await axios.post(`${ENDPOINT_MS_USER}/users/update-profile`,{
                 email,
                 firstName,
                 lastName,

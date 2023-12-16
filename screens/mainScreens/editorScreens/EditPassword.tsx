@@ -48,6 +48,7 @@ const {primary, secondary, terceary, yellow, darkLight, brand, purple, red} = Co
 import KeyboardWrapper from "./../../../components/keyboardWrapper";
 import { useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ENDPOINT_MS_USER } from '@env';
 
 
 
@@ -67,7 +68,7 @@ const EditPassword = ({navigation}) => {
         }else{
             try{
                 const email = await AsyncStorage.getItem('email');
-                const response = await axios.post('http://10.0.2.2:3000/api/users/update-password',{
+                const response = await axios.post(`${ENDPOINT_MS_USER}/users/update-password`,{
                 email,
                 password,
                 newPassword,

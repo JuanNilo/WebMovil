@@ -12,6 +12,7 @@ import { Formik } from "formik";
 import {Octicons, Ionicons, AntDesign} from "@expo/vector-icons";
 
 import giraStyles from "./../components/style";
+import { ENDPOINT_MS_USER } from '@env';
 
 const {styleInput, styleIcon, styleContainer, styleIconContainer, styleLabel, styleErrorView, styleErrorMessage} = giraStyles
 
@@ -67,7 +68,7 @@ const PasswordChange = ({navigation}) => {
             setErrorMessage('Contraseñas no coinciden!');
         }else{
             try{
-                const response = await axios.post('http://10.0.2.2:3000/api/auth/reset-pass',{
+                const response = await axios.post(`${ENDPOINT_MS_USER}/auth/reset-pass`,{
                 email,
                 code,
                 codeInput,

@@ -45,6 +45,8 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 
+import { ENDPOINT_MS_TEAM } from '@env';
+
 export default function CreateTeam({navigation}){
     
     const [error, setError] = useState(false);
@@ -56,7 +58,7 @@ export default function CreateTeam({navigation}){
     const registerTeamRequest = async (name: string) => {
         try {
           const id_project = await AsyncStorage.getItem('id_project');
-          const response = await axios.post(`http://10.0.2.2:4000/api/in/teams`,{
+          const response = await axios.post(`${ENDPOINT_MS_TEAM}/teams`,{
             name,
             id_project,
           });

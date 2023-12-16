@@ -46,6 +46,7 @@ const {primary , secondary, purple, yellow} = Colors;
 import KeyboardWrapper from "../../../components/keyboardWrapper";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ENDPOINT_MS_TEAM } from '@env';
 
 
 const EditProject = ({navigation}) => {
@@ -59,7 +60,7 @@ const EditProject = ({navigation}) => {
     const fetchProjectData = async () => {
         try {
           const email = await AsyncStorage.getItem('email');
-          const response = await axios.post(`http://10.0.2.2:4000/api/in/middle/get-team-names`,
+          const response = await axios.post(`${ENDPOINT_MS_TEAM}/middle/get-team-names`,
           {
             email: email,
           }
