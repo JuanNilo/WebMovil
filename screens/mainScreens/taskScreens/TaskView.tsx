@@ -57,6 +57,7 @@ const TaskView = ({ route, navigation }) => {
                 id_task,
             })
             fetchCommentData();
+            setComment('');
         }catch (e: any){
             setError(true);
             setErrorMessage(e?.response?.data?.message);
@@ -76,7 +77,7 @@ const TaskView = ({ route, navigation }) => {
           setCommentsIds(commentData.commentsIds);
           setCommentsAuthors(commentData.commentsAuthors);
           setCommentsComments(commentData.commentsComments);
-          setComment('');
+          console.log(commentsComments);
         } catch (error) {
           console.error('Error al recuperar los datos de comentarios:', error);
         }
@@ -217,10 +218,11 @@ const TaskView = ({ route, navigation }) => {
                                 (<Text style={{fontSize:18, fontWeight:'bold',paddingHorizontal:10}}>No hay comentarios...</Text>)
                                 : 
                         
-                                commentsIds.map((index) => (
+                                commentsComments.map((comments, index) => (
+                        
                                     <View key={index} style={{ backgroundColor: '#CFCFCF', padding: 10, margin: 5, borderRadius: 10 }}>
-                                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{commentsAuthors[index-1]}</Text>
-                                    <Text style={{ fontSize: 16 }}>{commentsComments[index-1]}</Text>
+                                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{commentsAuthors[index]}</Text>
+                                    <Text style={{ fontSize: 16 }}>{commentsComments[index]}</Text>
                                     </View>
                                     ))
                                 

@@ -43,14 +43,20 @@ const ProjectView = ({navigation, route}) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [editingName, setEditingName] = useState(nameProject);
   const [teamDeleteIndex, setTeamDeleteIndex] = useState(0);
-
+  const [deleteTeamId, setDeleteTeamId] = useState(-1);
+  const [deleteMemberEmail, setDeleteMemberEmail] = useState('');
   // Modal
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [modalTeamVisible, setModalTeamVisible] = useState(false);
+
+  const [modalMemberVisible, setModalMemberVisible] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
   const handleCancelDelete = () => {
     setModalVisible(false);
+    setModalTeamVisible(false);
+    setModalMemberVisible(false);
   }
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -172,6 +178,10 @@ const editProjectName = async (newName: string) => {
     setModalVisible(true);
   }
 
+  const handleDeleteMember = async (email: string) => {
+    setModalMemberVisible(true);
+  }
+
   const handleDeleteProjectConfirm = async () => {
     try {
       const id_project = await AsyncStorage.getItem('id_project');
@@ -184,16 +194,50 @@ const editProjectName = async (newName: string) => {
     }
   }
 
-  const handleDeleteMemeber = async (email: string) => {
+  const handleDeleteMemberConfirm = async () => {
     try {
-      const id_project = await AsyncStorage.getItem('id_project');
-      const response = await axios.delete(`http://10.0.2.2:3002/api/on/members/member-project/${email}`, {data: {id_project},});
-      console.log('id_member', id_project);
-      fetchMembersData();
+      const email = deleteMemberEmail.toString();
+      console.log(email);
+      setModalMemberVisible(false);
+      const id = await AsyncStorage.getItem('id_project');
+        if (id !== null){
+
+          console.log(id);
+          const response = await axios.delete(`http://10.0.2.2:3002/api/on/members/member-project/${email}`, {data: {id}});
+          console.log('id_member', id);
+          fetchMembersData();
+        }
     } catch (error) {
-      console.error('Error al eliminar el miembro:', error);
+      console.log('Error al eliminar el miembro:', error)
     }
   }
+
+  const handleDeleteTeamConfirm = async () => {
+    setModalTeamVisible(false);
+
+    try{
+      const id = deleteTeamId
+      console.log(id);
+      const response = await axios.delete(`http://10.0.2.2:4000/api/in/middle/delete-team/${id}`);
+      fetchTeamsData();
+      console.log(response);
+    }catch (e: any){
+        setError(true);
+        setErrorMessage(e?.response?.data?.message);
+        console.log({error: e?.response?.data?.message});
+    }
+  }
+
+  const handleDeleteTeamId = (id: number) => {
+    setDeleteTeamId(id);
+    setModalTeamVisible(true);
+  }
+
+  const handleDeleteMemeberEmail = (email: string) => {
+    setDeleteMemberEmail(email);
+    setModalMemberVisible(true);
+  }
+  
 
   const handleNameChange = (text: string) => {
     setEditingName(text);
@@ -258,7 +302,7 @@ const editProjectName = async (newName: string) => {
                     <Text style={styles.memberName}>{email}</Text>
                   </View>
                   {adminAviable && email !== userEmail ? 
-                    <TouchableOpacity onPress={() => handleDeleteMemeber(email)} >
+                    <TouchableOpacity onPress={() => handleDeleteMemeberEmail(email)} >
 
                       <Octicons name="x" style={styles.boton} size={30} color="white" /> 
                     </TouchableOpacity>
@@ -320,7 +364,7 @@ const editProjectName = async (newName: string) => {
                   {adminAviable ? (
                     <TouchableOpacity
                       style={{ height: 50, alignItems: "flex-end", justifyContent: "center" }}
-                      onPress={() => deleteTeam(idTeams[index])}
+                      onPress={() => handleDeleteTeamId(idTeams[index])}
                     >
                       <Octicons name="x" style={styles.boton} size={30} color="white" />
                     </TouchableOpacity>
@@ -391,6 +435,93 @@ const editProjectName = async (newName: string) => {
                                                     style={{backgroundColor: 'red' ,alignItems: 'center',height:50, width:125, borderRadius: 5, justifyContent: 'center', marginHorizontal: 5}}
                                                     >
                                                     <ButtonText onPress={() =>  handleDeleteProjectConfirm()} style={{fontSize:20, fontWeight:'bold', color: 'white', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
+                                                        Si
+                                                    </ButtonText>
+                                                </TouchableOpacity>
+                                                {/* Cancelar */}
+                                                <TouchableOpacity
+                                                    style={{backgroundColor: 'white', justifyContent:'center', borderColor: 'black', borderWidth:2,height:50, width:125,borderRadius: 5, alignItems:'center',marginHorizontal:5}}
+                                                    onPress={() => handleCancelDelete()}>
+                                                    <ButtonText style={{fontSize:20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
+                                                        No
+                                                    </ButtonText>
+                                                </TouchableOpacity>
+                                            </View>    
+                                        </View>
+                                    </View>
+                                </Modal>
+
+                                {/* Modal eliminar equipo */}
+                                <Modal
+                                    animationType="slide"
+                                    onDismiss={() => console.log("Modal closed")}
+                                    onShow={() => console.log("Modal showed")}
+                                    transparent
+                                    visible={modalTeamVisible}
+                                >
+
+                                    <View style={{flex: 1, justifyContent: 'flex-end', alignItems:'center'}}>
+                                        <TouchableOpacity style={{height: '50%', width:'100%'}} onPress={() => setModalTeamVisible(false)}/>
+                                        <View style={{height: '50%', width:'95%', backgroundColor: '#fff', borderTopLeftRadius: 25, borderTopRightRadius: 25}}>
+                                            <View style={{flexDirection:'row', alignItems:'flex-end',backgroundColor: 'transparent', justifyContent:'flex-end', padding:15}}>
+                                                <ButtonText  onPress={() => setModalTeamVisible(false)}> 
+                                                    <Octicons style={{width:40, padding: 2, paddingLeft: 9}} name={"x"} size={35} color={'black'} />
+                                                </ButtonText>
+                                            </View>
+                                            <View style={{flexDirection:'row', alignItems:'center',backgroundColor: 'transparent', justifyContent:'center', padding:15}}>
+                                                <Text style={{fontSize: 20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
+                                                    ¿Está seguro que desea eliminar el equipo?
+                                                </Text>
+                                            </View>
+                                            <View style={{flexDirection:'row', alignItems:'center',backgroundColor: 'transparent', justifyContent:'center', padding:15}}>
+                                                {/* Eliminar */}
+                                                <TouchableOpacity
+                                                    style={{backgroundColor: 'red' ,alignItems: 'center',height:50, width:125, borderRadius: 5, justifyContent: 'center', marginHorizontal: 5}}
+                                                    >
+                                                    <ButtonText onPress={() =>  handleDeleteTeamConfirm()} style={{fontSize:20, fontWeight:'bold', color: 'white', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
+                                                        Si
+                                                    </ButtonText>
+                                                </TouchableOpacity>
+                                                {/* Cancelar */}
+                                                <TouchableOpacity
+                                                    style={{backgroundColor: 'white', justifyContent:'center', borderColor: 'black', borderWidth:2,height:50, width:125,borderRadius: 5, alignItems:'center',marginHorizontal:5}}
+                                                    onPress={() => handleCancelDelete()}>
+                                                    <ButtonText style={{fontSize:20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
+                                                        No
+                                                    </ButtonText>
+                                                </TouchableOpacity>
+                                            </View>    
+                                        </View>
+                                    </View>
+                                </Modal>
+                                 {/* Modal eliminar miembro */}
+                                 <Modal
+                                    animationType="slide"
+                                    onDismiss={() => console.log("Modal closed")}
+                                    onShow={() => console.log("Modal showed")}
+                                    transparent
+                                    visible={modalMemberVisible}
+                                >
+
+                                    <View style={{flex: 1, justifyContent: 'flex-end', alignItems:'center'}}>
+                                        <TouchableOpacity style={{height: '50%', width:'100%'}} onPress={() => setModalMemberVisible(false)}/>
+                                        <View style={{height: '50%', width:'95%', backgroundColor: '#fff', borderTopLeftRadius: 25, borderTopRightRadius: 25}}>
+                                            <View style={{flexDirection:'row', alignItems:'flex-end',backgroundColor: 'transparent', justifyContent:'flex-end', padding:15}}>
+                                                <ButtonText  onPress={() => setModalMemberVisible(false)}> 
+                                                    <Octicons style={{width:40, padding: 2, paddingLeft: 9}} name={"x"} size={35} color={'black'} />
+                                                </ButtonText>
+                                            </View>
+                                            <View style={{flexDirection:'row', alignItems:'center',backgroundColor: 'transparent', justifyContent:'center', padding:15}}>
+                                                <Text style={{fontSize: 20, fontWeight:'bold', color: 'black', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
+                                                    ¿Está seguro que desea eliminar al mimbro del proyecto
+                                                </Text>
+                                            </View>
+                                            <View style={{flexDirection:'row', alignItems:'center',backgroundColor: 'transparent', justifyContent:'center', padding:15}}>
+                                                {/* Eliminar */}
+                                                <TouchableOpacity
+                                                    style={{backgroundColor: 'red' ,alignItems: 'center',height:50, width:125, borderRadius: 5, justifyContent: 'center', marginHorizontal: 5}}
+                                                    >
+                                                    <ButtonText onPress={() =>  handleDeleteMemberConfirm()} style={{fontSize:20, fontWeight:'bold', color: 'white', width: '100%', textAlign: 'center',  padding: 10, borderRadius: 5}}>
                                                         Si
                                                     </ButtonText>
                                                 </TouchableOpacity>

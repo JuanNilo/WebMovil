@@ -38,6 +38,7 @@ export default function Home({navigation}){
     const [task, setTask] = useState([] as any[]);
     const [projectsIds, setProjectsIds] = useState([] as string[]);
     const [projectsNames, setProjectsNames] = useState([] as string[]);
+    const [emailUser, setEmailUser] = useState('');
     
     const [teamsNames, setTeamsNames] = useState([] as string[]);
     const [teamsIds, setTeamsIds] = useState([] as string[]);
@@ -85,7 +86,7 @@ export default function Home({navigation}){
 
   const fetchTaskData = async () => {
     try {
-        const email = await AsyncStorage.getItem('email');
+        const email = emailUser;
         const response = await axios.get(`http://10.0.2.2:1000/api/ts/tasks/tasks-email/data=${email}`);
         const taskData = response.data;
         console.log('=======taskData', taskData)
@@ -95,10 +96,18 @@ export default function Home({navigation}){
     }
 }
 
-
+const emailUserStorage = async () => {
+    const data = await AsyncStorage.getItem('email');
+    if(data != null){
+        setEmailUser(data);
+    }
+    console.log('\n\n',emailUser)
+}
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+        emailUserStorage();
+        
         fetchUserData();
         fetchProjectData();
         fetchTeamData();
@@ -141,12 +150,12 @@ const handleNavigationTeam = (name: string, index: number) => {
                             {
                                 task.length > 0 ?
                                 (
-
+                                    
                                     task.map((item, index) => {
                                         return(
                                             <View key={index}>
                                         {
-                                            item.estado != 'completada' 
+                                            item.email == emailUser 
                                             ? (
                                                 <TouchableOpacity onPress={() => navigation.navigate('TaskView', {item})}>
                                                 <TaskCard   nombre={item.name} descripcion={item.description} estado={item.state}  />
